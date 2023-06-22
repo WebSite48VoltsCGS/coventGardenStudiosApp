@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 from studios.forms import SignUpForm
 from studios.forms import SignInForm
-from studios.forms import PasswordResetForm
+from studios.forms import UserPasswordResetForm
 
 def home(request):
     return render(request, 'home.html')
@@ -32,9 +32,9 @@ def booking(request):
 def account(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('sign_in')
+        return redirect('account_sign_in')
 
-    return render(request, 'account.html')
+    return render(request, 'account-detail.html')
 
 def sign_in(request):
     if request.method == 'POST':
@@ -58,7 +58,7 @@ def sign_in(request):
 
     # Return an empty form if GET request or login is invalid
     form = SignInForm()
-    return render(request, 'sign_in.html', {'form': form})
+    return render(request, 'account_sign_in.html', {'form': form})
 
 def sign_up(request):
     if request.method == 'POST':
@@ -76,16 +76,23 @@ def sign_up(request):
                 user.first_name = first_name
                 user.last_name = last_name
                 user.save()
-                return redirect('account')
+
+                # Authenticate
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return redirect('account')
+                else:
+                    print("Error: Login to newly created account failed")
     form = SignUpForm()
-    return render(request, 'sign_up.html', {'form': form})
+    return render(request, 'account_sign_up.html', {'form': form})
 
 def password_reset_form(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             email = request.POST["email"]
-    form = PasswordResetForm()
+    form = UserPasswordResetForm()
     return render(request, 'password_reset_form.html', {'form': form})
 
 def password_reset_done(request):
