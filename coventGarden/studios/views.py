@@ -32,7 +32,7 @@ def booking(request):
 def account(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('account_sign_in')
+        return redirect('sign_in')
 
     return render(request, 'account-detail.html')
 
