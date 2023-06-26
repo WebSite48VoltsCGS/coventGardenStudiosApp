@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 
@@ -8,6 +9,9 @@
 
 
 {% block style %}
+
+<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
+
 
 {% endblock %}
 
@@ -30,5 +34,38 @@
 	</ol>
 
 </div> <!-- /container -->
+
+<div class="exemple-fiche-technique">
+	<p>
+		Comment remplir une fiche technique ? Voici un modèle valide : 
+	</p>
+	<div class="image-container">
+		<script src="../static/studios/js/animation.js"></script>
+		<a href="#" id="image-link">
+		<div class="image-overlay">
+		  <img src="../static/studios/images/modèle fiche technique.png" alt="Image fiche technique" onclick="showImage(this)">
+		  <div class="overlay-text">
+			<p>Modèle fiche Technique</p>
+		  </div>
+		</div>
+		</a>
+	  </div>
+	  
+	  <div id="imageModal" class="modal">
+		<span class="close" onclick="hideImage()">&times;</span>
+		<img id="modalImage" src="" alt="Image en grand">
+	  </div>
+
+	  
+	  <br><p>
+		Document vierge téléchargeable ci-dessous : 
+		</p>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	  <br><a href="../static/studios/images/modèle fiche technique.png" download><button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button></a>
+
+	 
+	
+	  
+	
     
 {% endblock %}
