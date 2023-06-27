@@ -97,3 +97,19 @@
     background-color: gold;
   }
 
+/* boutton réservation*/
+
+
+.row-button {
+    display: flex;
+    align-items: flex-start;
+    max-width: 800px;
+    margin-bottom: 100px;
+    padding: 200px;
+    
+  }
+
+  
+
+/* explications*/ 
+

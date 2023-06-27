@@ -23,6 +23,7 @@ from studios.forms import UserPasswordResetForm, UserPasswordSetForm
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    path('', views.placeholder, name='placeholder'),
 
     # Main
     path('', views.home, name='home'),

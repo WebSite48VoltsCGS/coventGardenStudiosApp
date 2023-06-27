@@ -1,0 +1,35 @@
+.Réseaux{
+    text-align: center;
+}
+
+/* Ligne entre les studios */ 
+
+.stud {
+	border-top: 3px solid #c3b988;
+	padding-bottom: 25px;
+	margin-bottom: 20px;
+    margin-top: 75px;
+	text-align: center;
+	
+  }
+
+  .program-column {
+    display: inline-block;
+    width: 30%;
+    vertical-align: top;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  h3 {
+    font-size: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .paragraphes {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: left;
+  }

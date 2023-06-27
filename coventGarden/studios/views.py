@@ -8,6 +8,9 @@ from studios.forms import SignUpForm
 from studios.forms import SignInForm
 from studios.forms import UserPasswordResetForm
 
+def placeholder(request):
+    return render(request, 'home.html')
+
 def home(request):
     return render(request, 'home.html')
 

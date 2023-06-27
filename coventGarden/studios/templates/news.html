@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 
@@ -9,6 +10,7 @@
 
 {% block style %}
 
+<link rel="stylesheet" href="{% static 'studios/css/news.css' %}" />
 {% endblock %}
 
 
@@ -28,7 +30,90 @@
         <li><a href="{% url 'home' %}">Accueil</a></li>
         <li class="active">Actualités</li>
     </ol>
-
+    <div class="row">
+    <article class="col-sm-8 maincontent">
+        <header class="page-header">
+            <h1 class="page-title">Actualités</h1>
+        </header>
+    </article>
+</div>
 </div> <!-- /container -->
+
+<div class="Réseaux">
+    <h3>
+        Nos Réseaux
+    </h3>
+    <p>
+        Retrouvez toutes nos actualités évènements, concerts sur nos réseaux 
+    </p>
+
+	<p>
+			<a target="_blank" href="https://www.youtube.com/user/CoventGardenStudio"><i class="fa fa-youtube-play fa-2"></i></a>
+			<a target="_blank" href="https://www.facebook.com/CGS95"><i class="fa fa-facebook fa-2"></i></a>
+			<a target="_blank" href="https://www.instagram.com/coventgardenstudios/"><i class="fa fa-instagram fa-2"></i></a>
+			<a target="_blank" href=""><i class="fa fa-twitter fa-2"></i></a>
+		</p>
+	
+</div>
+
+<div class="container">
+    <div class="stud">
+        <h1 class="page-title">Programmation</h1>
+        <div class="paragraphes">Le Covent Garden offre une large palette de dispositifs pour se produire sur scène adaptés à chaque projet.</div>
+       
+        <div class="program-column">
+            <h3>Auto-production</h3>
+            <div class="paragraphes">Pour les associations ou les artistes souhaitant produire leur propre concert de A à Z.</div>
+        </div>
+        
+        <div class="program-column">
+            <h3>Free Friday</h3>
+            <div class="paragraphes">Pour les groupes locaux souhaitant monter sur scène sans contraintes, mêlant musique et esprit familiale.</div>
+        </div>
+        
+        <div class="program-column">
+            <h3>Production du Covent Garden</h3>
+            <div class="paragraphes">Pour les groupes professionnels, projets portés par le Covent Garden Studios, en production ou co-production.</div>
+        </div>
+    </div>  
+</div>
+
+<div class="container">
+    <div class="stud">
+        <h3>Produire son propre concert au Covent Garden Studios</h3>
+        <div class="paragraphes">
+            <p>Les associations et les groupes de musique (structuré en association) ont la possibilité d’organiser leur propre concert au Covent Garden Studios :</p>
+        <ul>
+            <li>Programmation des groupes musicaux</li>
+            <li>Gestion de la communication</li>
+            <li>Gestion de la vente des places et de la réunération</li>
+            <li>Lien technique entre les groupes et les régisseurs du Covent Garden Studios</li>
+        </ul>
+        </div>
+        <br><div class="paragraphes">
+            <br><p>Le Covent Garden Studios garde à sa charge :</p>
+        <ul>
+            <li>Gestion du Bar</li>
+            <li>Régie technique</li>
+           
+        </ul>
+        </div>
+    </div>
+</div> 
+
+<div class="container">
+    <div class="stud">
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div> 
 
 {% endblock %}
