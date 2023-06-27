@@ -100,3 +100,16 @@ body {
 	margin: 0 auto; 
   }
   
+.crop-image-container {
+	width: 200px; /* Définissez la largeur souhaitée du conteneur */
+	height: 70px; /* Définissez la hauteur souhaitée du conteneur */
+	object-position: center;
+	overflow: hidden;
+}
+  
+.crop-image {
+	width: 100%; /* Assurez-vous que l'image occupe toute la largeur du conteneur */
+	height: 100%; /* Assurez-vous que l'image occupe toute la hauteur du conteneur */
+	object-fit: cover;
+  }
+
