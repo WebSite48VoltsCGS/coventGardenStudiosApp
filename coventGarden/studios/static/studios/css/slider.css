@@ -65,3 +65,15 @@ swiper-slide img {
   stroke-dasharray: 125.6;
   transform: rotate(-90deg);
 }
+
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px; /* Définissez la largeur souhaitée */
+	max-height: 300px; /* Définissez la hauteur souhaitée */
+	margin:  auto; /* Centrez le carrousel horizontalement */
+	background-color: black; /* Ajoutez cette ligne pour définir le fond noir */
+	border-radius: 15px; /* Ajoutez cette ligne pour définir les coins arrondis */
+	overflow: hidden; /* Ajoutez cette ligne pour masquer le contenu dépassant du conteneur */
+}
