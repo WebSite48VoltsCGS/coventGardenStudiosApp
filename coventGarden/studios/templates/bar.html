@@ -1,5 +1,6 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 {% load static %}
+
 {% block title %}
 
 <title>Bar</title>
@@ -9,8 +10,7 @@
 
 {% block style %}
 
-<link rel="stylesheet" type="text/css" href="../static/studios/css/slider.css">
-<link rel="stylesheet" type="text/css" href="../static/studios/css/main.css">
+<link rel="stylesheet" href="{% static 'studios/css/slider.css' %}"/>
 
 {% endblock %}
 
