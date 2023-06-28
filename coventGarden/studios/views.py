@@ -6,7 +6,10 @@ from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
 from .forms import CustomUserCreationForm
-from .forms import SignInForm, SignUpForm, TestForm
+from .forms import (
+    SignInForm, SignUpForm,
+    UserUpdateForm, ConfirmPasswordForm,
+    GroupCreateForm, TestForm)
 
 User = get_user_model()
 
@@ -76,10 +79,16 @@ def account_sign_in(request):
             username = request.POST["username"]
             password = request.POST["password"]
             account_log_in(request, username, password)
+            return redirect('profile_detail')
+        else:
+            # Return an empty form if form is invalid
+            form = SignInForm()
+            return render(request, 'account/account_sign_in.html', {'form': form})
 
-    # Return an empty form if GET request or form is invalid
-    form = SignInForm()
-    return render(request, 'account/account_sign_in.html', {'form': form})
+    # Return an empty form if GET request
+    else:
+        form = SignInForm()
+        return render(request, 'account/account_sign_in.html', {'form': form})
 
 def account_sign_up(request):
     if request.method == 'POST':
@@ -101,10 +110,16 @@ def account_sign_up(request):
 
                 # Log in the user
                 account_log_in(request, username, password)
+                return redirect('profile_detail')
+            else:
+                # Return an empty form if form is invalid
+                form = SignUpForm()
+                return render(request, 'account/account_sign_up.html', {'form': form})
 
-    # Return an empty form if GET request or form is invalid
-    form = SignUpForm()
-    return render(request, 'account/account_sign_up.html', {'form': form})
+    # Return an empty form if GET request
+    else:
+        form = SignUpForm()
+        return render(request, 'account/account_sign_up.html', {'form': form})
 
 def account_log_in(request, username, password):
     # Authenticate the user
@@ -113,10 +128,13 @@ def account_log_in(request, username, password):
         login(request, user)
     else:
         print("Error: A user is already logged in.")
-    return redirect('profile_detail')
 
 def account_log_out(request):
-    logout(request)
+    # Disconnect the user
+    if request.user:
+        logout(request)
+    else:
+        print("Error: User is already logged out.")
     return redirect('account_sign_in')
 
 """
@@ -131,32 +149,35 @@ def profile_detail(request):
     return render(request, 'profile/profile_detail.html')
 
 def profile_update(request):
-    return render(request, 'profile/profile_update.html')
+    def empty_form():
+        current_user = request.user
+        new_form = UserUpdateForm(initial={
+            "username": current_user.username,
+            "email": current_user.email,
+            "last_name": current_user.last_name,
+            "first_name": current_user.first_name
+        })
+        return new_form
 
-def profile_username_update(request):
-    """
-    WIP
-        Testing user fields
-    """
     if request.method == 'POST':
-        form = TestForm(request.POST)
-        if form.is_valid():
-            test = request.POST["test"]
-            user = request.user
-            user.test_field = test
-            user.save()
-            print("Test successful")
-            return redirect('profile_detail')
+        form = UserUpdateForm(request.POST)
+        confirm_form = ConfirmPasswordForm(request.POST)
+        if form.is_valid() and confirm_form.is_valid():
+            if request.POST["current_password"] == request.POST["confirm_password"]:
+                user = request.user
+                user.username = request.POST["username"]
+                user.email = request.POST["email"]
+                user.last_name = request.POST["last_name"]
+                user.first_name = request.POST["first_name"]
+                user.save()
+                return redirect('profile_detail')
+            else:
+                print("Error: Password and confirmation password do not match")
 
-    # Return an empty form if GET request or form is invalid
-    form = TestForm()
-    return render(request, 'profile/profile_username_update.html', {'form': form})
-
-def profile_email_update(request):
-    return render(request, 'profile/profile_email_update.html')
-
-def profile_password_update(request):
-    return render(request, 'profile/profile_password_update.html')
+    # Return an empty form if GET request or invalid form
+    form = empty_form()
+    confirm_form = ConfirmPasswordForm()
+    return render(request, 'profile/profile_update.html', {'form': form, 'confirm_form': confirm_form})
 
 """
 Groups
@@ -169,7 +190,23 @@ def groups_detail(request):
     return render(request, 'groups/groups_detail.html')
 
 def groups_create(request):
-    return render(request, 'groups/groups_create.html')
+    def empty_form():
+        current_user = request.user
+        new_form = GroupCreateForm(initial={
+            "email": current_user.email,
+            "phone": current_user.phone,
+        })
+        return new_form
+
+    if request.method == 'POST':
+        form = GroupCreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('groups_detail')
+
+    # Return an empty form if GET request or invalid form
+    form = empty_form()
+    return render(request, 'groups/groups_create.html', {'form': form})
 
 def groups_update(request):
     return render(request, 'groups/groups.html')
@@ -195,3 +232,35 @@ Password reset
     - Confirm: password_reset_confirm.html
     - Complete: password_reset_complete.html
 """
+
+
+
+
+
+"""
+Unused
+"""
+def profile_username_update(request):
+    """
+    WIP
+        Testing user fields
+    """
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        if form.is_valid():
+            test = request.POST["test"]
+            user = request.user
+            user.test_field = test
+            user.save()
+            print("Test successful")
+            return redirect('profile_detail')
+
+    # Return an empty form if GET request or form is invalid
+    form = TestForm()
+    return render(request, 'profile/profile_username_update.html', {'form': form})
+
+def profile_email_update(request):
+    return render(request, 'profile/profile_email_update.html')
+
+def profile_password_update(request):
+    return render(request, 'profile/profile_password_update.html')

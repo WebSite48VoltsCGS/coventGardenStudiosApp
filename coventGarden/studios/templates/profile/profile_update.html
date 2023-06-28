@@ -26,34 +26,40 @@
 
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Placeholder</li>
-		<li class="active">Placeholder</li>
+		<li><a href="{% url 'profile_detail' %}">Profil</a></li>
+		<li class="active"><a href="{% url 'profile_detail' %}">Modifier mon profil</a></li>
 	</ol>
 
 	<!-- Article main content -->
 	<article class="col-xs-12 maincontent">
 		<header class="page-header">
-			<h1 class="page-title">Placeholder</h1>
+			<h1 class="page-title">Profil</h1>
 		</header>
 		
 		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					Placeholder: {{ user.first_name }}<br>
-				</div>
-			</div>
-		</div>
+					<h3 class="thin text-center">Modifier son profil</h3>
+					<p class="text-center text-muted">Voulez-vous revenir à votre profil? <a href="{% url 'profile_detail' %}">Cliquez ici.</a></p>
+					<hr>
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'profile_username_update' %}">
-					<button class="btn btn-action" type="submit">Test Group</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form>
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
+					<form action="" method="post">
+						{% include "base/base_form.html" %}
+						<hr>
+						{% include "base/base_confirm_form.html" %}
+						<hr>
+						<div class="row">
+							<div class="col-lg-6 text-left">
+								<form action="{% url 'profile_detail' %}">
+									<button class="btn btn-action" onclick="window.location.href='{% url 'profile_detail' %}'">Annuler
+								</form>
+							</div>
+							<div class="col-lg-6 text-right">
+								<button class="btn btn-action" type="submit">Confirmer</button>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 		

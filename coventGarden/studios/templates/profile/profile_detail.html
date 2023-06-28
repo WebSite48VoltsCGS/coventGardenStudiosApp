@@ -26,8 +26,7 @@
 
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Compte</li>
-		<li class="active">Profil</li>
+		<li class="active"><a href="{% url 'profile_detail' %}">Profil</a></li>
 	</ol>
 
 	<!-- Article main content -->
@@ -39,9 +38,10 @@
 		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					Prénom: {{ user.first_name }}<br>
 					Nom: {{ user.last_name }}<br>
+					Prénom: {{ user.first_name }}<br>
 					E-mail: {{ user.email }}<br>
+					Téléphone: {{ user.phone }}<br>
 					Test Field: {{ user.test_field }}<br>
 				</div>
 			</div>
@@ -54,7 +54,7 @@
 				</form>
 			</div>
 			<div class="col-lg-6 text-right">
-				<form action="" method="post">
+				<form action="{% url 'account_log_out' %}" method="post">
 					{% csrf_token %}
 					<button class="btn btn-action" type="submit">Déconnexion</button>
 				</form>
