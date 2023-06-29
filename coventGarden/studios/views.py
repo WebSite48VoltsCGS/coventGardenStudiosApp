@@ -1,10 +1,8 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView
-from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.http import JsonResponse
 
+<<<<<<< HEAD
 #a retirer
 from django.views.decorators.csrf import csrf_exempt
 
@@ -14,22 +12,20 @@ from .forms import CustomUserCreationForm
 from .forms import SignInForm, SignUpForm, TestForm
 #Bibliothèque pour upload un fichier pdf modif Luca 
 from .forms import FicheTechniqueForm
+=======
+from .models import CustomGroup, Event
+from .forms import (
+    SignInForm, SignUpForm, GroupCreateForm,
+    UserUpdateForm, ConfirmPasswordForm,
+    EventForm)
+
+from datetime import timedelta
+
+>>>>>>> daab8b967225cb00140a04e10ec9caeca27ddc24
 User = get_user_model()
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-"""
-Tutorial
-"""
-class UserListView(LoginRequiredMixin, ListView):
-    model = User
-    template_name = "user_detail.html"
-
-class SignUpView(CreateView):
-    form_class = CustomUserCreationForm
-    success_url = reverse_lazy("login")
-    template_name = "registration/signup.html"
-
 """
 WIP
     - Placeholder
@@ -57,6 +53,9 @@ def news(request):
 def studios(request):
     return render(request, 'studios.html')
 
+def concert(request):
+    return render(request, 'concert.html')
+
 def bar(request):
     return render(request, 'bar.html')
 
@@ -69,22 +68,32 @@ def contact(request):
 def booking(request):
     return render(request, 'booking.html')
 
+
 """
 Account
     - Sign in
     - Sign out
-    - Log out
+    - Log in (Redirect)
+    - Log out (Redirect)
 """
 def account_sign_in(request):
     if request.method == 'POST':
         form = SignInForm(request.POST)
         if form.is_valid():
-            # Log in the user
+            # Form input
             username = request.POST["username"]
             password = request.POST["password"]
-            account_log_in(request, username, password)
 
-    # Return an empty form if GET request or form is invalid
+            # Log in the user
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                # Redirect on success
+                login(request, user)
+                return redirect('profile_detail')
+            else:
+                print("Error: User not found.")
+
+    # Return an empty form if GET request or invalid form
     form = SignInForm()
     return render(request, 'account/account_sign_in.html', {'form': form})
 
@@ -92,6 +101,7 @@ def account_sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
+            # Form input
             username = request.POST["username"]
             first_name = request.POST["first_name"]
             last_name = request.POST["last_name"]
@@ -101,69 +111,79 @@ def account_sign_up(request):
 
             if password == confirm_password:
                 # Create a new user
-                user = User.objects.create_user(username, email, password)
-                user.first_name = first_name
-                user.last_name = last_name
+                user = User.objects.create_user(
+                    username=username, email=email, password=password,
+                    last_name=last_name, first_name=first_name)
                 user.save()
 
                 # Log in the user
-                account_log_in(request, username, password)
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    # Redirect on success
+                    login(request, user)
+                    return redirect('profile_detail')
+                else:
+                    print("Error: User not found.")
+            else:
+                print("Error: Password and confirmation password do not match")
 
-    # Return an empty form if GET request or form is invalid
+    # Return an empty form if GET request or invalid form
     form = SignUpForm()
     return render(request, 'account/account_sign_up.html', {'form': form})
 
-def account_log_in(request, username, password):
-    # Authenticate the user
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-    else:
-        print("Error: A user is already logged in.")
-    return redirect('profile_detail')
-
 def account_log_out(request):
+    # Disconnect the user
     logout(request)
+
+    # Redirect on success
     return redirect('account_sign_in')
+
 
 """
 Profile
     - Detail
     - Update
-    - Username update
-    - Email update
-    - Password update
 """
 def profile_detail(request):
     return render(request, 'profile/profile_detail.html')
 
 def profile_update(request):
-    return render(request, 'profile/profile_update.html')
+    def empty_form():
+        # Form initial value(s)
+        current_user = request.user
+        new_form = UserUpdateForm(initial={
+            "username": current_user.username,
+            "email": current_user.email,
+            "last_name": current_user.last_name,
+            "first_name": current_user.first_name
+        })
+        return new_form
 
-def profile_username_update(request):
-    """
-    WIP
-        Testing user fields
-    """
     if request.method == 'POST':
-        form = TestForm(request.POST)
-        if form.is_valid():
-            test = request.POST["test"]
-            user = request.user
-            user.test_field = test
-            user.save()
-            print("Test successful")
-            return redirect('profile_detail')
+        form = UserUpdateForm(request.POST)
+        confirm_form = ConfirmPasswordForm(request.POST)
+        if form.is_valid() and confirm_form.is_valid():
+            if request.POST["current_password"] == request.POST["confirm_password"]:
+                # Form input
+                user = request.user
+                user.username = request.POST["username"]
+                user.email = request.POST["email"]
+                user.last_name = request.POST["last_name"]
+                user.first_name = request.POST["first_name"]
 
-    # Return an empty form if GET request or form is invalid
-    form = TestForm()
-    return render(request, 'profile/profile_username_update.html', {'form': form})
+                # Update the user
+                user.save()
 
-def profile_email_update(request):
-    return render(request, 'profile/profile_email_update.html')
+                # Redirect on success
+                return redirect('profile_detail')
+            else:
+                print("Error: Password and confirmation password do not match")
 
-def profile_password_update(request):
-    return render(request, 'profile/profile_password_update.html')
+    # Return an empty form if GET request or invalid form
+    form = empty_form()
+    confirm_form = ConfirmPasswordForm()
+    return render(request, 'profile/profile_update.html', {'form': form, 'confirm_form': confirm_form})
+
 
 """
 Groups
@@ -173,16 +193,68 @@ Groups
     - Delete
 """
 def groups_detail(request):
-    return render(request, 'groups/groups_detail.html')
+    # Get all groups object related to the current user
+    my_groups = request.user.my_groups.all()
+
+    return render(request, 'groups/groups_detail.html', {'my_groups': my_groups})
 
 def groups_create(request):
-    return render(request, 'groups/groups_create.html')
+    def empty_form():
+        # Form initial value(s)
+        current_user = request.user
+        new_form = GroupCreateForm(initial={
+            "email": current_user.email,
+            "phone": current_user.phone,
+        })
+        return new_form
 
-def groups_update(request):
-    return render(request, 'groups/groups.html')
+    if request.method == 'POST':
+        form = GroupCreateForm(request.POST)
+        if form.is_valid():
+            # Associate the group to the current user
+            group = form.save(commit=False)
+            group.user = request.user
 
-def groups_delete(request):
-    return render(request, 'groups/groups_delete.html')
+            # Create a new group
+            group.save()
+
+            # Redirect on success
+            return redirect('groups_detail')
+
+    # Return an empty form if GET request or invalid form
+    form = empty_form()
+    return render(request, 'groups/groups_create.html', {'form': form})
+
+def groups_update(request, group_id):
+    # Get group object with its id
+    group = CustomGroup.objects.get(id=group_id)
+
+    if request.method == 'POST':
+        form = GroupCreateForm(request.POST, instance=group)
+        if form.is_valid():
+            # Update the group
+            form.save()
+
+            # Redirect on success
+            return redirect('groups_detail')
+
+    # Return an empty form if GET request or invalid form
+    form = GroupCreateForm(instance=group)
+    return render(request, 'groups/groups_update.html', {'form': form})
+
+def groups_delete(request, group_id):
+    # Get group object with its id
+    group = CustomGroup.objects.get(id=group_id)
+
+    if request.method == 'POST':
+        # Delete the group
+        group.delete()
+
+        # Redirect on success
+        return redirect('groups_detail')
+
+    return render(request, 'groups/groups_delete.html', {'group': group})
+
 
 """
 Bookings
@@ -194,6 +266,94 @@ def bookings_detail(request):
 
 def bookings_create(request):
     return render(request, 'bookings/bookings_create.html')
+
+
+"""
+Planning
+"""
+def generate_occurrences(event):
+    occurrences = [event.start_time]
+
+    if event.recurrence == 'daily':
+        current_time = event.start_time
+        while current_time < event.end_time:
+            current_time += timedelta(days=1)
+            occurrences.append(current_time)
+
+    return occurrences
+
+
+def add_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('calendar')
+    else:
+        form = EventForm()
+    return render(request, 'create_event.html', {'form': form})
+
+
+def index(request):
+    all_events = Event.objects.all()
+
+    events = []
+    for event in all_events:
+        occurrences = generate_occurrences(event)
+        for occurrence in occurrences:
+            events.append({
+                'title': event.title,
+                'id': event.id,
+                'start': occurrence.strftime("%Y-%m-%d %H:%M:%S"),
+                'end': occurrence.strftime("%Y-%m-%d %H:%M:%S"),
+            })
+
+    context = {
+        "events": events,
+    }
+    return render(request, 'index.html', context)
+
+
+def all_events(request):
+    events = Event.objects.all()
+    out = []
+    for event in events:
+        out.append({
+            'title': event.title,
+            'id': event.id,
+            'start': event.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'end': event.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    return JsonResponse(out, safe=False)
+
+
+def update(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    id = request.GET.get("id", None)
+    event = Event.objects.get(id=id)
+    event.start_time = start
+    event.end_time = end
+    event.title = title
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def remove(request):
+    id = request.GET.get("id", None)
+    event = Event.objects.get(id=id)
+    event.delete()
+    data = {}
+    return JsonResponse(data)
+
+
+def calendar_view(request):
+    events = Event.objects.all()
+    context = {'events': events}
+    return render(request, 'calendar.html', context)
+
 
 """
 Password reset

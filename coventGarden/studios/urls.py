@@ -1,10 +1,7 @@
 
 from django.urls import path
 from django.contrib.auth.views import (
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
-    PasswordResetCompleteView
+    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 )
 
 from coventGarden import settings
@@ -16,18 +13,17 @@ from .forms import UserPasswordResetForm, UserPasswordSetForm
 
 
 urlpatterns = [
-    path("signup/", views.SignUpView.as_view(), name="signup"),
-
     path('', views.placeholder, name='placeholder'),
 
     # Navigation
     path('', views.home, name='home'),
     path('actualites/', views.news, name='news'),
     path('studios/', views.studios, name='studios'),
+    path('concert/', views.concert, name='concert'),
     path('bar/', views.bar, name='bar'),
     path('espace_pro/', views.pro_area, name='pro_area'),
-    path('contact/', views.contact, name='contact'),
     path('reservation/', views.booking, name='booking'),
+    path('contact/', views.contact, name='contact'),
 
     # Account
     path('compte/connexion/', views.account_sign_in, name='account_sign_in'),
@@ -35,21 +31,25 @@ urlpatterns = [
     path('compte/deconnexion/', views.account_log_out, name='account_log_out'),
 
     # Profile
-    path('compte/mon_profil/', views.profile_detail, name='profile_detail'),
-    path('compte/mon_profil/modifier/', views.profile_update, name='profile_update'),
-    path('compte/mon_profil/modifier/utilisateur', views.profile_username_update, name='profile_username_update'),
-    path('compte/mon_profil/modifier/email', views.profile_email_update, name='profile_email_update'),
-    path('compte/mon_profil/modifier/mot_de_passe', views.profile_password_update, name='profile_password_update'),
+    path('compte/', views.profile_detail, name='profile_detail'),
+    path('compte/modifier/', views.profile_update, name='profile_update'),
 
     # Groups
     path('compte/mes_groupes/', views.groups_detail, name='groups_detail'),
     path('compte/mes_groupes/ajouter/', views.groups_create, name='groups_create'),
-    path('compte/mes_groupes/modifier/', views.groups_update, name='groups_update'),
-    path('compte/mes_groupes/supprimer/', views.groups_delete, name='groups_delete'),
+    path('compte/mes_groupes/modifier/<int:group_id>/', views.groups_update, name='groups_update'),
+    path('compte/mes_groupes/supprimer/<int:group_id>/', views.groups_delete, name='groups_delete'),
 
     # Bookings
     path('compte/mes_reservations/', views.bookings_detail, name='bookings_detail'),
     path('compte/mes_reservations/ajouter/', views.bookings_create, name='bookings_create'),
+
+    # Planning
+    path('all_events/', views.all_events, name='all_events'),
+    path('add_event/', views.add_event, name='add_event'),
+    path('update/', views.update, name='update'),
+    path('remove/', views.remove, name='remove'),
+    path('calendar/', views.calendar_view, name='calendar'),
 
     # Password Reset
     path('compte/mot-de-passe/oublie/',

@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>Création de compte</title>
+<title>Créer un compte</title>
 
 {% endblock %}
 
@@ -21,47 +21,59 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
 		<li>Compte</li>
 		<li class="active">Inscription</li>
-	</ol>
+	</ol> <!-- /Breadcrumb -->
 
 	<div class="row">
-		
+
 		<!-- Article main content -->
 		<article class="col-xs-12 maincontent">
-			<header class="page-header">
-				<h1 class="page-title">Nouveau compte</h1>
-			</header>
-			
-			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h3 class="thin text-center">Créer un compte</h3>
-						<p class="text-center text-muted">Vous avez déjà un compte? <a href="{% url 'account_sign_in' %}">Connectez-vous</a></p>
-						<hr>
 
-						<form action="" method="post">
-							{% include "base/base_form.html" %}
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Créer un compte</h1>
+			</header> <!-- /Header -->
+
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Title / Text -->
+							<h3 class="thin text-center">Nouveau compte</h3>
+							<p class="text-center text-muted">Vous avez déjà un compte? <a href="{% url 'account_sign_in' %}">Cliquez ici</a></p>
+
 							<hr>
+
+							<!-- Include form(s) here -->
+							{% include "base/base_form.html" %}
+
+							<hr>
+
+							<!-- Button(s) -->
 							<div class="row">
+								<!-- Confirm -->
 								<div class="col-lg-12 text-right">
-									<button class="btn btn-action" type="submit">Inscription</button>
+									<button class="btn btn-action" type="submit">Confirmer</button>
 								</div>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
-			</div>
-			
-		</article>
-		<!-- /Article -->
+			</form> <!-- /Form -->
+
+		</article> <!-- /Article -->
 
 	</div>
-</div> <!-- /container -->
+
+</div> <!-- /Container -->
 
 {% endblock %}

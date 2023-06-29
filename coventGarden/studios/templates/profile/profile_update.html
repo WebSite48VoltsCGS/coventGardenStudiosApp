@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>Placeholder</title>
+<title>Modifier mon profil</title>
 
 {% endblock %}
 
@@ -21,45 +21,70 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Placeholder</li>
-		<li class="active">Placeholder</li>
-	</ol>
+		<li><a href="{% url 'profile_detail' %}">Compte</a></li>
+		<li class="active"><a href="{% url 'profile_update' %}">Modifier</a></li>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Placeholder</h1>
-		</header>
-		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					Placeholder: {{ user.first_name }}<br>
+	<div class="row">
+
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Modifier mon profil</h1>
+			</header> <!-- /Header -->
+
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Title / Text -->
+							<h3 class="thin text-center">Changer ses informations</h3>
+							<p class="text-center text-muted">Vous voulez revenir à votre profil? <a href="{% url 'profile_detail' %}">Cliquez ici</a></p>
+
+							<hr>
+
+							<!-- Include form(s) here -->
+							{% include "base/base_form.html" %}
+
+							<hr>
+
+							<h3 class="thin text-center">Vérification</h3>
+							<p class="text-center text-muted">Veuillez rentrer votre mot de passe afin de compléter vos changements.</a></p>
+							{% include "base/base_confirm_form.html" %}
+
+							<hr>
+
+							<!-- Button(s) -->
+							<div class="row">
+								<!-- Redirect -->
+								<div class="col-lg-6 text-left">
+									<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'profile_detail' %}'">Annuler</button>
+								</div>
+
+								<!-- Confirm -->
+								<div class="col-lg-6 text-right">
+									<button class="btn btn-action" type="submit">Confirmer</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			</form> <!-- /Form -->
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'profile_username_update' %}">
-					<button class="btn btn-action" type="submit">Test Group</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form>
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+		</article> <!-- /Article -->
 
-</div>	<!-- /container -->
+	</div>
+
+</div> <!-- /Container -->
 
 {% endblock %}
