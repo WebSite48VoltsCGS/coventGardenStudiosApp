@@ -47,9 +47,7 @@
 
 <div class="container">
 	<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
-</div>
 
-<div class="container">
 	<div class="row-button">
 		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
 		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
@@ -62,7 +60,7 @@
   
 
 	<div class="container">
- 	<br> <p> * Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
+ 	<p> * Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
 
        
 		<div class="exemple-fiche-technique">
@@ -94,5 +92,16 @@
 			  <br><a href="../static/studios/images/modèle fiche technique.png" download><button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button></a>
 		
 		</div>
+
+		<!--Upload de la fiche technique modif Luca -->
+
+		<form method="POST" enctype="multipart/form-data" name="test">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type="file" name="fichier">
+			<button type="submit">Enregistrer</button>
+		  </form>
+		  
+		  
 
 {% endblock %}

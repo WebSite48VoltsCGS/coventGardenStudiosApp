@@ -1,3 +1,4 @@
+
 from django.urls import path
 from django.contrib.auth.views import (
     PasswordResetView,
@@ -6,8 +7,13 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView
 )
 
+from coventGarden import settings
+from coventGarden.settings import STATIC_URL
+from django.conf.urls.static import static 
 from studios import views
+
 from .forms import UserPasswordResetForm, UserPasswordSetForm
+
 
 urlpatterns = [
     path("signup/", views.SignUpView.as_view(), name="signup"),
@@ -65,4 +71,12 @@ urlpatterns = [
          PasswordResetCompleteView.as_view(
              template_name='password_reset/password_reset_complete.html'),
          name='password_reset_complete'),
-]
+
+    
+
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+
+#url fichier Luca modif ligne 76-82, et ligne 10 et 11 et 17
+
+

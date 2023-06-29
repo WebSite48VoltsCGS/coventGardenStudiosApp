@@ -91,3 +91,9 @@ class TestForm(forms.Form):
         super(TestForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
+
+
+#Upload pdf concert modif Luca 
+
+class FicheTechniqueForm(forms.Form):
+    pdf_file = forms.FileField(label='Déposer la Fiche Technique')

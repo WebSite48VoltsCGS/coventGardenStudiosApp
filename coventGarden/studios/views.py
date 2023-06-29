@@ -5,10 +5,17 @@ from django.views.generic import ListView
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 
+#a retirer
+from django.views.decorators.csrf import csrf_exempt
+
+from studios.models import FicheTechnique
+
 from .forms import CustomUserCreationForm
 from .forms import SignInForm, SignUpForm, TestForm
-
+#Bibliothèque pour upload un fichier pdf modif Luca 
+from .forms import FicheTechniqueForm
 User = get_user_model()
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 """
@@ -195,3 +202,26 @@ Password reset
     - Confirm: password_reset_confirm.html
     - Complete: password_reset_complete.html
 """
+
+
+#Upload de fichiers modif Luca
+@csrf_exempt
+@login_required 
+def pro_area(request):
+    if request.method == 'POST':
+        print(request.POST, "caca")
+        fiche_technique = FicheTechnique.objects.all().filter(Utilisateur=request.user).first()
+        if not fiche_technique: fiche_technique = FicheTechnique()
+
+        print(request.user)
+        form = FicheTechniqueForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Traitez le fichier ici (par exemple, sauvegardez-le)
+            deposited_file = form.cleaned_data['pdf_file']
+            fiche_technique.Fiche_Technique = deposited_file
+            fiche_technique.Utilisateur = request.user
+            fiche_technique.save()
+            return render(request, 'pro_area.html', {'form': form})
+    else:
+        form = FicheTechniqueForm()
+    return render(request, 'pro_area.html', {'form': form})

@@ -11,7 +11,7 @@
 {% block style %}
 
 <link rel="stylesheet" href="{% static 'studios/css/news.css' %}" />
-
+<link rel="stylesheet" href="{% static 'studios/css/background.css' %}" />
 {% endblock %}
 
 
@@ -24,25 +24,21 @@
 
 {% block content %}
 
+   
 <!-- container -->
 <div class="container">
-
-    <ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Actualités</li>
-    </ol>
     <div class="row">
-    <article class="col-sm-8 maincontent">
-        <header class="page-header">
-            <h1 class="page-title">Actualités</h1>
-        </header>
-    </article>
-</div>
-</div> <!-- /container -->
+        <article class="col-sm-8 maincontent">
+            <header class="page-header">
+                <h1 class="page-title">Actualités</h1>
+            </header>
+        </article>
+    </div>
+    </div>
 
 
 <div class="Réseaux">
-    <h3>
+    <h3 class="titles">
         Nos Réseaux
     </h3>
     <p>
@@ -64,17 +60,17 @@
         <div class="paragraphes">Le Covent Garden offre une large palette de dispositifs pour se produire sur scène adaptés à chaque projet.</div>
        
         <div class="program-column">
-            <h3>Auto-production</h3>
+            <h3 class="titles">Auto-production</h3>
             <div class="paragraphes">Pour les associations ou les artistes souhaitant produire leur propre concert de A à Z.</div>
         </div>
         
         <div class="program-column">
-            <h3>Free Friday</h3>
+            <h3 class="titles">Free Friday</h3>
             <div class="paragraphes">Pour les groupes locaux souhaitant monter sur scène sans contraintes, mêlant musique et esprit familiale.</div>
         </div>
         
         <div class="program-column">
-            <h3>Production du Covent Garden</h3>
+            <h3 class="titles">Production du Covent Garden</h3>
             <div class="paragraphes">Pour les groupes professionnels, projets portés par le Covent Garden Studios, en production ou co-production.</div>
         </div>
     </div>  
@@ -82,7 +78,7 @@
 
 <div class="container">
     <div class="stud">
-        <h3>Produire son propre concert au Covent Garden Studios</h3>
+        <h3 class="titles">Produire son propre concert au Covent Garden Studios</h3>
         <div class="paragraphes">
             <p>Les associations et les groupes de musique (structuré en association) ont la possibilité d’organiser leur propre concert au Covent Garden Studios :</p>
         <ul>
@@ -103,14 +99,113 @@
     </div>
 </div> 
 
+
+<div class="container">
+    <div class="stud">
+        <div class="freefriday">  
+           
+    <br><div class="glow">Organiser son Free Friday au Covent Garden Studios</div>
+    <br><br><br><img src="../static/studios/images/freefriday_White.png"   alt="logofreefriday"> 
+    <br><div class="paragraphesff">
+        Depuis plusieurs années, les Free Friday organisés par le Covent Garden Studios permettent aux groupes locaux de se produire sur scène. 
+        Grâce à une mise à disposition gratuite de la scène et d’un encadrement technique, les groupes peuvent se produire sur scène.
+        Un plateau complet de 3 groupes doit être proposé par un groupe.
+    </div>
+    
+
+        
+    </div>
+
+
+    <div class="program-column2">
+        <h3 class="blancblanc">Conditions générales</h3>
+        <ul>
+            <li>La production est réalisée par les groupes</li>
+            <li>Documents à fournir pour validation de l’inscription :
+                <ul>
+                    <li>Fiches techniques</li>
+                    <li>Logos</li>
+                    <li>Biographies</li>
+                </ul>
+            </li>
+            <li>Toute demande technique non inscrite dans la fiche technique, pourra ne pas être honorée</li>
+            <li>Catering offert par la salle</li>
+            <li>Pas de défraiement</li>
+            <li>Pas de cachet</li>
+            <li>Pas de déclaration Sacem</li>
+            <li>3 groupes, pas moins, pas plus, annulation du concert en cas de désistement d’un groupe</li>
+           
+        </ul>
+    
+    </div>
+
+    <div class="program-column2">
+        <h3 class="blancblanc">Conditions techniques</h3>
+        <div class="paragraphes">
+            <p>
+                Balance pour un groupe et line check pour les autres juste avant de jouer.
+            </p>
+            <p>
+                Les groupes doivent s’entendre entre eux du temps de jeu de chacun, prévoir 15min de changement de plateau entre chaque groupe.
+            </p>
+            <p>
+                Ingénieur son et pupitreur lumière à la charge du Covent Garden Studios, possibilité d’accueillir les techniciens des groupes, si prévenu à l’avance.
+            </p>
+            <h3 class="blancblanc">Horaires : </h3>
+                <ul>
+                    <li>
+                        19h00 : installation du groupe qui balance
+                    </li>
+                    <li>
+                        19h30 : balance du groupe
+                    </li>
+                    <li>
+                        20h00 : installation du matériel des autres groupes en autonomie
+                    </li>
+                    <li>
+                        20h30 : début du concert
+                    </li>
+                    <li>
+                        23h30 : fin du concert
+                    </li>
+                </ul>
+                <h3 class="blancblanc">Backline commun : </h3>
+                <ul>
+                    <li>
+                        Batterie de la salle obligatoire 
+                    </li>
+                    <li>
+                        Caisse claire et cymbales à la charge des groupes
+                    </li>
+                    <li>
+                        2x cabinets guitare 4×12 (16 Ω) fournis
+                    </li>
+                    <li>
+                        1 cabinet basse 1×15 fourni
+                    </li>
+                    <li>
+                        Tête d’ampli à la charge des groupes (guitare et basse)
+                    </li>
+                </ul>
+            </div>
+    </div>
+
+    </div>
+</div> 
+
 <div class="container">
     <div class="stud">
 
-
-
-
-
-
+        <h3 class="titles">Être programmé au Covent Garden Studios</h3>
+        <div class="paragraphes">
+            <p>Le Covent Garden Studios produit quelques dates au cours de l’année avec des groupes professionnels. Nous nous occupons de tout :</p>
+        <ul>
+            <li>Programmation des groupes musicaux</li>
+            <li>Gestion de la communication</li>
+            <li>Gestion de la vente des places et de la réunération</li>
+            <li>Régie technique</li>
+        </ul>
+        </div>
 
 
 
@@ -119,9 +214,21 @@
 </div> 
 
 
+<div class="container">
+    <div class="stud">
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0" nonce="zefN5tA6"></script>
 
 <div class="fb-page" data-href="https://www.facebook.com/CGS95/" data-tabs="timeline" data-width="500" data-height="800" data-small-header="true" data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true"><blockquote cite="https://www.facebook.com/CGS95/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/CGS95/">Covent Garden Studios</a></blockquote></div>
+</div>
+
+
+
+<figure data-behold-id="lyoEY8QNfQsC2kiJ6pop"></figure>
+<script src="https://w.behold.so/widget.js" type="module"></script>
+
+
+</div> 
+
 
 {% endblock %}
