@@ -4,6 +4,9 @@ from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser, CustomGroup
 
+#import event
+from .models import Events
+
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -18,3 +21,10 @@ class CustomGroupAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomGroup, CustomGroupAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
+
+#nouvelle class
+
+class eventAdmin(admin.ModelAdmin):
+    list_display = ["Utilisateur","title", "start_time","end_time","description"]
+
+admin.site.register(Events,eventAdmin)

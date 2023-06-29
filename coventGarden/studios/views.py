@@ -56,8 +56,8 @@ def studios(request):
 def bar(request):
     return render(request, 'bar.html')
 
-def pro_area(request):
-    return render(request, 'pro_area.html')
+def concert(request):
+    return render(request, 'concert.html')
 
 def contact(request):
     return render(request, 'contact.html')
@@ -264,3 +264,102 @@ def profile_email_update(request):
 
 def profile_password_update(request):
     return render(request, 'profile/profile_password_update.html')
+
+###########################################################################################################################
+
+from django.shortcuts import render
+from django.http import JsonResponse 
+from studios.models import Events 
+
+from django.shortcuts import render, redirect
+from .forms import EventForm
+
+from django.core import serializers
+from django.http import HttpResponse
+
+from datetime import timedelta
+
+def generate_occurrences(event):
+    occurrences = [event.start_time]
+
+    if event.recurrence == 'daily':
+        current_time = event.start_time
+        while current_time < event.end_time:
+            current_time += timedelta(days=1)
+            occurrences.append(current_time)
+
+
+    return occurrences
+def add_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('calendar')
+    else:
+        form = EventForm()
+    return render(request, 'create_event.html', {'form': form})
+
+
+def index(request):
+    all_events = Events.objects.all()
+
+    events = []
+    for event in all_events:
+        occurrences = generate_occurrences(event)
+        for occurrence in occurrences:
+            events.append({
+                'title': event.title,
+                'id': event.id,
+                'start': occurrence.strftime("%Y-%m-%d %H:%M:%S"),
+                'end': occurrence.strftime("%Y-%m-%d %H:%M:%S"),
+            })
+
+    context = {
+        "events": events,
+    }
+    return render(request, 'index.html', context)
+
+
+
+
+def all_events(request):
+    events = Events.objects.all()
+    out = []
+    for event in events :
+        out.append({
+            'title':event.title,
+            'id': event.id,
+            'start': event.start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'end': event.end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    return JsonResponse(out, safe=False)
+
+
+def update(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.start_time = start
+    event.end_time = end
+    event.title = title
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+ 
+def remove(request):
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.delete()
+    data = {}
+    return JsonResponse(data)
+
+
+def calendar_view(request):
+    events = Events.objects.all()
+    context = {'events': events}
+    return render(request, 'calendar.html', context)
+#########################################################################################################################

@@ -1,26 +1,12 @@
+#remise en forme du fichier
+
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils import timezone
 
 from .fields import *
 
-# Create your models here.
 class CustomUser(AbstractUser):
-    """
-    Default
-        username
-        first_name
-        last_name
-        email
-        password
-    """
-
-    """
-    WIP
-    phone
-    my_groups
-    my_bookings
-    
-    """
-
     test_field = MODELS_TEST
     phone = MODEL_USER_PHONE
 
@@ -30,7 +16,7 @@ class CustomUser(AbstractUser):
 class CustomGroup(models.Model):
     name = MODEL_NAME
     email = MODEL_EMAIL
-    phone = MODEL_GROUP_PHONE
+    phone = models.IntegerField(verbose_name='Phone')  # Correction: Utilisation de IntegerField pour le champ 'phone'
     members = MODEL_MEMBERS
     genre = MODEL_GENRE
     facebook = MODEL_FACEBOOK
@@ -39,16 +25,16 @@ class CustomGroup(models.Model):
     biography = MODEL_BIOGRAPHY
 
     def __str__(self):
-        return f"{self.name}"
-"""
-    - Group name
-    - E-mail
-    - Phone
-    - Members
-    - Musical style
-    - Facebook
-    - Instagram
-    - Twitter
-    - Biography
-    - Approval
-"""
+        return self.name
+
+
+# new class : Event -> planning
+
+class Events(models.Model):
+    title = models.CharField(max_length=200, default='Untitled Event')
+    start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(default=timezone.now)
+    description = models.TextField(blank=True)
+    recurrence = models.CharField(max_length=200, blank=True)
+    Utilisateur =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+

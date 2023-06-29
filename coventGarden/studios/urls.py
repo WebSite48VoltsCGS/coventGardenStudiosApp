@@ -16,7 +16,7 @@ urlpatterns = [
     path('actualites/', views.news, name='news'),
     path('studios/', views.studios, name='studios'),
     path('bar/', views.bar, name='bar'),
-    path('espace_pro/', views.pro_area, name='pro_area'),
+    path('concert/', views.concert, name='concert'),
     path('contact/', views.contact, name='contact'),
     path('reservation/', views.booking, name='booking'),
 
@@ -62,4 +62,13 @@ urlpatterns = [
          PasswordResetCompleteView.as_view(
              template_name='password_reset/password_reset_complete.html'),
          name='password_reset_complete'),
+
+    # Concert
+    path('', views.index, name='index'), 
+    path('all_events/', views.all_events, name='all_events'), 
+    path('add_event/', views.add_event, name='add_event'), 
+    path('update/', views.update, name='update'),
+    path('remove/', views.remove, name='remove'),
+    path('calendar/', views.calendar_view, name='calendar'),
+
 ]

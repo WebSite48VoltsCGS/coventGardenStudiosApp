@@ -63,3 +63,12 @@ class GroupCreateForm(forms.ModelForm):
 
 class TestForm(forms.Form):
     test = FORM_GROUP_NAME
+
+###################################################################################################
+from django import forms
+from studios.models import Events
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Events
+        fields = ['title', 'start_time', 'end_time','recurrence']
