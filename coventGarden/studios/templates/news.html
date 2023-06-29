@@ -12,6 +12,7 @@
 
 <link rel="stylesheet" href="{% static 'studios/css/news.css' %}" />
 <link rel="stylesheet" href="{% static 'studios/css/background.css' %}" />
+
 {% endblock %}
 
 
@@ -24,17 +25,21 @@
 
 {% block content %}
 
-   
 <!-- container -->
 <div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li class="active">Actualités</li>
+    </ol>
     <div class="row">
-        <article class="col-sm-8 maincontent">
-            <header class="page-header">
-                <h1 class="page-title">Actualités</h1>
-            </header>
-        </article>
-    </div>
-    </div>
+    <article class="col-sm-8 maincontent">
+        <header class="page-header">
+            <h1 class="page-title">Actualités</h1>
+        </header>
+    </article>
+</div>
+</div> <!-- /container -->
 
 
 <div class="Réseaux">
@@ -99,13 +104,36 @@
     </div>
 </div> 
 
+<div class="container">
+    <div class="stud">
+        <h3 class="titles">Produire son propre concert au Covent Garden Studios</h3>
+        <div class="paragraphes">
+            <p>Les associations et les groupes de musique (structuré en association) ont la possibilité d’organiser leur propre concert au Covent Garden Studios :</p>
+        <ul>
+            <li>Programmation des groupes musicaux</li>
+            <li>Gestion de la communication</li>
+            <li>Gestion de la vente des places et de la réunération</li>
+            <li>Lien technique entre les groupes et les régisseurs du Covent Garden Studios</li>
+        </ul>
+        </div>
+        <br><div class="paragraphes">
+            <br><p>Le Covent Garden Studios garde à sa charge :</p>
+        <ul>
+            <li>Gestion du Bar</li>
+            <li>Régie technique</li>
+           
+        </ul>
+        </div>
+    </div>
+</div> 
+
 
 <div class="container">
     <div class="stud">
         <div class="freefriday">  
            
     <br><div class="glow">Organiser son Free Friday au Covent Garden Studios</div>
-    <br><br><br><img src="../static/studios/images/freefriday_White.png"   alt="logofreefriday"> 
+    <br><br><br><img src="../static/studios/images/freefriday_White.png" alt="logofreefriday"> 
     <br><div class="paragraphesff">
         Depuis plusieurs années, les Free Friday organisés par le Covent Garden Studios permettent aux groupes locaux de se produire sur scène. 
         Grâce à une mise à disposition gratuite de la scène et d’un encadrement technique, les groupes peuvent se produire sur scène.
@@ -195,23 +223,18 @@
 
 <div class="container">
     <div class="stud">
-
         <h3 class="titles">Être programmé au Covent Garden Studios</h3>
         <div class="paragraphes">
             <p>Le Covent Garden Studios produit quelques dates au cours de l’année avec des groupes professionnels. Nous nous occupons de tout :</p>
-        <ul>
-            <li>Programmation des groupes musicaux</li>
-            <li>Gestion de la communication</li>
-            <li>Gestion de la vente des places et de la réunération</li>
-            <li>Régie technique</li>
-        </ul>
+            <ul>
+                <li>Programmation des groupes musicaux</li>
+                <li>Gestion de la communication</li>
+                <li>Gestion de la vente des places et de la réunération</li>
+                <li>Régie technique</li>
+            </ul>
         </div>
-
-
-
-
     </div>
-</div> 
+</div>
 
 
 <div class="container">

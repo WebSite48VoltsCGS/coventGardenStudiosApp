@@ -1,29 +1,18 @@
 from django.shortcuts import redirect, render
-from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.http import JsonResponse
-
-<<<<<<< HEAD
-#a retirer
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from datetime import timedelta
 
-from studios.models import FicheTechnique
-
-from .forms import CustomUserCreationForm
-from .forms import SignInForm, SignUpForm, TestForm
-#Bibliothèque pour upload un fichier pdf modif Luca 
-from .forms import FicheTechniqueForm
-=======
-from .models import CustomGroup, Event
+from .models import CustomGroup, Event, TechnicalSheet
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
-    EventForm)
+    EventForm, TechnicalSheetForm)
 
-from datetime import timedelta
 
->>>>>>> daab8b967225cb00140a04e10ec9caeca27ddc24
 User = get_user_model()
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 """
@@ -59,8 +48,25 @@ def concert(request):
 def bar(request):
     return render(request, 'bar.html')
 
+@csrf_exempt
+@login_required
 def pro_area(request):
-    return render(request, 'pro_area.html')
+    if request.method == 'POST':
+        technical_sheet = TechnicalSheet.objects.all().filter(user=request.user).first()
+        if not technical_sheet:
+            technical_sheet = TechnicalSheet()
+
+        form = TechnicalSheetForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process
+            deposited_file = form.cleaned_data['pdf_file']
+            technical_sheet.pdf_file = deposited_file
+            technical_sheet.user = request.user
+            technical_sheet.save()
+            return render(request, 'pro_area.html', {'form': form})
+
+    form = TechnicalSheetForm()
+    return render(request, 'pro_area.html', {'form': form})
 
 def contact(request):
     return render(request, 'contact.html')
@@ -362,26 +368,3 @@ Password reset
     - Confirm: password_reset_confirm.html
     - Complete: password_reset_complete.html
 """
-
-
-#Upload de fichiers modif Luca
-@csrf_exempt
-@login_required 
-def pro_area(request):
-    if request.method == 'POST':
-        print(request.POST, "caca")
-        fiche_technique = FicheTechnique.objects.all().filter(Utilisateur=request.user).first()
-        if not fiche_technique: fiche_technique = FicheTechnique()
-
-        print(request.user)
-        form = FicheTechniqueForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Traitez le fichier ici (par exemple, sauvegardez-le)
-            deposited_file = form.cleaned_data['pdf_file']
-            fiche_technique.Fiche_Technique = deposited_file
-            fiche_technique.Utilisateur = request.user
-            fiche_technique.save()
-            return render(request, 'pro_area.html', {'form': form})
-    else:
-        form = FicheTechniqueForm()
-    return render(request, 'pro_area.html', {'form': form})

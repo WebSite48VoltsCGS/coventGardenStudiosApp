@@ -5,19 +5,19 @@ from .fields import *
 
 # Create your models here.
 class CustomUser(AbstractUser):
-    # Add additional fields in here
-    test_field = models.CharField(max_length=LENGTH_NAME, default="Test")
-    #modification Luca ligne13
-
+    """
+    Default
+        username
+        first_name
+        last_name
+        email
+        password
+    """
+    test_field = MODELS_TEST
+    phone = MODEL_USER_PHONE
 
     def __str__(self):
         return self.username
-
-#modification Luca nouvelle classe
-
-class FicheTechnique(models.Model):
-    Fiche_Technique = models.FileField(upload_to='media/public', null=True)
-    Utilisateur = models.ForeignKey('CustomUser', on_delete=models.CASCADE, null = True)
 
 class CustomGroup(models.Model):
     user = models.ForeignKey(
@@ -45,3 +45,7 @@ class Event(models.Model):
     end_time = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
     recurrence = models.CharField(max_length=200, blank=True)
+
+class TechnicalSheet(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    pdf_file = models.FileField(upload_to='media/public', null=True)

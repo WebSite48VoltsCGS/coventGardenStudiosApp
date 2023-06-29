@@ -87,19 +87,12 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['title', 'start_time', 'end_time', 'recurrence']
 
-
-    # Class = 'form-control'
-    def __init__(self, *args, **kwargs):
-        super(TestForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
-
-#Upload pdf concert modif Luca 
-
-class FicheTechniqueForm(forms.Form):
+"""
+Concert
+    - Technical sheet
+"""
+class TechnicalSheetForm(forms.Form):
     pdf_file = forms.FileField(label='Déposer la Fiche Technique')
 
 class TestForm(forms.Form):
     test = FORM_GROUP_NAME
-

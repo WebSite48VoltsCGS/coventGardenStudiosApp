@@ -99,10 +99,11 @@
 
 /* boutton réservation*/
 
+
 .row-button {
     display: flex;
     align-items: flex-start;
-    max-width: 8px;
+    max-width: 80px;
     margin-bottom: 10px;
     padding: 20px;
     
