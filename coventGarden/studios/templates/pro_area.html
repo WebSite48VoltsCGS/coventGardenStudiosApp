@@ -1,0 +1,98 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+
+<title>Espace Pro</title>
+
+{% endblock %}
+
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
+
+{% endblock %}
+
+
+{% block header %}
+
+<header id="head" class="secondary"></header>
+
+{% endblock %}
+
+
+{% block content %}
+
+<!-- container -->
+<div class="container">
+
+	<ol class="breadcrumb">
+		<li><a href="{% url 'home' %}">Accueil</a></li>
+		<li class="active">Espace Pro</li>
+	</ol>
+
+</div> <!-- /container -->
+
+
+<div class="container">
+<div class="row">
+	<article class="col-sm-8 maincontent">
+		<header class="page-header">
+			<h1 class="page-title">Mon Espace Pro</h1>
+		</header>
+	</article>
+</div>
+</div>
+
+<div class="container">
+	<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
+</div>
+
+<div class="container">
+	<div class="row-button">
+		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
+		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
+	</div>
+</div>
+
+
+  <!--! fichier java -->
+<script src="../static/studios/js/animation.js"></script>
+  
+
+	<div class="container">
+ 	<br> <p> * Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
+
+       
+		<div class="exemple-fiche-technique">
+			<br><p>
+				Comment remplir une fiche technique ? Voici un modèle valide : 
+			</p>
+			<div class="image-container">
+				
+				<a href="#" id="image-link">
+				<div class="image-overlay">
+				  <img src="../static/studios/images/modèle fiche technique.png" alt="Image fiche technique" onclick="showImage(this)">
+				  <div class="overlay-text">
+					<p>Modèle fiche Technique</p>
+				  </div>
+				</div>
+				</a>
+			  </div>
+			  
+			  <div id="imageModal" class="modal">
+				<span class="close" onclick="hideImage()">&times;</span>
+				<img id="modalImage" src="" alt="Image en grand">
+			  </div>
+		
+			  
+			  <br><p>
+				Document vierge téléchargeable ci-dessous : 
+				</p>
+			  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+			  <br><a href="../static/studios/images/modèle fiche technique.png" download><button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button></a>
+		
+		</div>
+
+{% endblock %}

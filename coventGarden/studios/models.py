@@ -1,12 +1,27 @@
-#remise en forme du fichier
-
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.utils import timezone
 
 from .fields import *
 
+# Create your models here.
 class CustomUser(AbstractUser):
+    """
+    Default
+        username
+        first_name
+        last_name
+        email
+        password
+    """
+
+    """
+    WIP
+    phone
+    my_groups
+    my_bookings
+    
+    """
+
     test_field = MODELS_TEST
     phone = MODEL_USER_PHONE
 
@@ -14,9 +29,14 @@ class CustomUser(AbstractUser):
         return self.username
 
 class CustomGroup(models.Model):
+    user = models.ForeignKey(
+        to=CustomUser,
+        on_delete=models.CASCADE,
+        related_name='my_groups'
+    )
     name = MODEL_NAME
     email = MODEL_EMAIL
-    phone = models.IntegerField(verbose_name='Phone')  # Correction: Utilisation de IntegerField pour le champ 'phone'
+    phone = MODEL_GROUP_PHONE
     members = MODEL_MEMBERS
     genre = MODEL_GENRE
     facebook = MODEL_FACEBOOK
@@ -25,16 +45,12 @@ class CustomGroup(models.Model):
     biography = MODEL_BIOGRAPHY
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
-
-# new class : Event -> planning
-
-class Events(models.Model):
+class Event(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=200, default='Untitled Event')
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
     recurrence = models.CharField(max_length=200, blank=True)
-    Utilisateur =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-
