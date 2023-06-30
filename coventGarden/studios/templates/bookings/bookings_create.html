@@ -21,45 +21,77 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
 		<li>Placeholder</li>
 		<li class="active">Placeholder</li>
-	</ol>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Placeholder</h1>
-		</header>
-		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					Placeholder: {{ user.first_name }}<br>
+	<div class="row">
+
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Placeholder</h1>
+			</header> <!-- /Header -->
+
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Text -->
+							<h3 class="thin text-center">Placeholder</h3>
+							<p class="text-center text-muted">Placeholder? <a href="{% url 'placeholder' %}">Ajouter un lien</a></p>
+
+							<hr>
+
+							<!-- Include form(s) here -->
+							{% include "base/base_form.html" %}
+
+							<hr>
+
+							<!-- Button(s) -->
+							<div class="row">
+								<!-- Redirect -->
+								<div class="col-lg-6 text-left">
+									<b><a href="{% url 'placeholder' %}">Ajouter un lien</a></b>
+								</div>
+
+								<!-- Confirm -->
+								<div class="col-lg-6 text-right">
+									<button class="btn btn-action" type="submit">Confirmer</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			</form> <!-- /Form -->
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'profile_update' %}">
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form>
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+			<!-- Button(s) -->
+			<div class="row">
+				<div class="col-lg-6 text-left">
+					<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'placeholder' %}'">Annuler</button>
+				</div>
 
-</div>	<!-- /container -->
+				<div class="col-lg-6 text-right">
+					<form action="{% url 'placeholder' %}">
+						<button class="btn btn-action">Placeholder</button>
+					</form>
+				</div>
+			</div> <!-- /Button(s) -->
+
+		</article> <!-- /Article -->
+
+	</div>
+
+</div> <!-- /Container -->
 
 {% endblock %}

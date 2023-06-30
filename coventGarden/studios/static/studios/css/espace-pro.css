@@ -103,9 +103,9 @@
 .row-button {
     display: flex;
     align-items: flex-start;
-    max-width: 800px;
-    margin-bottom: 100px;
-    padding: 200px;
+    max-width: 80px;
+    margin-bottom: 10px;
+    padding: 20px;
     
   }
 

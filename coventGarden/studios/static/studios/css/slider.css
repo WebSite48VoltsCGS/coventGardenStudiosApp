@@ -25,7 +25,37 @@
 	height: 175px;
   }
 
+
   .swiper-slide img {
 	display: block;
 	width: 100%;
   }
+
+.autoplay-progress svg {
+  --progress: 0;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  stroke-width: 4px;
+  stroke: var(--swiper-theme-color);
+  fill: none;
+  stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
+  stroke-dasharray: 125.6;
+  transform: rotate(-90deg);
+}
+
+.carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 300px; /* Définissez la largeur souhaitée */
+	max-height: 300px; /* Définissez la hauteur souhaitée */
+	margin:  auto; /* Centrez le carrousel horizontalement */
+	background-color: black; /* Ajoutez cette ligne pour définir le fond noir */
+	border-radius: 15px; /* Ajoutez cette ligne pour définir les coins arrondis */
+	overflow: hidden; /* Ajoutez cette ligne pour masquer le contenu dépassant du conteneur */
+}
+
