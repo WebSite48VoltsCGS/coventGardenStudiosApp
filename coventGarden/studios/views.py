@@ -5,12 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
 
-from .models import CustomGroup, Event, TechnicalSheet
+from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
-    EventForm, TechnicalSheetForm)
-
+    EventForm, TechnicalSheetForm, ReservationForm)
+from datetime import datetime
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -368,3 +369,123 @@ Password reset
     - Confirm: password_reset_confirm.html
     - Complete: password_reset_complete.html
 """
+
+"""
+Salles
+    -Listing all Salle
+Reservation
+    - Listing reservation
+"""
+def list_salles(request):
+    salles = Salle.objects.all()
+    salle_data = [{"id": salle.id, "title": salle.name} for salle in salles]
+    return JsonResponse(salle_data, safe=False)
+
+def list_users(request):
+    users = CustomUser.objects.all()
+    user_data = [{"id": user.id, "title": user.username} for user in users]
+    return JsonResponse(user_data, safe=False)
+
+
+def accompte(request):
+
+    if request.method == 'POST':
+
+        salle_id = int(request.POST["salle_id"])
+        #salle_id = int(request.POST["salle_id"])
+        salle = Salle.objects.get(id= salle_id)
+
+        user_id = int(request.POST["user_id"])
+        user = CustomUser.objects.get(id= user_id)
+
+        start_date = request.POST["date_start"]
+        end_date = request.POST["date_end"]
+
+        form = ReservationForm()
+
+        #print(form)
+        
+        duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
+        duration_seconds = duration.total_seconds()
+        duration_hours = duration_seconds / 3600
+        print(duration_hours)
+        
+        duration = 1
+        return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
+        "end_date": end_date, "duration": duration_hours, "form": form})
+
+    else:
+        return redirect('booking')
+
+
+def payment(request):
+
+    print(request.POST)
+    
+    if request.method == 'POST':
+
+        salle_id = int(request.POST["salle_id"])
+        user_id = int(request.POST["user_id"])
+
+        form = ReservationForm(request.POST)
+
+        if form.is_valid():
+            
+            salle = Salle.objects.get(id= salle_id)
+            user = CustomUser.objects.get(id= user_id)
+
+            description = "Reservation for user "+ user.username
+            duration = form.cleaned_data["duration"]
+            date_start = form.cleaned_data["date_start"]
+            date_end = form.cleaned_data["date_end"]
+            price = form.cleaned_data["price"]
+            status = "En cours"
+            """
+            description = ""
+            duration = request.POST["duration"]
+            date_start = request.POST["date_start"]
+            date_end = request.POST["date_end"]
+            price = request.POST["price"]
+            status = "En cours"
+            """
+            """
+            description = models.fields.CharField(max_length=1000)
+            duration = models.fields.IntegerField(choices=Duration.choices)
+            date_start = models.DateTimeField(null=False)
+            date_end = models.DateTimeField(null=False)
+            hour_begin = models.TimeField(null=False)
+            price = models.fields.IntegerField(validators=[MinValueValidator(1)])
+            status = models.fields.CharField(choices=Status.choices, max_length=20)
+            salle = models.ForeignKey(Salle, null=True, on_delete=models.SET_NULL)
+            user = models.ForeignKey(Utilisateur, null=True, on_delete=models.SET_NULL)
+            """
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration,
+                date_start=date_start,
+                date_end=date_end,
+                price=price,
+                status=status,
+                salle=salle,
+                user=user
+            )
+
+            messages.success(request, "Votre réservation a bien été prise en compte !")
+            # Redirect to the detail page of the band we just created
+            return redirect('booking')
+            
+    else:
+        return redirect('booking')
+
+
+def all_booking(request):
+    reservations = Reservation.objects.all()
+    datas = []
+    for current in reservations:
+        datas.append({
+            'title': current.description,
+            'id': current.id,
+            'start': current.date_start.strftime("%Y-%m-%d %H:%M:%S"),
+            'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
+        })
+    return JsonResponse(datas, safe=False)
