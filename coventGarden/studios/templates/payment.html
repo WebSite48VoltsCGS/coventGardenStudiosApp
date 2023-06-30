@@ -1,19 +1,16 @@
 {% extends 'base/base.html' %}
 {% load static %}
+
+<!-- Insert title -->
 {% block title %}
 
-<title>Réservation</title>
+<title>Paiement accompte</title>
 
 {% endblock %}
 
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
 
-
+<!-- Insert main header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -21,6 +18,8 @@
 {% endblock %}
 
 
+
+<!-- Insert content -->
 {% block content %}
 
 <!-- Container -->
@@ -28,22 +27,23 @@
 
 	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Réservation</li>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li>Réservation</li>
 		<li class="active">Paiement accompte</li>
 	</ol> <!-- /Breadcrumb -->
 
+	<!-- Main content -->
 	<div class="row">
 
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
+		<!-- Article -->
+		<article class="col-sm-12 maincontent">
 
 			<!-- Header -->
 			<header class="page-header">
 				<h1 class="page-title">Paiement accompte</h1>
-			</header> <!-- /Header -->
+			</header>
 
-			<!-- Form -->
+            <!-- Content 1: Form -->
 			<form  action="{% url 'payment' %}" method="POST">
 				{% csrf_token %}
 				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
@@ -59,6 +59,7 @@
 							{% include "base/base_form.html" %}
                             <input type="hidden" name="salle_id" value="{{ salle.id }}">
                             <input type="hidden" name="user_id" value="{{ user.id }}">
+
 							<hr>
 
 							<!-- Button(s) -->
@@ -71,24 +72,41 @@
 						</div>
 					</div>
 				</div>
-			</form> <!-- /Form -->
-
+			</form>
+	
 		</article> <!-- /Article -->
-
-	</div>
+	
+	</div> <!-- /Main content -->
 
 </div> <!-- /Container -->
 
 {% endblock %}
 
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+	<link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
 {% block scripts %}
-<script src="{% static 'studios/js/payment.js' %}"></script>
-<script>
-    $('#id_name').val("{{user.username}}");
-    $('#id_email').val("{{user.email}}");
-    $('#id_salle').val("{{salle.name}}");
-    $('#id_duration').val("duration");
-    $('#id_date_start').val("{{ start_date }}");
-    $('#id_date_end').val("{{ end_date }}");
-</script>
+
+	<script src="{% static 'studios/js/payment.js' %}"></script>
+
+	<script>
+		$('#id_name').val("{{user.username}}");
+		$('#id_email').val("{{user.email}}");
+		$('#id_salle').val("{{salle.name}}");
+		$('#id_duration').val("duration");
+		$('#id_date_start').val("{{ start_date }}");
+		$('#id_date_end').val("{{ end_date }}");
+	</script>
+
 {% endblock %}

@@ -94,24 +94,27 @@ Concert
 class TechnicalSheetForm(forms.Form):
     pdf_file = forms.FileField(label='Déposer la Fiche Technique')
 
-class TestForm(forms.Form):
-    test = FORM_GROUP_NAME
-
+"""
+Booking
+"""
 class ReservationForm(forms.Form):
     name = forms.CharField(max_length=LENGTH_NAME, label="Nom de l'utilisateur")
     email = forms.EmailField(label="Email de utilisateur")
-    
+
     salle = forms.CharField(max_length=20, label="Salle réservée")
-    #description = models.fields.CharField(max_length=1000)
+    # description = models.fields.CharField(max_length=1000)
     duration = forms.IntegerField(label="Durée de la séance en (H)")
     date_start = forms.DateTimeField(label="Date de début reservation")
     date_end = forms.DateTimeField(label="Date de fin reservation")
-    #hour_begin = forms.TimeField( label="Heure de début de la réservation")
+    # hour_begin = forms.TimeField( label="Heure de début de la réservation")
     price = forms.IntegerField(label="Montant payé en £")
-    #status = models.fields.CharField(choices=Status.choices, max_length=20)
-   
+
+    # status = models.fields.CharField(choices=Status.choices, max_length=20)
 
     def __init__(self, *args):
         super(ReservationForm, self).__init__(*args)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
+
+class TestForm(forms.Form):
+    test = FORM_GROUP_NAME

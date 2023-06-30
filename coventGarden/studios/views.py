@@ -3,15 +3,15 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from datetime import timedelta
+from datetime import timedelta, datetime
+from django.contrib import messages
 
 from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
     EventForm, TechnicalSheetForm, ReservationForm)
-from datetime import datetime
-from django.contrib import messages
+
 
 User = get_user_model()
 
@@ -361,15 +361,6 @@ def calendar_view(request):
     context = {'events': events}
     return render(request, 'calendar.html', context)
 
-
-"""
-Password reset
-    - Forgot: password_reset_forgot.html
-    - Done: password_reset_done.html
-    - Confirm: password_reset_confirm.html
-    - Complete: password_reset_complete.html
-"""
-
 """
 Salles
     -Listing all Salle
@@ -404,12 +395,12 @@ def accompte(request):
         form = ReservationForm()
 
         #print(form)
-        
+
         duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
         print(duration_hours)
-        
+
         duration = 1
         return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
         "end_date": end_date, "duration": duration_hours, "form": form})
@@ -421,7 +412,7 @@ def accompte(request):
 def payment(request):
 
     print(request.POST)
-    
+
     if request.method == 'POST':
 
         salle_id = int(request.POST["salle_id"])
@@ -430,7 +421,7 @@ def payment(request):
         form = ReservationForm(request.POST)
 
         if form.is_valid():
-            
+
             salle = Salle.objects.get(id= salle_id)
             user = CustomUser.objects.get(id= user_id)
 
@@ -473,7 +464,7 @@ def payment(request):
             messages.success(request, "Votre réservation a bien été prise en compte !")
             # Redirect to the detail page of the band we just created
             return redirect('booking')
-            
+
     else:
         return redirect('booking')
 
@@ -489,3 +480,11 @@ def all_booking(request):
             'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
         })
     return JsonResponse(datas, safe=False)
+
+"""
+Password reset
+    - Forgot: password_reset_forgot.html
+    - Done: password_reset_done.html
+    - Confirm: password_reset_confirm.html
+    - Complete: password_reset_complete.html
+"""

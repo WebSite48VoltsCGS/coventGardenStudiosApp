@@ -23,11 +23,10 @@ class TechnicalSheetAdmin(admin.ModelAdmin):
     list_display = ["user", "pdf_file"]
 
 class SalleAdmin(admin.ModelAdmin):
-   list_display = ('name', 'description')
+    list_display = ('name', 'description')
 
 class ReservationAdmin(admin.ModelAdmin):
-   list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user')
-
+    list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user')
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(CustomGroup, CustomGroupAdmin)
