@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="{% static 'studios/css/3D-view.css' %}" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap">
-
+<!-- Link Swiper's CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 {% endblock %}
 
 
@@ -105,126 +106,126 @@
 			<a class="btn btn-action btn-lg" href="{% url 'placeholder' %}" role="button">Réserver un studio</a>
 		</div>
 	</div>
-			<!-- Début des studios -->
-			<div class="container">	
-				<div class="stud">
-				<h3>Supernova</h3>
-				<br>
-				<div class="row">
-					<div class="col-sm-6">
-						<div id="panorama-supernova" class="panorama-supernova-container"></div>
-					</div>
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 48m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl Export 5 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Maryland (2x 1500w)</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				</div>
+<!-- Début des studios -->
+<div class="container">	
+	<div class="stud">
+	<h3>Supernova</h3>
+	<br>
+	<div class="row">
+		<div class="col-sm-6">
+			<div id="panorama-supernova" class="panorama-supernova-container"></div>
+		</div>
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 48m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl Export 5 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Maryland (2x 1500w)</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	</div>
 
-				<div class="stud">	
-				<h3>Octopuss</h3>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 48m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl Export 5 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Maryland (2x 1500w)</li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="text-container">
-							<div id="panorama-octopuss" class="panorama-octopuss-container"></div>
-						</div>
-					</div>
-				</div>
-				</div>
+	<div class="stud">	
+	<h3>Octopuss</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 48m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl Export 5 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Maryland (2x 1500w)</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="text-container">
+				<div id="panorama-octopuss" class="panorama-octopuss-container"></div>
+			</div>
+		</div>
+	</div>
+	</div>
 
-				<div class="stud">
-				<h3>Rainbow</h3>
-				<div class="row">
-					<div class="col-sm-6">
-						<div id="panorama-rainbow" class="panorama-rainbow-container"></div>
-					</div>
-					<div class="col-sm-6">
-						<div class="text-container">
-							<div class="text-container">
-								<ul>
-									<li>Superficie : 31m²</li>
-									<li>2 amplis guitare à lampe 2 corps</li>
-									<li>Ampli basse Hartke 250w</li>
-									<li>Batterie Pearl Export 5 fûts</li>
-									<li>3 micros AKG D5</li>
-									<li>Console Soundfraft EFX8</li>
-									<li>Diffusion Nexo PS15 (2x 1000w)</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-				</div>
-
-				<div class="stud">
-				<h3>California</h3>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 25m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl CZX custom fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Nexo PS15 (2x 1000w)</li>
-							</ul>
-						</div>
-					</div>
-					<div class="col-sm-6">
-						<div class="text-container">
-							<div id="panorama-california" class="panorama-california-container"></div>
-						</div>
-					</div>
-				</div>
-				</div>
-				<div class="stud">
-				<h3>Scène</h3>
-				<div class="row">
-					<div class="col-sm-6">
-						<div id="panorama-scene" class="panorama-scene-container"></div>
-					</div>
-					<div class="col-sm-6">
-						<div class="text-container">
-							<div class="text-container">
-								<ul>
-									<li>Superficie : Plateau 25m² / Fosse : 60m² </li>
-									<li>2 amplis guitare à lampe 2 corps</li>
-									<li>Ampli basse Hartke 250w</li>
-									<li>Batterie PDP Concept 6 fûts</li>
-									<li>3 micros AKG D5</li>
-									<li>Console Soundfraft EFX8</li>
-									<li>6 JBL SRX712</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
+	<div class="stud">
+	<h3>Rainbow</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div id="panorama-rainbow" class="panorama-rainbow-container"></div>
+		</div>
+		<div class="col-sm-6">
+			<div class="text-container">
+				<div class="text-container">
+					<ul>
+						<li>Superficie : 31m²</li>
+						<li>2 amplis guitare à lampe 2 corps</li>
+						<li>Ampli basse Hartke 250w</li>
+						<li>Batterie Pearl Export 5 fûts</li>
+						<li>3 micros AKG D5</li>
+						<li>Console Soundfraft EFX8</li>
+						<li>Diffusion Nexo PS15 (2x 1000w)</li>
+					</ul>
 				</div>
 			</div>
+		</div>
+	</div>
+	</div>
+
+	<div class="stud">
+	<h3>California</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 25m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl CZX custom fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Nexo PS15 (2x 1000w)</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="text-container">
+				<div id="panorama-california" class="panorama-california-container"></div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="stud">
+	<h3>Scène</h3>
+	<div class="row">
+		<div class="col-sm-6">
+			<div id="panorama-scene" class="panorama-scene-container"></div>
+		</div>
+		<div class="col-sm-6">
+			<div class="text-container">
+				<div class="text-container">
+					<ul>
+						<li>Superficie : Plateau 25m² / Fosse : 60m² </li>
+						<li>2 amplis guitare à lampe 2 corps</li>
+						<li>Ampli basse Hartke 250w</li>
+						<li>Batterie PDP Concept 6 fûts</li>
+						<li>3 micros AKG D5</li>
+						<li>Console Soundfraft EFX8</li>
+						<li>6 JBL SRX712</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
 </div>
 
 	<script src="https://cdn.pannellum.org/2.5/pannellum.js"></script>
@@ -305,40 +306,33 @@
 					});
 				</script>
 
-<head>
-	<meta charset="utf-8" />
-	<title>Swiper demo</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-	<!-- Link Swiper's CSS -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-  
-	<!-- Demo styles -->
-	<style>
+<!-- Demo styles -->
+<style>
 
-  
-	  .swiper {
-		width: 100%;
-		padding-top: 50px;
-		padding-bottom: 50px;
-	  }
-  
-	  .swiper-slide {
-		background-position: center;
-		background-size: cover;
-		width: 175px;
-		height: 175px;
-	  }
-  
-	  .swiper-slide img {
-		display: block;
-		width: 100%;
-	  }
-	</style>
-  </head>
+
+	.swiper {
+	width: 100%;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	}
+
+	.swiper-slide {
+	background-position: center;
+	background-size: cover;
+	width: 175px;
+	height: 175px;
+	}
+
+	.swiper-slide img {
+	display: block;
+	width: 100%;
+	}
+</style>
+
  
-	<div class="container">
-		<div class="row">
-		  <!-- Article main content -->
+<div class="container">
+	<div class="row">
+	<!-- Article main content -->
 
 	<!-- Swiper -->
 	<div class="swiper mySwiper">
@@ -373,7 +367,7 @@
 <!-- /Article -->
 </div>
 
-	<!-- Swiper JS -->
+<!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script src="../static/studios/js/slider.js"></script>
  
