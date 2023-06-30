@@ -489,3 +489,19 @@ def all_booking(request):
             'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
         })
     return JsonResponse(datas, safe=False)
+
+def all_booking_event(request):
+    reservations = Reservation.objects.all()
+    datas = []
+    for current in reservations:
+        data = {
+            'id': current.id,
+            'resourceId': current.salle.id,
+            'title': 'Indisponible',
+            'start': current.date_start.strftime("%Y-%m-%d %H:%M:%S"),
+            'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        data['color'] = 'gainsboro'
+        data['textColor'] = 'black'
+        datas.append(data)
+    return JsonResponse(datas, safe=False)
