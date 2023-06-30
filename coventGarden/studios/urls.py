@@ -68,4 +68,11 @@ urlpatterns = [
          PasswordResetCompleteView.as_view(
              template_name='password_reset/password_reset_complete.html'),
          name='password_reset_complete'),
+
+    # Booking
+    path('api/all_booking/', views.all_booking, name='all_booking'),
+    path('users/', views.list_users, name='list_users'),
+    path('salles/', views.list_salles, name='list_salles'),
+    path('paiement-accompte/', views.accompte, name='accompte'),
+    path('payment/', views.payment, name='payment'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

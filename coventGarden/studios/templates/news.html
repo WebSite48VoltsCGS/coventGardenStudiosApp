@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+<!-- Insert title -->
 {% block title %}
 
 <title>Actualités</title>
@@ -8,12 +9,8 @@
 {% endblock %}
 
 
-{% block style %}
 
-<link rel="stylesheet" href="{% static 'studios/css/news.css' %}" />
-
-{% endblock %} 
-
+<!-- Insert main header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -21,33 +18,45 @@
 {% endblock %}
 
 
+
+<!-- Insert content -->
 {% block content %}
 
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0" nonce="zefN5tA6"></script>
    
 <!-- container -->
 <div class="container">
-    <div class="row">
-        <article class="col-sm-8 maincontent">
-            <header class="page-header">
-                <h1 class="page-title">Actualités</h1>
-            </header>
-        </article>
-    </div>
-    </div>
 
-<!-- container -->
-<div class="container">
-	<h2 class="text-center top-space">Nos réseaux</h2>
-	<br>
+	<!-- Breadcrumb -->
+	<ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li class="active">Actualités</li>
+	</ol> <!-- /Breadcrumb -->
+
+	<!-- Main content -->
 	<div class="row">
-		<div class="col-sm-12 text-center">
-			<p>
-                Retrouvez toutes nos actualités évènements, concerts sur nos réseaux sociaux :
+
+		<!-- Article -->
+		<article class="col-sm-12 maincontent">
+
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Actualités</h1>
+		  	</header>
+
+            <!-- Content 1 -->
+            <h2 class="text-center top-space">Nos réseaux</h2><br>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <p>Retrouvez toutes nos actualités évènements, concerts sur nos réseaux sociaux :</p>
+                </div>
+            </div>
+
+            <p>
+                <a target="_blank" href="https://www.youtube.com/user/CoventGardenStudio"><i class="fa fa-youtube-play fa-2"></i></a>
+                <a target="_blank" href="https://www.facebook.com/CGS95"><i class="fa fa-facebook fa-2"></i></a>
+                <a target="_blank" href="https://www.instagram.com/coventgardenstudios/"><i class="fa fa-instagram fa-2"></i></a>
             </p>
-		</div>
-	</div> <!-- /row -->
-</div>	<!-- /container -->
 
 <!-- container -->
 <div class="container">
@@ -249,25 +258,21 @@
             <li>Régie technique</li>
         </ul>
         </div>
+        {% endblock %}
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+    <link rel="stylesheet" href="{% static 'studios/css/news.css' %}" />
+    <link rel="stylesheet" href="{% static 'studios/css/background.css' %}" />
+
+{% endblock %}
 
 
 
-
-
-            <li>Lien technique entre les groupes et les régisseurs du Covent Garden Studios</li>
-        </ul>
-        </div>
-        <br><div class="paragraphes">
-            <br><p>Le Covent Garden Studios garde à sa charge :</p>
-        <ul>
-            <li>Gestion du Bar</li>
-            <li>Régie technique</li>
-           
-        </ul>
-        </div>
-
-    </div>
-</div> 
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 
 <div class="container">

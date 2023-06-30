@@ -1,18 +1,9 @@
+const progressCircle = document.querySelector(".autoplay-progress svg");
+const progressContent = document.querySelector(".autoplay-progress span");
 
-var swiper = new Swiper(".mySwiper", {
-effect: "coverflow",
-grabCursor: true,
-centeredSlides: true,
-slidesPerView: "auto",
-coverflowEffect: {
-  rotate: 0,
-  stretch: 0,
-  depth: 40,
-  modifier: 1,
-  slideShadows: false,
-},
-pagination: {
-  el: ".swiper-pagination",
-},
-initialSlide: 2, // Affiche la 3e image (index 2) par défaut
+const swiperEl = document.querySelector("swiper-container");
+swiperEl.addEventListener("autoplaytimeleft", (e) => {
+  const [swiper, time, progress] = e.detail;
+  progressCircle.style.setProperty("--progress", 1 - progress);
+  progressContent.textContent = `${Math.ceil(time / 1000)}s`;
 });

@@ -5,10 +5,6 @@
     display: flex;
 }
 
-.horaires {
-    flex: 1;
-}
-
 .tarifs {
     flex: 1;
 }

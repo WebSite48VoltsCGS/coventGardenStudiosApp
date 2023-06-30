@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-
+{% load static %}
 {% block title %}
 
 <title>Réservation</title>
@@ -8,7 +8,7 @@
 
 
 {% block style %}
-
+    <link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
 {% endblock %}
 
 
@@ -21,14 +21,72 @@
 
 {% block content %}
 
-<!-- container -->
 <div class="container">
 
     <ol class="breadcrumb">
         <li><a href="{% url 'home' %}">Accueil</a></li>
         <li class="active">Réservation</li>
     </ol>
+    <div class="row">
 
+		{% if messages %}
+            <div class="alert alert-success" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+		<div class="col-xs-12 maincontent">
+			<header class="page-header">
+				<h1 class="page-title">Réservation</h1>
+			</header>
+			
+			<div id="calendar" class="col-md-12">
+			
+			</div>
+		</div>
+		
+	</div>
 </div> <!-- /container -->
 
+<div class="modal" id="confirmation-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Information de la réservation</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <form id="confirm-form" action="{% url 'accompte' %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="salle">Studios choisi :</label>
+                        <input id="salleName" name="salleName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">Date et heure de début :</label>
+                        <input type="datetime" name="date_start" id="startDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Date et heure de fin :</label>
+                        <input type="datetime" name="date_end" id="endDate" class="form-control" required>
+                    </div>
+                   
+                    <input type="hidden" name="salle_id" id="idSalle">
+                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Confirmer</button>
+                    <button type="button" id="cancel-btn" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.8/index.global.min.js'></script>
+<script src="{% static 'studios/js/booking.js' %}"></script>
 {% endblock %}
