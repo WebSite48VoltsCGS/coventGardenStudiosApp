@@ -1,49 +1,75 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+<!-- Insert title -->
 {% block title %}
 <title>Concert</title>
+
 {% endblock %}
 
+
+
+<!-- Insert main header -->
 {% block header %}
 <header id="head" class="secondary"></header>
 {% endblock %}
 
-{% block content %}
-<!-- container -->
-<div class="container">
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li class="active">Concert</li>
-	</ol>
-</div> <!-- /container -->
 
+
+<!-- Insert content -->
+{% block content %}
+
+<!-- Container -->
 <div class="container">
+
+	<!-- Breadcrumb -->
+	<ol class="breadcrumb">
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li class="active">Concert</li>
+	</ol> <!-- /Breadcrumb -->
+
+	<!-- Main content -->
 	<div class="row">
-		<article class="col-sm-8 maincontent">
+
+		<!-- Article -->
+		<article class="col-sm-12 maincontent">
+
+			<!-- Header -->
 			<header class="page-header">
 				<h1 class="page-title">Concert</h1>
-			</header>
-		</article>
-	</div>
+		  	</header>
 
-	<div class="row">
-		<div id="calendar"></div>
-	</div>
-</div>
+            <!-- Content 1 -->
+			<div class="row">
+				<div id="calendar"></div>
+			</div>
+	
+		</article> <!-- /Article -->
+	
+	</div> <!-- /Main content -->
+
+</div> <!-- /Container -->
+
+{% endblock %}
 
 
-<!-- External JavaScript dependencies -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js'></script>
 
-<!-- Custom JavaScript file -->
-<script src="../static/studios/js/concert.js"></script>
+<!-- Custom CSS styles file(s) -->
+{% block style %}
 
-<div class="container">
-	<br>
-	<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
-</div>
+	<link rel="stylesheet" href="{% static 'studios/css/concert.css' %}"/>
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
+
+	<script src="{% static 'studios/js/concert.js' %}"></script>
+
+	<!-- External JavaScript dependencies -->
+	<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js'></script>
+	<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js'></script>
 
 {% endblock %}

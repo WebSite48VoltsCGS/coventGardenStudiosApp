@@ -32,9 +32,12 @@
 </head>
 
 <body class="home">
+
 	<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
 		<div class="container">
+
+			<!-- Header -->
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
@@ -43,17 +46,18 @@
 				<a class="navbar-brand" href="{% url 'home' %}"><img id="navbar-logo" src="{% static 'studios/images/logo.png' %}"></a>
 			</div>
 
-			<!-- Navbar collapse -->
+			<!-- Collapse -->
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
+
 					<!-- Link(s) -->
 					<li><a href="{% url 'home' %}">Accueil</a></li>
 					<li><a href="{% url 'news' %}">Actualités</a></li>
-					<li><a href="{% url 'studios' %}">Studios</a></li>  
+					<li><a href="{% url 'studios' %}">Studios</a></li>
+					<li><a href="{% url 'concert' %}">Concert</a></li>
 					<li><a href="{% url 'bar' %}">Bar</a></li>
-					<li><a href="{% url 'concert' %}">Concert</a></li>     <!--change name into concert-->
 					<li><a href="{% url 'booking' %}">Réservation</a></li>
-					<li ><a href="{% url 'contact' %}">Contact</a></li>
+					<li><a href="{% url 'contact' %}">Contact</a></li>
 
 					<!-- Button(s) -->
 					{% if user.is_authenticated %}
@@ -61,50 +65,36 @@
 						<li class="dropdown">
 							<a class="btn" href="#" class="dropdown-toggle" data-toggle="dropdown">MON COMPTE <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<!-- Add list of links -->
 								<li><a href="{% url 'profile_detail' %}">Profil</a></li>
 								<li><a href="{% url 'groups_detail' %}">Groupes</a></li>
 								<li><a href="{% url 'bookings_detail' %}">Réservations</a></li>
+								<li><a href="{% url 'pro_area' %}">Espace Pro</a></li>
 								<li><a href="{% url 'account_log_out' %}">Déconnexion</a></li>
 							</ul>
 						</li> <!-- /Dropdown -->
+
 					{% else %}
 						<li><a class="btn" href="{% url 'account_sign_in' %}">CONNEXION / INSCRIPTION</a></li>
-					{% endif %} <!-- /Button(s) -->
-				</ul>
 
-			</div> <!--/.nav-collapse -->
+					{% endif %} <!-- /Button(s) -->
+
+				</ul>
+			</div> <!-- /Collapse -->
+
 		</div>
-	</div> <!-- /.navbar -->
+	</div> <!-- /Navbar -->
 
 
 	{% block header %}{% endblock %}
 	{% block content %}{% endblock %}
 
-
-	<!-- Social links. @TODO: replace by link/instructions in template -->
-	<!-- <section id="social">
-		<div class="container">
-			<div class="wrapper clearfix">
-				AddThis Button BEGIN
-				<div class="addthis_toolbox addthis_default_style">
-				<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
-				<a class="addthis_button_tweet"></a>
-				<a class="addthis_button_linkedin_counter"></a>
-				<a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
-				</div>
-				AddThis Button END
-			</div>
-		</div>
-	</section> -->
-	<!-- /.social links -->
-
-
 	<!-- Footer -->
 	<footer id="footer" class="top-space">
+
 		<!-- Footer 1 -->
 		<div class="footer1">
 			<div class="container">
+
 				<!-- Row of widgets -->
 				<div class="row">
 					<div class="col-md-3 widget">
@@ -120,10 +110,12 @@
 					<div class="col-md-3 widget">
 						<h3 class="widget-title">Adresse</h3>
 						<div class="widget-body">
-							<p>	
-								1 rue du bouvreuil,<br>
-								Parc d'activité de la Danne<br>
-								95610 Eragny-sur-Oise
+							<p>
+ 								<a href="https://goo.gl/maps/xwy7vnXwuFTFXfJA8" target="_blank">
+ 									1 Rue du Bouvreuil,<br>
+ 									Parc d'activité de la Danne<br>
+ 									95610, Eragny-sur-Oise
+ 								</a>
 							</p>
 						</div>
 					</div>
@@ -151,13 +143,15 @@
 						</div>
 					</div>
 
-				</div> <!-- /.Row of widgets -->
+				</div> <!-- /Row of widgets -->
+
 			</div>
-		</div> <!-- /.Footer 1 -->
+		</div> <!-- /Footer 1 -->
 		
 		<!-- Footer 2 -->
 		<div class="footer2">
 			<div class="container">
+
 				<!-- Row of widgets -->
 				<div class="row">
 					<div class="col-md-6 widget">
@@ -166,10 +160,10 @@
 								<a href="{% url 'home' %}">Accueil</a> /
 								<a href="{% url 'news' %}">Actualités</a> /
 								<a href="{% url 'studios' %}">Studios</a> /
+								<a href="{% url 'concert' %}">Concert</a> /
 								<a href="{% url 'bar' %}">Bar</a> /
-								<a href="{% url 'concert' %}">Concert</a> /   <!--change name into concert-->
+								<a href="{% url 'booking' %}">Réservation</a> /
 								<a href="{% url 'contact' %}">Contact</a> /
-								<a href="{% url 'booking' %}">Réservation</a>
 							</p>
 						</div>
 					</div>
@@ -177,15 +171,16 @@
 					<div class="col-md-6 widget">
 						<div class="widget-body">
 							<p class="text-right">
-								Copyright &copy; 2023 Covent Garden Studios - Musican theme by FilaThemes</a> 
+								Copyright &copy; 2023 Covent Garden Studios</a> 
 							</p>
 						</div>
 					</div>
+				</div> <!-- /Row of widgets -->
 
-				</div> <!-- /.Row of widgets -->
 			</div>
-		</div>
-	</footer> <!-- /.Footer 2 -->
+		</div> <!-- /Footer 2 -->
+
+	</footer>
 	
 	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="{% static 'studios/js/jquery.min.js' %}"></script>
@@ -193,5 +188,9 @@
 	<script src="{% static 'studios/js/headroom.min.js' %}"></script>
 	<script src="{% static 'studios/js/jQuery.headroom.min.js' %}"></script>
 	<script src="{% static 'studios/js/template.js' %}"></script>
+
+	<!-- Custom JavaSript for our template -->
+	{% block scripts %}{% endblock %}
 </body>
+
 </html>

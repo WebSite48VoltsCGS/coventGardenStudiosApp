@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>Ajouter un groupe</title>
+<title>Créer un groupe</title>
 
 {% endblock %}
 
@@ -21,49 +21,66 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li><a href="{% url 'groups_detail' %}">Mes groupes</a></li>
-		<li class="active"><a href="{% url 'groups_create' %}">Ajouter un groupe</a></li>
-	</ol>
+		<li><a href="{% url 'groups_detail' %}">Groupes</a></li>
+		<li class="active">Créer</li>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Profil</h1>
-		</header>
-		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h3 class="thin text-center">Ajouter un groupe</h3>
-					<p class="text-center text-muted">Voulez-vous revenir à vos groupes? <a href="{% url 'groups_detail' %}">Cliquez ici.</a></p>
-					<hr>
+	<div class="row">
 
-					<form action="" method="post">
-						{% include "base/base_form.html" %}
-						<hr>
-						<div class="row">
-							<div class="col-lg-6 text-left">
-								<form action="{% url 'profile_detail' %}">
-									<button class="btn btn-action" onclick="window.location.href='{% url 'groups_detail' %}'">Annuler
-								</form>
-							</div>
-							<div class="col-lg-6 text-right">
-								<button class="btn btn-action" type="submit">Confirmer</button>
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Créer un groupe</h1>
+			</header>
+
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Title / Text -->
+							<h3 class="thin text-center">Création de groupe</h3>
+							<p class="text-center text-muted">Vous avez déjà créé votre groupe? <a href="{% url 'groups_detail' %}">Cliquez ici</a></p>
+
+							<hr>
+
+							<!-- Include form(s) here -->
+							{% include "base/base_form.html" %}
+
+							<hr>
+
+							<!-- Button(s) -->
+							<div class="row">
+								<!-- Redirect -->
+								<div class="col-lg-6 text-left">
+									<form>
+										<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'groups_detail' %}'">Annuler</button>
+									</form>
+								</div>
+
+								<!-- Confirm -->
+								<div class="col-lg-6 text-right">
+									<button class="btn btn-action" type="submit">Confirmer</button>
+								</div>
 							</div>
 						</div>
-					</form>
+					</div>
 				</div>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+			</form> <!-- /Form -->
 
-</div>	<!-- /container -->
+		</article> <!-- /Article -->
+
+	</div>
+
+</div> <!-- /Container -->
 
 {% endblock %}

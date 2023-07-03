@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>Placeholder</title>
+<title>Supprimer un groupe</title>
 
 {% endblock %}
 
@@ -21,44 +21,58 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Placeholder</li>
-		<li class="active">Placeholder</li>
-	</ol>
+		<li><a href="{% url 'groups_detail' %}">Groupes</a></li>
+		<li class="active">Supprimer</li>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Placeholder</h1>
-		</header>
-		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					Placeholder: {{ user.first_name }}<br>
+	<div class="row">
+
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+			
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Supprimer un groupe</h1>
+			</header>
+			
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Title / Text -->
+							<h3 class="thin text-center">Confirmer la suppression du groupe? </h3>
+							<p class="text-center text-muted">Vous voulez revenir à vos groupes? <a href="{% url 'groups_detail' %}">Cliquez ici</a></p>
+
+							<hr>
+
+							<!-- Button(s) -->
+							<div class="row">
+								<!-- Redirect -->
+								<div class="col-lg-6 text-left">
+									<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'groups_detail' %}'">Annuler
+								</div>
+
+								<!-- Confirm -->
+								<div class="col-lg-6 text-right">
+									<button class="btn btn-action" type="submit">Confirmer</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			</form> <!-- /Form -->
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'profile_update' %}">
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form>
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+		</article> <!-- /Article -->
+
+	</div>
 
 </div>	<!-- /container -->
 

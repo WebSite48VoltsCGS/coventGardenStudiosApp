@@ -2,7 +2,7 @@
 
 {% block title %}
 
-<title>Identification</title>
+<title>Se connecter à son compte</title>
 
 {% endblock %}
 
@@ -21,50 +21,64 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
 		<li>Compte</li>
-		<li class="active">Identification</li>
-	</ol>
+		<li class="active">Connexion</li>
+	</ol> <!-- /Breadcrumb -->
 
 	<div class="row">
-		
+
 		<!-- Article main content -->
 		<article class="col-xs-12 maincontent">
+
+			<!-- Header -->
 			<header class="page-header">
-				<h1 class="page-title">Accéder à son compte</h1>
+				<h1 class="page-title">Se connecter à son compte</h1>
 			</header>
-			
-			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<h3 class="thin text-center">Se connecter à son compte</h3>
-						<p class="text-center text-muted">Vous n'avez pas encore de compte? <a href="{% url 'account_sign_up' %}">Inscrivez-vous</a></p>
-						
-						<hr>
-						
-						<form action="" method="post">
-							{% include "base/base_form.html" %}
+
+			<!-- Form -->
+			<form method="post">
+				{% csrf_token %}
+				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<!-- Title / Text -->
+							<h3 class="thin text-center">Mon compte</h3>
+							<p class="text-center text-muted">Vous n'avez pas encore de compte? <a href="{% url 'account_sign_up' %}">Inscrivez-vous</a></p>
+
 							<hr>
+
+							<!-- Include form(s) here -->
+							{% include "base/base_form.html" %}
+
+							<hr>
+
+							<!-- Button(s) -->
 							<div class="row">
-								<div class="col-lg-8">
+								<!-- Redirect -->
+								<div class="col-lg-6 text-left">
 									<b><a href="{% url 'password_reset_forgot' %}">Mot de passe oublié?</a></b>
 								</div>
-								<div class="col-lg-4 text-right">
+
+								<!-- Confirm -->
+								<div class="col-lg-6 text-right">
 									<button class="btn btn-action" type="submit">Connexion</button>
 								</div>
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
-			</div>
-		</article>
-		<!-- /Article -->
+			</form> <!-- /Form -->
 
+		</article> <!-- /Article -->
+		
 	</div>
-</div> <!-- /container -->
+	
+</div> <!-- /Container -->
 
 {% endblock %}

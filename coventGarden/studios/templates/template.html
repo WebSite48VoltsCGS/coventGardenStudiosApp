@@ -1,5 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
+<!-- Insert title -->
 {% block title %}
 
 <title>Placeholder</title>
@@ -7,11 +9,8 @@
 {% endblock %}
 
 
-{% block style %}
 
-{% endblock %}
-
-
+<!-- Insert main header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,47 +18,50 @@
 {% endblock %}
 
 
+
+<!-- Insert content -->
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Placeholder</li>
-		<li class="active">Placeholder</li>
-	</ol>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li class="active">Placeholder</li>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Placeholder</h1>
-		</header>
-		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					Placeholder: {{ user.first_name }}<br>
-				</div>
-			</div>
-		</div>
+	<!-- Main content -->
+	<div class="row">
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'profile_update' %}">
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form>
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+		<!-- Article -->
+		<article class="col-sm-12 maincontent">
 
-</div>	<!-- /container -->
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Placeholder</h1>
+		  	</header>
+
+            <!-- Content 1 -->
+	
+		</article> <!-- /Article -->
+	
+	</div> <!-- /Main content -->
+
+</div> <!-- /Container -->
+
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}

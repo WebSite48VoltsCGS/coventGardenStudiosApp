@@ -2,10 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, CustomGroup
-
-#import event
-from .models import Events
+from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Salle, Reservation
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
@@ -15,11 +12,22 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["email", "username"]
 
 class CustomGroupAdmin(admin.ModelAdmin):
-    list_display = ["name", "email",
+    list_display = ["user", "name", "email",
                     "phone", "members", "genre",
                     "facebook", "instagram", "biography"]
 
-admin.site.register(CustomGroup, CustomGroupAdmin)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ["user", "title", "start_time", "end_time", "description"]
+
+class TechnicalSheetAdmin(admin.ModelAdmin):
+    list_display = ["user", "pdf_file"]
+
+class SalleAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+
+class ReservationAdmin(admin.ModelAdmin):
+    list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user')
+
 admin.site.register(CustomUser, CustomUserAdmin)
 
 #nouvelle class
@@ -28,3 +36,8 @@ class eventAdmin(admin.ModelAdmin):
     list_display = ["Utilisateur","title", "start_time","end_time","description",'url']
 
 admin.site.register(Events,eventAdmin)
+admin.site.register(CustomGroup, CustomGroupAdmin)
+admin.site.register(Event, EventAdmin)
+admin.site.register(TechnicalSheet, TechnicalSheetAdmin)
+admin.site.register(Salle, SalleAdmin)
+admin.site.register(Reservation, ReservationAdmin)

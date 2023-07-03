@@ -21,48 +21,60 @@
 
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
 		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li class="active"><a href="{% url 'groups_detail' %}">Mes groupes</a></li>
-	</ol>
+		<li class="active">Groupes</li>
+	</ol> <!-- /Breadcrumb -->
 
-	<!-- Article main content -->
-	<article class="col-xs-12 maincontent">
-		<header class="page-header">
-			<h1 class="page-title">Mes Groupes</h1>
-		</header>
+	<div class="row">
 		
-		<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					Nom: {{ user.last_name }}<br>
-					Prénom: {{ user.first_name }}<br>
-					E-mail: {{ user.email }}<br>
-					Test Field: {{ user.test_field }}<br>
+		<!-- Article main content -->
+		<article class="col-xs-12 maincontent">
+
+			<!-- Header -->
+			<header class="page-header">
+				<h1 class="page-title">Mes groupes</h1>
+			</header>
+			
+			<!-- Panel -->
+			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<!-- Text -->
+						<ul>
+							{% for group in my_groups %}
+							<li>
+								<a href="{% url 'groups_update' group.id %}">{{ group.name }}</a>
+								- <a href="{% url 'groups_update' group.id %}">[Modifier]</a>
+								- <a href="{% url 'groups_delete' group.id %}">[Supprimer]</a>
+							</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>				
+			</div> <!-- /Panel -->
+
+			<!-- Button(s) -->
+			<div class="row">
+				<div class="col-lg-6 text-left">
+					<form action="{% url 'groups_create' %}">
+						<button class="btn btn-action">Créer un groupe</button>
+					</form>
 				</div>
-			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-lg-6 text-left">
-				<form action="{% url 'groups_create' %}">
-					<button class="btn btn-action" type="submit">Créer un groupe</button>
-				</form>
-			</div>
-			<div class="col-lg-6 text-right">
-				<form action="{% url 'placeholder' %}" method="post">
-					{% csrf_token %}
-					<button class="btn btn-action" type="submit">Placeholder</button>
-				</form>
-			</div>
-		</div>
-		
-	</article>
-	<!-- /Article -->
+				<div class="col-lg-6 text-right">
+					<form action="{% url 'placeholder' %}">
+						<button class="btn btn-action">Placeholder</button>
+					</form>
+				</div>
+			</div> <!-- /Button(s)-->
 
-</div>	<!-- /container -->
+		</article> <!-- /Article -->
+	</div>
+</div>	<!-- /Container -->
 
 {% endblock %}
