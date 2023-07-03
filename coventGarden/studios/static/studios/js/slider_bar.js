@@ -1,4 +1,3 @@
-
 var swiper = new Swiper(".mySwiper", {
     effect: "coverflow",
     grabCursor: true,
@@ -16,3 +15,4 @@ var swiper = new Swiper(".mySwiper", {
     },
     initialSlide: 2, // Affiche la 3e image (index 2) par défaut
     });
+    

@@ -55,7 +55,7 @@ def news(request):
             {"view": None, "name": "Actualités"}],
     }
 
-    return render(request, 'news.html', context)
+    return render(request, 'news.html')
 
 def studios(request):
     # Context: Variables passed to the web page
@@ -66,7 +66,7 @@ def studios(request):
             {"view": None, "name": "Studios"}],
     }
 
-    return render(request, 'studios.html', context)
+    return render(request, 'studios.html')
 
 def concert(request):
     # Context: Variables passed to the web page
