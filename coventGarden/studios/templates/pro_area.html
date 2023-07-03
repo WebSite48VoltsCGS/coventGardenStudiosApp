@@ -1,6 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
+<!-- Insert title -->
 {% block title %}
 
 <title>Espace Pro</title>
@@ -8,14 +9,8 @@
 {% endblock %}
 
 
-{% block style %}
 
-<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-{% endblock %}
-
-
+<!-- Insert main header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -23,57 +18,87 @@
 {% endblock %}
 
 
+
+<!-- Insert content -->
 {% block content %}
 
-<!-- container -->
+<!-- Container -->
 <div class="container">
 
+	<!-- Breadcrumb -->
 	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li class="active">Espace Pro</li>
-	</ol>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li class="active">Espace Pro</li>
+	</ol> <!-- /Breadcrumb -->
 
+	<!-- Main content -->
 	<div class="row">
-		<article class="col-sm-8 maincontent">
+
+		<!-- Article -->
+		<article class="col-sm-12 maincontent">
+
+			<!-- Header -->
 			<header class="page-header">
-				<h1 class="page-title">Mon Espace Pro</h1>
-			</header>
-		</article>
-	</div>
+				<h1 class="page-title">Espace Pro</h1>
+		  	</header>
 
-	<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
+            <!-- Content 1 -->
+			<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
 
-	<div class="row-button">
-		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
-		<a  href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
-	</div>
+			<div class="row-button">
+				<a href="{% url 'booking' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
+				<a href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
+			</div>
 
-	<p> * Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
+			<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
 
-       
-	<div class="exemple-fiche-technique">
-		<br><p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
+			<br>
 
-		<div class="image-container">
-			<a href="#" id="image-link">
-				<div class="image-overlay">
-					<img src="../static/studios/images/modèle fiche technique.png" alt="Image fiche technique" onclick="showImage(this)">
-					<div class="overlay-text">
-						<p>Modèle fiche Technique</p>
-					</div>
+			<!-- Content 2: Technical Sheet -->
+			<div class="exemple-fiche-technique">
+				<p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
+
+				<!-- Image -->
+				<div class="image-container">
+					<a href="#" id="image-link">
+						<div class="image-overlay">
+							<img src="{% static 'studios/images/modèle fiche technique.png' %}" alt="Image fiche technique" onclick="showImage(this)">
+							<div class="overlay-text">
+								<p>Modèle fiche Technique</p>
+							</div>
+						</div>
+					</a>
 				</div>
-			</a>
-		</div>
-		
-		<div id="imageModal" class="modal">
-			<span class="close" onclick="hideImage()">&times;</span>
-			<img id="modalImage" src="" alt="Image en grand">
-		</div>
+				
+				<!-- Image click -->
+				<div id="imageModal" class="modal">
+					<span class="close" onclick="hideImage()">&times;</span>
+					<img id="modalImage" src="" alt="Image en grand">
+				</div>
 
-		<br><p>Document vierge téléchargeable ci-dessous : </p>
+				<br>
+				
+				<p>Document vierge téléchargeable ci-dessous : </p>
 
-		<br><a href="../static/studios/images/modèle fiche technique.png" download><button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button></a>
-	</div>
+				<br>
+				
+				<a href="{% static 'studios/images/modèle fiche technique.png' %}" download>
+					<button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button>
+				</a>
+			</div>
+
+			<!-- Content 3: Upload Technical Sheet -->
+			<form method="POST" enctype="multipart/form-data" name="test">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="file" name="fichier">
+				<button type="submit">Enregistrer</button>
+			</form>
+
+		</article> <!-- /Article -->
+	
+	</div> <!-- /Main content -->
+
 </div> <!-- /Container -->
 
 <div class="container">
@@ -87,10 +112,21 @@
 </div>
 {% endblock %}
 
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+	<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
 {% block scripts %}
 
-<!-- Custom JavaScript file -->
-<script src="{% static 'studios/js/animation.js' %}"></script>
-
+	<script src="{% static 'studios/js/animation.js' %}"></script>
 
 {% endblock %}
