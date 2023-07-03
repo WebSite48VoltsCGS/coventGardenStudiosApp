@@ -278,7 +278,6 @@
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
 	<!-- Demo styles -->
 	<style>
 	  .swiper {
@@ -383,6 +382,26 @@
 
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-<script src="../static/studios/js/slider.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+	var swiper = new Swiper(".mySwiper", {
+		effect: "coverflow",
+		grabCursor: true,
+		centeredSlides: true,
+		slidesPerView: "auto",
+		coverflowEffect: {
+		rotate: 0,
+		stretch: 0,
+		depth: 40,
+		modifier: 1,
+		slideShadows: false,
+		},
+		pagination: {
+		el: ".swiper-pagination",
+		},
+		initialSlide: 3, // Affiche la 3e image (index 2) par défaut
+	});
+</script>
  
 {% endblock %}

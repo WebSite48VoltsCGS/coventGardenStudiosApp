@@ -8,28 +8,23 @@ margin-bottom: 20px;
 text-align: center;
 }
 
-.blancblanc {
+.centerwhite {
   color: white;
   font-size: 30px;
   margin-bottom: 15px;
   text-align: center;
-  font-weight: bold;
+
 }
 
-
-.freefriday{
-  background-image: url('../images/concert.jpeg');
-  background-size: cover;
-  background-position: center;
-  height: 500px;
-}
-
-.paragraphesff {
-  font-size: 21px;
-  margin: 50px;
-  margin-bottom: 50px;
-  text-align: justify;
+.leftwhite {
   color: white;
+  font-size: 26px;
+  margin-bottom: 15px;
+  text-align: left;
+
 }
 
-
+.text-container {
+	flex: 1;
+	text-align: justify;
+}
