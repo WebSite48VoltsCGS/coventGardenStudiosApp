@@ -1,18 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-
-
-<!-- Insert page title -->
-{% block title %}
-
-<title>Bar</title>
-
-{% endblock %}
-
-
-
-<!-- Insert page main header -->
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -21,87 +10,72 @@
 
 
 
-<!-- Insert page content -->
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
+<!-- Content 1: Images  -->
+<div class="row">
+	<div class="col-sm-6">
+		<a class="navbar-brand"><img src="{% static 'studios/images/De_Sutter.png' %}" text-center></a>
+	</div>
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-    	<li><a href="{% url 'home' %}">Accueil</a></li>
-    	<li class="active">Bar</li>
-	</ol> <!-- /Breadcrumb -->
+	<div class="col-sm-6">
+		<p><img src="{% static 'studios/images/mac.jpg' %}" alt="presentation_studios"></p>
+	</div>
+</div>
 
-	<!-- Main content -->
-	<div class="row">
+<!-- Content 2: Text -->
+<p>Depuis de nombres années, le Covent Garden Studios fait confiance à la <a href="http://www.brasseriedesutter.com/" target="_blank" rel="noopener">Brasserie De Sutter</a> pour leur fournir une bière artisanale de qualité.</p>
+<p>La Brasserie De Sutter est fondée par deux frères, Antoine et Frédéric, passionnés par la bière et par sa fabrication. En 2008, ils se lancent dans des tests de création de recettes et suite à l’obtention de leurs diplômes en agronomie ainsi qu’en brasserie, les premières bières voient le jour. Rapidement confortés par la qualité de leurs produits, les brasseurs installent une unité de production artisanale de 800 litres.</p>  
+<p>En janvier 2012, c’est le grand saut vers une fabrication maîtrisée et de plus grosse capacité grâce au déménagement de la Brasserie De Sutter à Gisors dans des locaux plus grands avec du matériel de brassage neuf et performant.</p>
 
-		<!-- Article -->
-		<article class="col-sm-12 maincontent">
+<!-- Content 3: Swiper -->
+<div class="swiper mySwiper">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ambree-rousse-dement-bree.png' %}" alt="Dément'brée">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-blanche-givree_1.png' %}" alt="Givrée">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-blonde-brin-de-folie.png' %}" alt="Brin de Folie">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-sombre-folle-brune.png' %}" alt="Folle Furieuse">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-fruits-rouges-folle-des-bo.png' %}" alt="Folle des bois">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ipa-crazy-indian-pale-ale.png' %}" alt="Crazy - IPA">
+		</div>
+		
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-zinzin-quadruple-fermentat.png' %}" alt="Zin Zin">
+		</div>
 
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Bar</h1>
-		  	</header>
-
-			<!-- Content 1  -->
-			<div class="row">
-				<div class="col-sm-6">
-					<a class="navbar-brand"><img src="{% static 'studios/images/De_Sutter.png' %}" text-center></a>
-				</div>
-
-				<div class="col-sm-6">
-					<p><img src="{% static 'studios/images/mac.jpg' %}" alt="presentation_studios"></p>
-				</div>
-			</div>
-
-			<!-- Content 2 -->
-			<p>Depuis de nombres années, le Covent Garden Studios fait confiance à la <a href="http://www.brasseriedesutter.com/" target="_blank" rel="noopener">Brasserie De Sutter</a> pour leur fournir une bière artisanale de qualité.</p>
-			<p>La Brasserie De Sutter est fondée par deux frères, Antoine et Frédéric, passionnés par la bière et par sa fabrication. En 2008, ils se lancent dans des tests de création de recettes et suite à l’obtention de leurs diplômes en agronomie ainsi qu’en brasserie, les premières bières voient le jour. Rapidement confortés par la qualité de leurs produits, les brasseurs installent une unité de production artisanale de 800 litres.</p>  
-			<p>En janvier 2012, c’est le grand saut vers une fabrication maîtrisée et de plus grosse capacité grâce au déménagement de la Brasserie De Sutter à Gisors dans des locaux plus grands avec du matériel de brassage neuf et performant.</p>
-			
-			<!-- Content 3 -->
-			<div class="swiper mySwiper">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ambree-rousse-dement-bree.png' %}" alt="Dément'brée">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-blanche-givree_1.png' %}" alt="Givrée">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-blonde-brin-de-folie.png' %}" alt="Brin de Folie">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-sombre-folle-brune.png' %}" alt="Folle Furieuse">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-fruits-rouges-folle-des-bo.png' %}" alt="Folle des bois">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ipa-crazy-indian-pale-ale.png' %}" alt="Crazy - IPA">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-zinzin-quadruple-fermentat.png' %}" alt="Zin Zin">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ictis.jpg' %}" alt="Ictis - Bio">
-					</div>
-				</div>
-			</div>
-	
-		</article> <!-- /Article -->
-	
-	</div> <!-- /Main content -->
-
-</div> <!-- /Container -->
+		<div class="swiper-slide">
+			<img src="{% static 'studios/images/biere-artisanale-folies-de-sutter-ictis.jpg' %}" alt="Ictis - Bio">
+		</div>
+	</div>
+</div>
 
 {% endblock %}
 
