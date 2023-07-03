@@ -35,6 +35,7 @@ class Events(models.Model):
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
+    url = models.URLField(blank=True) 
     recurrence = models.CharField(max_length=200, blank=True)
     Utilisateur =  models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 

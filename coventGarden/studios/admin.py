@@ -25,6 +25,6 @@ admin.site.register(CustomUser, CustomUserAdmin)
 #nouvelle class
 
 class eventAdmin(admin.ModelAdmin):
-    list_display = ["Utilisateur","title", "start_time","end_time","description"]
+    list_display = ["Utilisateur","title", "start_time","end_time","description",'url']
 
 admin.site.register(Events,eventAdmin)
