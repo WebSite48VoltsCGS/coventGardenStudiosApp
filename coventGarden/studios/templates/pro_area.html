@@ -72,29 +72,35 @@
 
 			<!-- Content 2: Technical Sheet -->
 			<div class="container">
+
 				<div class="stud">
 				<h2 class="ft">Espace Fiche Technique</h2>
 					<br>
-					<div class="exemple-fiche-technique">
-						<p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
+						<p>
+							Lorsque vous souhaitez vous produire sur scène avec un groupe, le "leader" du groupe se doit de déposer la fiche technique correspondante sur son compte (une seule upload par groupe est nécéssaire)
+
+						</p>
+					<br>
+						<div class="exemple-fiche-technique">
+							<p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
 
 				<!-- Image -->
 							<div class="image-container">
 								<a href="#" id="image-link">
-							<div class="image-overlay">
-								<img src="{% static 'studios/images/modèle fiche technique.png' %}" alt="Image fiche technique" onclick="showImage(this)">
-								<div class="overlay-text">
-									<p>Modèle fiche Technique</p>
-								</div>
+									<div class="image-overlay">
+										<img src="{% static 'studios/images/modèle fiche technique.png' %}" alt="Image fiche technique" onclick="showImage(this)">
+											<div class="overlay-text">
+												<p>Modèle fiche Technique</p>
+											</div>
+									</div>
+								</a>
 							</div>
-						</a>
 					</div>
-			</div>
 				<!-- Image click -->
-				<div id="imageModal" class="modal">
-					<span class="close" onclick="hideImage()">&times;</span>
-					<img id="modalImage" src="" alt="Image en grand">
-				</div>
+					<div id="imageModal" class="modal">
+						<span class="close" onclick="hideImage()">&times;</span>
+							<img id="modalImage" src="" alt="Image en grand">
+					</div>
 
 				<br>
 				
@@ -102,10 +108,10 @@
 
 				<br>
 				
-				<a href="{% static 'studios/images/modèle fiche technique.png' %}" download>
-					<button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button>
-				</a>
-			</div>
+						<a href="{% static 'studios/images/modèle fiche technique.png' %}" download>
+							<button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button>
+						</a>
+					</div>
 			</div>
 
 			<br>
