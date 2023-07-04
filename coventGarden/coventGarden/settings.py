@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studios',
+    'django_select2',
+    
 ]
 
 MIDDLEWARE = [
@@ -140,4 +142,3 @@ EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 # Store file
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = '/media/'
-

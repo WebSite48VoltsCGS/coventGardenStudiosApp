@@ -1,6 +1,9 @@
 from django.contrib.auth.forms import (UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm)
-from .models import CustomUser, CustomGroup, Event
+from django.forms import ModelChoiceField, SelectDateWidget, ValidationError
+from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Concert
 from .fields import *
+from django_select2.forms import Select2Widget
+
 
 # Register your forms here
 """
@@ -91,8 +94,15 @@ class EventForm(forms.ModelForm):
 Concert
     - Technical sheet
 """
-class TechnicalSheetForm(forms.Form):
-    pdf_file = forms.FileField(label='Déposer la Fiche Technique')
+
+class TechnicalSheetForm(forms.ModelForm):
+        class Meta:
+            model = TechnicalSheet
+            fields = ['pdf_file']
+            
+
+  
+
 
 """
 Booking
@@ -118,3 +128,38 @@ class ReservationForm(forms.Form):
 
 class TestForm(forms.Form):
     test = FORM_GROUP_NAME
+
+"""
+Concert Programation
+"""
+class ConcertForm(forms.ModelForm):
+    groupe1 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
+    groupe2 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
+    groupe3 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
+
+    date = forms.DateField(widget=SelectDateWidget)
+    is_engaged = forms.BooleanField(
+        required=True,
+        label="Je m'engage à ce que les 3 groupes soient disponibles et que les fiches techniques de chacun soient déposées.",
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+    )
+    class Meta:
+        model = Concert
+        fields = ['groupe1', 'groupe2', 'groupe3', 'date', 'is_engaged']
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        if date.weekday() != 4:
+            raise ValidationError("Vous devez choisir un vendredi.")
+    
+        group1 = self.cleaned_data['groupe1']
+        group2 = self.cleaned_data['groupe2']
+        group3 = self.cleaned_data['groupe3']
+
+        if group1 and (group1 == group2 or group1 == group3):
+            raise forms.ValidationError("Vous ne pouvez pas choisir le même groupe plus d'une fois.")
+
+        if group2 and group2 == group3:
+            raise forms.ValidationError("Vous ne pouvez pas choisir le même groupe plus d'une fois.")
+
+        return date

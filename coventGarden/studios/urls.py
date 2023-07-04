@@ -50,24 +50,13 @@ urlpatterns = [
 
     # Password Reset
     path('compte/mot-de-passe/oublie/',
-         PasswordResetView.as_view(
-             template_name='password_reset/password_reset_forgot.html',
-             html_email_template_name='password_reset/password_reset_email.html',
-             form_class=UserPasswordResetForm),
-         name='password_reset_forgot'),
+         views.CustomPasswordResetForgot.as_view(), name='password_reset_forgot'),
     path('compte/mot-de-passe-oublie/envoi/',
-         PasswordResetDoneView.as_view(
-             template_name='password_reset/password_reset_done.html'),
-         name='password_reset_done'),
+         views.CustomPasswordResetDone.as_view(), name='password_reset_done'),
     path('compte/mot-de-passe-oublie/modification/<uidb64>/<token>/',
-         PasswordResetConfirmView.as_view(
-             template_name='password_reset/password_reset_confirm.html',
-             form_class=UserPasswordSetForm),
-         name='password_reset_confirm'),
+         views.CustomPasswordResetConfirm.as_view(), name='password_reset_confirm'),
     path('compte/mot-de-passe-oublie/confirmation/',
-         PasswordResetCompleteView.as_view(
-             template_name='password_reset/password_reset_complete.html'),
-         name='password_reset_complete'),
+         views.CustomPasswordResetComplete.as_view(), name='password_reset_complete'),
 
     # Booking
     path('api/all_booking/', views.all_booking, name='all_booking'),
@@ -75,4 +64,7 @@ urlpatterns = [
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
     path('payment/', views.payment, name='payment'),
+
+    #deleted
+    path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

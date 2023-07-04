@@ -1,16 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-<!-- Insert title -->
-{% block title %}
-
-<title>Placeholder</title>
-
-{% endblock %}
-
-
-
-<!-- Insert main header -->
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,36 +10,21 @@
 
 
 
-<!-- Insert content -->
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
-
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Placeholder</li>
-	</ol> <!-- /Breadcrumb -->
-
-	<!-- Main content -->
-	<div class="row">
-
-		<!-- Article -->
-		<article class="col-sm-12 maincontent">
-
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Placeholder</h1>
-		  	</header>
-
-            <!-- Content 1 -->
-	
-		</article> <!-- /Article -->
-	
-	</div> <!-- /Main content -->
-
-</div> <!-- /Container -->
+<!-- Content 1 -->
 
 {% endblock %}
 

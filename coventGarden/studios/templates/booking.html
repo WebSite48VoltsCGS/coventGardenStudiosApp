@@ -1,14 +1,10 @@
 {% extends 'base/base.html' %}
 {% load static %}
+
 {% block title %}
 
 <title>Réservation</title>
 
-{% endblock %}
-
-
-{% block style %}
-    <link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
 {% endblock %}
 
 
@@ -86,7 +82,17 @@
 </div>
 {% endblock %}
 
+
+{% block style %}
+
+    <link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
+
+{% endblock %}
+
+
 {% block scripts %}
+
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.8/index.global.min.js'></script>
 <script src="{% static 'studios/js/booking.js' %}"></script>
+
 {% endblock %}

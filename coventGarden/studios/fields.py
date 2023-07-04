@@ -49,3 +49,6 @@ MODEL_FACEBOOK = models.URLField(max_length=LENGTH_URL, blank=True)
 MODEL_INSTAGRAM = models.URLField(max_length=LENGTH_URL, blank=True)
 MODEL_TWITTER = models.URLField(max_length=LENGTH_URL, blank=True)
 MODEL_BIOGRAPHY = models.TextField(max_length=LENGTH_TEXT, verbose_name="Biographie")
+
+
+
