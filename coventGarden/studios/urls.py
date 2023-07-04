@@ -75,4 +75,7 @@ urlpatterns = [
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
     path('payment/', views.payment, name='payment'),
+
+    #deleted
+    path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

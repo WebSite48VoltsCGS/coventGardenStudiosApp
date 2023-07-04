@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,7 @@ from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation,
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
-    EventForm, TechnicalSheetForm, ReservationForm)
+    EventForm, TechnicalSheetForm, ReservationForm, ConcertForm)
 
 
 User = get_user_model()
@@ -49,31 +49,49 @@ def concert(request):
 def bar(request):
     return render(request, 'bar.html')
 
-@csrf_exempt
+
 @login_required
 def pro_area(request):
-    if request.method == 'POST':
-        technical_sheet = TechnicalSheet.objects.all().filter(user=request.user).first()
-        if not technical_sheet:
-            technical_sheet = TechnicalSheet()
+    user_files = TechnicalSheet.objects.filter(user=request.user)
 
+    if request.method == 'POST':
         form = TechnicalSheetForm(request.POST, request.FILES)
         if form.is_valid():
-            # Process
-            deposited_file = form.cleaned_data['pdf_file']
-            technical_sheet.pdf_file = deposited_file
-            technical_sheet.user = request.user
-            technical_sheet.save()
-            return render(request, 'pro_area.html', {'form': form})
+            deposited_files = request.FILES.getlist('pdf_file')
+            for file in deposited_files:
+                technical_sheet = TechnicalSheet(pdf_file=file, user=request.user)
+                technical_sheet.save()
+            messages.success(request, 'Vos fiches techniques ont été déposées avec succès !')
+            return redirect('pro_area')
+        
+        form2 = ConcertForm(request.POST)
+        if form2.is_valid():
+            form2.save()
+            messages.success(request, 'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',extra_tags='concert_for')
+            return redirect('pro_area')
 
-    form = TechnicalSheetForm()
-    return render(request, 'pro_area.html', {'form': form})
+    else:
+        form = TechnicalSheetForm()
+        form2 = ConcertForm()
+
+    return render(request, 'pro_area.html', {'form': form, 'form2': form2, 'user_files': user_files})
 
 def contact(request):
     return render(request, 'contact.html')
 
 def booking(request):
     return render(request, 'booking.html')
+
+
+
+
+
+@login_required
+def delete_technical_sheet(request, pk):
+    technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
+    technical_sheet.delete()
+    messages.success(request, 'La fiche technique a été supprimée avec succès !')
+    return redirect('pro_area')
 
 
 """
@@ -480,6 +498,15 @@ def all_booking(request):
             'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
         })
     return JsonResponse(datas, safe=False)
+
+"""
+ConcertProgrammation
+"""
+
+
+
+
+
 
 """
 Password reset
