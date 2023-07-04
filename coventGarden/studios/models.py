@@ -81,12 +81,10 @@ class Reservation(models.Model):
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
-
 class Concert(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    groupe1= models.ForeignKey(CustomGroup, on_delete=models.CASCADE,related_name='concerts_groupe1', null=True)
-    groupe2= models.ForeignKey(CustomGroup, on_delete=models.CASCADE,related_name='concerts_groupe2' ,null=True)
-    groupe3= models.ForeignKey(CustomGroup, on_delete=models.CASCADE,related_name='concerts_groupe3' ,null=True)
+    groupe1 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe1', null=True)
+    groupe2 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe2', null=True)
+    groupe3 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe3', null=True)
     date = models.DateField()
     validated = models.BooleanField(default=False)
-      
