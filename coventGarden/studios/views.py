@@ -458,7 +458,7 @@ Bookings
 def bookings_detail(request):
     # Context: Variables passed to the web page
     context = {
-        "title": "Supprimer un groupe",
+        "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Réservations"}],
@@ -471,6 +471,10 @@ def bookings_detail(request):
 
     # Get all groups object related to the current user
     context["my_groups"] = request.user.my_groups.all()
+
+    #Get all reservations for user
+    reservations = Reservation.objects.filter(user_id=request.user.id)
+    context["reservations"] = reservations
 
     return render(request, 'bookings/bookings_detail.html', context)
 
