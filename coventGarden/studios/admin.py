@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Salle, Reservation, Concert 
+from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Salle, Reservation, Concert
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
@@ -31,7 +31,6 @@ class ReservationAdmin(admin.ModelAdmin):
 class ConcertAdmin(admin.ModelAdmin):
     list_display = ["user",'groupe1', 'groupe2', 'groupe3', 'date', 'validated']
     list_filter = ['validated']
-
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(CustomGroup, CustomGroupAdmin)

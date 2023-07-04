@@ -39,8 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'studios',
     'django_select2',
-    
 ]
+# ---------- Required ----------
+# pip3 install django-select2
+# ------------------------------
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -142,3 +145,4 @@ EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 # Store file
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = '/media/'
+
