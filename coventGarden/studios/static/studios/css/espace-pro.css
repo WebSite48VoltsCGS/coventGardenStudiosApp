@@ -1,90 +1,89 @@
 /*image*/
 
 .image-container {
-    position: relative;
-    display: inline-block;
-    
-  }
-  
-  .image-overlay {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .image-overlay img {
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: 0.5s;
-  }
-  
-  .image-overlay:hover img {
-    filter: brightness(50%);
-  }
-  
-  .overlay-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    opacity: 0;
-    transition: 0.5s;
-  }
-  
-  .image-overlay:hover .overlay-text {
-    opacity: 1;
-  }
-
-
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    overflow: auto;
-    background-color: white;
-  }
-  
-  .modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%; /* Vous pouvez ajuster cette valeur pour définir la largeur de la fenêtre modale */
-    max-height: 80%;
-    background-color: #fff;
-    padding: 20px;
-  }
-  
-  /* Autres styles pour la fenêtre modale */
-  
-  #modalImage {
-    display: block;
-    width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-  
-  .close {
-    color: red;
-    position: absolute;
-    bottom: 50%;
-    right: 0;
-    font-size: 50px;
-    font-weight: bold;
-    cursor: pointer;
+  position: relative;
+  display: inline-block;
 }
   
-  .close:hover {
-    color: rgb(159, 4, 4);
-  }
-  
 
+
+.image-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-overlay img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: 0.5s;
+}
+
+.image-overlay:hover img {
+  filter: brightness(50%);
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.image-overlay:hover .overlay-text {
+  opacity: 1;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  overflow: auto;
+  background-color: white;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%; /* Vous pouvez ajuster cette valeur pour définir la largeur de la fenêtre modale */
+  max-height: 80%;
+  background-color: #fff;
+  padding: 20px;
+}
+
+/* Autres styles pour la fenêtre modale */
+
+#modalImage {
+  display: block;
+  width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.close {
+  color: red;
+  position: absolute;
+  bottom: 50%;
+  right: 0;
+  font-size: 50px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: rgb(159, 4, 4);
+}
 
 .image-overlay {
   position: relative;
@@ -159,7 +158,6 @@
 
 .exemple-fiche-technique{
   text-align: center;
-
 }
 
 /* Style buttons */
@@ -181,17 +179,15 @@
 
 
 .row-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 40px;
-    max-width: 80px;
-    margin-bottom: 10px;
-    margin-left: 535px;
-    padding: 40px;
-    
-  }
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  max-width: 80px;
+  margin-bottom: 10px;
+  margin-left: 535px;
+  padding: 40px;
+}
   
 
 
@@ -202,10 +198,13 @@
 
 /*lien*/ 
 
-.lien a{ color: #c3b988;
+.lien a{
+  color: #c3b988;
 }
 
-.lien a:hover {color: #fff;}
+.lien a:hover {
+  color: #fff;
+}
 
 
 /*Custom des boutons du formulaire*/ 
@@ -213,12 +212,12 @@
 
 /* Style du formulaire */
 .custom-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color:white;
+max-width: 400px;
+margin: 0 auto;
+padding: 20px;
+border: 1px solid #ccc;
+border-radius: 5px;
+background-color:white;
 }
 
 /* Style des champs du formulaire */
