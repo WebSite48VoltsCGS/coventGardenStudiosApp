@@ -95,10 +95,10 @@ Concert
     - TechnicalSheetForm
     - ConcertForm
 """
-class TechnicalSheetForm(forms.Form):
-     class Meta:
-         model = TechnicalSheet
-         fields = ['pdf_file']
+class TechnicalSheetForm(forms.ModelForm):
+    class Meta:
+        model = TechnicalSheet
+        fields = ['pdf_file']
 
 
 class ConcertForm(forms.ModelForm):
