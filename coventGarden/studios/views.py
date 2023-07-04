@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta
 
@@ -73,7 +73,8 @@ def contact(request):
     return render(request, 'contact.html')
 
 def booking(request):
-    return render(request, 'booking.html')
+    salles = Salle.objects.all()
+    return render(request, 'booking.html', context={"salles": salles})
 
 
 """
@@ -376,6 +377,12 @@ Salles
 Reservation
     - Listing reservation
 """
+
+
+def is_in_group(CustomUser):
+    return CustomUser.groups.filter(name='Client_Regulier').exists()
+
+
 def list_salles(request):
     salles = Salle.objects.all()
     salle_data = [{"id": salle.id, "title": salle.name} for salle in salles]
@@ -386,13 +393,12 @@ def list_users(request):
     user_data = [{"id": user.id, "title": user.username} for user in users]
     return JsonResponse(user_data, safe=False)
 
-
+@login_required(login_url='account_sign_in')
 def accompte(request):
 
     if request.method == 'POST':
 
         salle_id = int(request.POST["salle_id"])
-        #salle_id = int(request.POST["salle_id"])
         salle = Salle.objects.get(id= salle_id)
 
         user_id = int(request.POST["user_id"])
@@ -403,21 +409,37 @@ def accompte(request):
 
         form = ReservationForm()
 
-        #print(form)
-        
         duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
         print(duration_hours)
         
-        duration = 1
-        return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
-        "end_date": end_date, "duration": duration_hours, "form": form})
+        #duration = 1
+
+        if is_in_group(user):
+            description = "Reservation for user "+ user.username
+            status = "En cours"
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration_hours,
+                date_start=start_date,
+                date_end=end_date,
+                price=0,
+                status=status,
+                salle=salle,
+                user=user
+            )
+            messages.success(request, "Votre réservation a bien été prise en compte !")
+            return redirect('booking')
+    
+        else:
+            return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
+            "end_date": end_date, "duration": duration_hours, "form": form})
 
     else:
         return redirect('booking')
 
-
+@login_required(login_url='account_sign_in')
 def payment(request):
 
     print(request.POST)

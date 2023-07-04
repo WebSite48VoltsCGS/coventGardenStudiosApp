@@ -12,3 +12,7 @@
     padding-top: 4px;
     text-align: center;
 }
+
+.fc .fc-toolbar-title{
+    font-size: 1.25em;
+}
