@@ -85,12 +85,21 @@ def bar(request):
 
 @login_required
 def pro_area(request):
-<<<<<<< HEAD
-    user_files = TechnicalSheet.objects.filter(user=request.user)
+    # Context: Variables passed to the web page
+    context = {
+        "title": "Espace Pro",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Espace Pro"}],
+        "form": None, "form2": None,
+        "user_files": None
+    }
+
+    context["user_files"] = TechnicalSheet.objects.filter(user=request.user)
 
     if request.method == 'POST':
-        form = TechnicalSheetForm(request.POST, request.FILES)
-        if form.is_valid():
+        context["form"] = TechnicalSheetForm(request.POST, request.FILES)
+        if context["form"].is_valid():
             deposited_files = request.FILES.getlist('pdf_file')
             for file in deposited_files:
                 technical_sheet = TechnicalSheet(pdf_file=file, user=request.user)
@@ -98,45 +107,17 @@ def pro_area(request):
             messages.success(request, 'Vos fiches techniques ont été déposées avec succès !')
             return redirect('pro_area')
         
-        form2 = ConcertForm(request.POST)
-        if form2.is_valid():
-            form2.save()
+        context["form2"] = ConcertForm(request.POST)
+        if context["form2"].is_valid():
+            context["form2"].save()
             messages.success(request, 'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',extra_tags='concert_for')
             return redirect('pro_area')
 
     else:
-        form = TechnicalSheetForm()
-        form2 = ConcertForm()
+        context["form"] = TechnicalSheetForm()
+        context["form2"] = ConcertForm()
 
-    return render(request, 'pro_area.html', {'form': form, 'form2': form2, 'user_files': user_files})
-=======
-    # Context: Variables passed to the web page
-    context = {
-        "title": "Espace Pro",
-        "breadcrumb": [
-            {"view": "home", "name": "Accueil"},
-            {"view": None, "name": "Espace Pro"}],
-        "form": None
-    }
-
-    # Submit form
-    if request.method == 'POST':
-        technical_sheet = TechnicalSheet.objects.all().filter(user=request.user).first()
-        if not technical_sheet:
-            technical_sheet = TechnicalSheet()
-
-        context["form"] = TechnicalSheetForm(request.POST, request.FILES)
-        if context["form"].is_valid():
-            # Process
-            deposited_file = context["form"].cleaned_data['pdf_file']
-            technical_sheet.pdf_file = deposited_file
-            technical_sheet.user = request.user
-            technical_sheet.save()
-            return render(request, 'pro_area.html', context)
-
-    context["form"] = TechnicalSheetForm()
     return render(request, 'pro_area.html', context)
->>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
 
 def contact(request):
     # Context: Variables passed to the web page
@@ -764,23 +745,3 @@ def all_booking(request):
             'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
         })
     return JsonResponse(datas, safe=False)
-<<<<<<< HEAD
-
-"""
-ConcertProgrammation
-"""
-
-
-
-
-
-
-"""
-Password reset
-    - Forgot: password_reset_forgot.html
-    - Done: password_reset_done.html
-    - Confirm: password_reset_confirm.html
-    - Complete: password_reset_complete.html
-"""
-=======
->>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab

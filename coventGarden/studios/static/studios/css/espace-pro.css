@@ -1,7 +1,6 @@
 /*image*/
 
 .image-container {
-<<<<<<< HEAD
     position: relative;
     display: inline-block;
     
@@ -84,10 +83,6 @@
   .close:hover {
     color: rgb(159, 4, 4);
   }
-=======
-  position: relative;
-  display: inline-block;
->>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
   
 }
 
@@ -186,7 +181,6 @@
 
 
 .row-button {
-<<<<<<< HEAD
     display: flex;
     justify-content: center;
     align-items: center;
@@ -198,13 +192,6 @@
     
   }
 
-=======
-  display: flex;
-  align-items: flex-start;
-  max-width: 80px;
-  margin-bottom: 10px;
-  padding: 20px;
->>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
   
 }
 
@@ -219,7 +206,6 @@
 }
 
 .lien a:hover {color: #fff;}
-<<<<<<< HEAD
 
 
 /*Custom des boutons du formulaire*/ 
@@ -323,5 +309,3 @@ ul.messages{
   max-width: 400px; 
   margin: 0 auto;
 }
-=======
->>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
