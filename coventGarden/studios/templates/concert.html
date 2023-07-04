@@ -1,16 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-<!-- Insert title -->
-{% block title %}
-
-<title>Concert</title>
-
-{% endblock %}
-
-
-
-<!-- Insert main header -->
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,39 +10,24 @@
 
 
 
-<!-- Insert content -->
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
-
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Concert</li>
-	</ol> <!-- /Breadcrumb -->
-
-	<!-- Main content -->
-	<div class="row">
-
-		<!-- Article -->
-		<article class="col-sm-12 maincontent">
-
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Concert</h1>
-		  	</header>
-
-            <!-- Content 1 -->
-			<div class="row">
-				<div id="calendar"></div>
-			</div>
-	
-		</article> <!-- /Article -->
-	
-	</div> <!-- /Main content -->
-
-</div> <!-- /Container -->
+<!-- Content 1 -->
+<div class="row">
+	<div id="calendar"></div>
+</div>
 
 {% endblock %}
 
@@ -60,7 +36,7 @@
 <!-- Custom CSS styles file(s) -->
 {% block style %}
 
-	<link rel="stylesheet" href="{% static 'studios/css/concert.css' %}"/>
+<link rel="stylesheet" href="{% static 'studios/css/concert.css' %}"/>
 
 {% endblock %}
 
@@ -69,10 +45,10 @@
 <!-- Custom JavaScript file(s) -->
 {% block scripts %}
 
-	<script src="{% static 'studios/js/concert.js' %}"></script>
+<script src="{% static 'studios/js/concert.js' %}"></script>
 
-	<!-- External JavaScript dependencies -->
-	<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js'></script>
-	<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js'></script>
+<!-- External JavaScript dependencies -->
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js'></script>
 
 {% endblock %}

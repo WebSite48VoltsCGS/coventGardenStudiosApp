@@ -1,6 +1,7 @@
 /*image*/
 
 .image-container {
+<<<<<<< HEAD
     position: relative;
     display: inline-block;
     
@@ -83,31 +84,109 @@
   .close:hover {
     color: rgb(159, 4, 4);
   }
+=======
+  position: relative;
+  display: inline-block;
+>>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
   
+}
+
+.image-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-overlay img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: 0.5s;
+}
+
+.image-overlay:hover img {
+  filter: brightness(50%);
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.image-overlay:hover .overlay-text {
+  opacity: 1;
+}
+
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  margin: 10% auto;
+  width: 100%;
+  max-height: 70vh;
+  background-color: #fff; /* Ajoutez une couleur de fond pour la fenêtre modale */
+}
+
+/* Autres styles pour la fenêtre modale */
+
+.modal img {
+  display: block;
+  width: 100%;
+  max-height: 100%;
+}
+
+.close {
+  color: #fff;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #bbb;
+}
+
 .exemple-fiche-technique{
-    text-align: center;
+  text-align: center;
 
 }
 
 /* Style buttons */
 .btnt{
-    background-color: #c3b988;
-    border: none;
-    color: #191919;
-    padding: 12px 30px;
-    cursor: pointer;
-    font-size: 20px;
-  }
-  
-  /* Darker background on mouse-over */
-  .btnt:hover {
-    background-color: gold;
-  }
+  background-color: #c3b988;
+  border: none;
+  color: #191919;
+  padding: 12px 30px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Darker background on mouse-over */
+.btnt:hover {
+  background-color: gold;
+}
 
 /* boutton réservation*/
 
 
 .row-button {
+<<<<<<< HEAD
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,7 +198,17 @@
     
   }
 
+=======
+  display: flex;
+  align-items: flex-start;
+  max-width: 80px;
+  margin-bottom: 10px;
+  padding: 20px;
+>>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab
   
+}
+
+
 
 /* explications*/ 
 
@@ -130,6 +219,7 @@
 }
 
 .lien a:hover {color: #fff;}
+<<<<<<< HEAD
 
 
 /*Custom des boutons du formulaire*/ 
@@ -233,3 +323,5 @@ ul.messages{
   max-width: 400px; 
   margin: 0 auto;
 }
+=======
+>>>>>>> 894ac64f82a656da11db8d0a2a130d6a523bebab

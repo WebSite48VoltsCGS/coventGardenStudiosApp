@@ -1,17 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}
-
-<title>Mes groupes</title>
-
-{% endblock %}
-
-
-{% block style %}
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,62 +9,67 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
+<!-- Content 1: Text -->
+<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<ul>
+				{% for group in my_groups %}
+				<li>
+					<a href="{% url 'groups_update' group.id %}">{{ group.name }}</a>
+					- <a href="{% url 'groups_update' group.id %}">[Modifier]</a>
+					- <a href="{% url 'groups_delete' group.id %}">[Supprimer]</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>				
+</div>
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li class="active">Groupes</li>
-	</ol> <!-- /Breadcrumb -->
-
-	<div class="row">
-		
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
-
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Mes groupes</h1>
-			</header>
-			
-			<!-- Panel -->
-			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<!-- Text -->
-						<ul>
-							{% for group in my_groups %}
-							<li>
-								<a href="{% url 'groups_update' group.id %}">{{ group.name }}</a>
-								- <a href="{% url 'groups_update' group.id %}">[Modifier]</a>
-								- <a href="{% url 'groups_delete' group.id %}">[Supprimer]</a>
-							</li>
-							{% endfor %}
-						</ul>
-					</div>
-				</div>				
-			</div> <!-- /Panel -->
-
-			<!-- Button(s) -->
-			<div class="row">
-				<div class="col-lg-6 text-left">
-					<form action="{% url 'groups_create' %}">
-						<button class="btn btn-action">Créer un groupe</button>
-					</form>
-				</div>
-
-				<div class="col-lg-6 text-right">
-					<form action="{% url 'placeholder' %}">
-						<button class="btn btn-action">Placeholder</button>
-					</form>
-				</div>
-			</div> <!-- /Button(s)-->
-
-		</article> <!-- /Article -->
+<!-- Button(s) -->
+<div class="row">
+	<!-- Left -->
+	<div class="col-lg-6 text-left">
+		<form action="{% url 'groups_create' %}">
+			<button class="btn btn-action">Créer un groupe</button>
+		</form>
 	</div>
-</div>	<!-- /Container -->
+
+	<!-- Right -->
+	<div class="col-lg-6 text-right">
+		<form action="{% url 'placeholder' %}">
+			<button class="btn btn-action">Placeholder</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}
