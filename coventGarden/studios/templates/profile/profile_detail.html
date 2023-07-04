@@ -39,35 +39,44 @@
 			<header class="page-header">
 				<h1 class="page-title">Mon compte</h1>
 			</header>
+		</article>
+	<div>
+		Bienvenue 
+	</div>
+
+<!-- Button(s) -->
+<div class="row">
+	<div class="col-lg-6 text-left">
+		<form action="{% url 'profile_update' %}">
+			<button class="btn btn-action">Modifier son profil</button>
+		</form>
+	</div>
+
+	<div class="col-lg-6 text-right">
+		<form action="{% url 'account_log_out' %}">
+			<button class="btn btn-action">Déconnexion</button>
+		</form>
+	</div>
+</div> <!-- /Button(s) -->
 
 			<!-- Panel -->
 			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 				<div class="panel panel-default">
+					<h4 class="text-center"> Informations Personnelles</h4>
 					<div class="panel-body">
 						<!-- Text -->
-						Nom: {{ user.last_name }}<br>
-						Prénom: {{ user.first_name }}<br>
-						E-mail: {{ user.email }}<br>
-						Téléphone: {{ user.phone }}<br>
-						Test Field: {{ user.test_field }}<br>
+						<p>Nom: {{ user.last_name }}</p>
+						<br>
+						<p>Prénom: {{ user.first_name }}</p>
+						<br>
+						<p>E-mail: {{ user.email }}</p>
+						<br>
+						<P>Téléphone: {{ user.phone }}</P>
 					</div>
 				</div>
 			</div> <!-- Panel -->
 
-			<!-- Button(s) -->
-			<div class="row">
-				<div class="col-lg-6 text-left">
-					<form action="{% url 'profile_update' %}">
-						<button class="btn btn-action">Modifier son profil</button>
-					</form>
-				</div>
 
-				<div class="col-lg-6 text-right">
-					<form action="{% url 'account_log_out' %}">
-						<button class="btn btn-action">Déconnexion</button>
-					</form>
-				</div>
-			</div> <!-- /Button(s) -->
 
 		</article> <!-- /Article -->
 
