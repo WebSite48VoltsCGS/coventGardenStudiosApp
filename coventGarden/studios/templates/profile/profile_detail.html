@@ -1,17 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}
-
-<title>Mon compte</title>
-
-{% endblock %}
-
-
-{% block style %}
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,61 +9,65 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li class="active"><a href="{% url 'profile_detail' %}">Compte</a></li>
-	</ol> <!-- /Breadcrumb -->
-
-	<div class="row">
-
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
-
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Mon compte</h1>
-			</header> <!-- /Header -->
-
-			<!-- Panel -->
-			<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<!-- Text -->
-						Nom: {{ user.last_name }}<br>
-						Prénom: {{ user.first_name }}<br>
-						E-mail: {{ user.email }}<br>
-						Téléphone: {{ user.phone }}<br>
-						Test Field: {{ user.test_field }}<br>
-					</div>
-				</div>
-			</div> <!-- Panel -->
-
-			<!-- Button(s) -->
-			<div class="row">
-				<div class="col-lg-6 text-left">
-					<form action="{% url 'profile_update' %}">
-						<button class="btn btn-action">Modifier son profil</button>
-					</form>
-				</div>
-
-				<div class="col-lg-6 text-right">
-					<form action="{% url 'account_log_out' %}">
-						<button class="btn btn-action">Déconnexion</button>
-					</form>
-				</div>
-			</div> <!-- /Button(s) -->
-
-		</article> <!-- /Article -->
-
+<!-- Content 1: Button(s) -->
+<div class="row">
+	<div class="col-lg-6 text-left">
+		<form action="{% url 'profile_update' %}">
+			<button class="btn btn-action">Modifier son profil</button>
+		</form>
 	</div>
 
-</div> <!-- /Container -->
+	<div class="col-lg-6 text-right">
+		<form action="{% url 'account_log_out' %}">
+			<button class="btn btn-action">Déconnexion</button>
+		</form>
+	</div>
+</div>
 
+<!-- Content 2: Text -->
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div class="panel panel-default">
+			<h4 class="text-center"> Informations Personnelles</h4>
+
+			<div class="panel-body">
+				<p>Nom: {{ user.last_name }}</p><br>
+				<p>Prénom: {{ user.first_name }}</p><br>
+				<p>E-mail: {{ user.email }}</p><br>
+				<p>Téléphone: {{ user.phone }}</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}

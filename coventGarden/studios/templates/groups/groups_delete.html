@@ -1,17 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}
-
-<title>Supprimer un groupe</title>
-
-{% endblock %}
-
-
-{% block style %}
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,61 +9,62 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
+<!-- Content 1 -->
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<!-- Title / Text -->
+				<h3 class="thin text-center">Confirmer la suppression du groupe? </h3>
+				<p class="text-center text-muted">Vous voulez revenir à vos groupes? <a href="{% url 'groups_detail' %}">Cliquez ici</a></p>
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li><a href="{% url 'groups_detail' %}">Groupes</a></li>
-		<li class="active">Supprimer</li>
-	</ol> <!-- /Breadcrumb -->
+				<hr>
 
-	<div class="row">
+				<!-- Button(s) -->
+				<div class="row">
+					<!-- Left: Redirect -->
+					<div class="col-lg-6 text-left">
+						<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'groups_detail' %}'">Annuler
+					</div>
 
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
-			
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Supprimer un groupe</h1>
-			</header> <!-- /Header -->
-			
-			<!-- Form -->
-			<form method="post">
-				{% csrf_token %}
-				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<!-- Title / Text -->
-							<h3 class="thin text-center">Confirmer la suppression du groupe? </h3>
-							<p class="text-center text-muted">Vous voulez revenir à vos groupes? <a href="{% url 'groups_detail' %}">Cliquez ici</a></p>
-
-							<hr>
-
-							<!-- Button(s) -->
-							<div class="row">
-								<!-- Redirect -->
-								<div class="col-lg-6 text-left">
-									<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'groups_detail' %}'">Annuler
-								</div>
-
-								<!-- Confirm -->
-								<div class="col-lg-6 text-right">
-									<button class="btn btn-action" type="submit">Confirmer</button>
-								</div>
-							</div>
-						</div>
+					<!-- Right: Confirm -->
+					<div class="col-lg-6 text-right">
+						<button class="btn btn-action" type="submit">Confirmer</button>
 					</div>
 				</div>
-			</form> <!-- /Form -->
-
-		</article> <!-- /Article -->
-
+			</div>
+		</div>
 	</div>
+</form>
 
-</div>	<!-- /container -->
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}

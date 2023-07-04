@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'studios',
+    'django_select2',
 ]
+# ---------- Required ----------
+# pip3 install django-select2
+# ------------------------------
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

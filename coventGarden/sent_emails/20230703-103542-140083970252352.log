@@ -1,14 +1,13 @@
 Content-Type: multipart/alternative;
- boundary="===============2502393611041220373=="
+ boundary="===============2463812679541776896=="
 MIME-Version: 1.0
 Subject: Password reset on 127.0.0.1:8000
 From: webmaster@localhost
 To: NewUser@cgs.com
-Date: Thu, 29 Jun 2023 12:20:55 -0000
-Message-ID: 
- <168804125588.94442.11620852805545079561@1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa>
+Date: Mon, 03 Jul 2023 08:35:42 -0000
+Message-ID: <168837334254.15651.15768038613498209065@JackPC>
 
---===============2502393611041220373==
+--===============2463812679541776896==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -18,7 +17,7 @@ You're receiving this email because you requested a password reset for your user
 
 Please go to the following page and choose a new password:
 
-http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/bqk2av-d98cecaf832a2334488541ea365b0839/
+http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/bqrc3i-b159c112be7b2a05ae296e153604d62f/
 
 Your username, in case you’ve forgotten: NewUser
 
@@ -28,7 +27,7 @@ The 127.0.0.1:8000 team
 
 
 
---===============2502393611041220373==
+--===============2463812679541776896==
 Content-Type: text/html; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -38,7 +37,7 @@ Content-Transfer-Encoding: 8bit
 3	
 4	Please go to the following page and choose a new password:
 5	
-6	http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/bqk2av-d98cecaf832a2334488541ea365b0839/
+6	http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/bqrc3i-b159c112be7b2a05ae296e153604d62f/
 7	
 8	Your username, in case you’ve forgotten: NewUser
 9	
@@ -47,6 +46,6 @@ Content-Transfer-Encoding: 8bit
 12	The 127.0.0.1:8000 team
 13	
 14	
---===============2502393611041220373==--
+--===============2463812679541776896==--
 
 -------------------------------------------------------------------------------

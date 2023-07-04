@@ -10,7 +10,7 @@
 	<meta name="author"      content="">
 	
 	<!-- Title -->
-	{% block title %}{% endblock %}
+	<title>{{title}}</title>
 
 	<!-- Styles -->
 	<link rel="shortcut icon" href="{% static 'studios/images/gt_favicon.png' %}">
@@ -44,7 +44,7 @@
 				
 				<!-- Home navigation bar button -->
 				<a class="navbar-brand" href="{% url 'home' %}"><img id="navbar-logo" src="{% static 'studios/images/logo.png' %}"></a>
-			</div> <!-- /Header -->
+			</div>
 
 			<!-- Collapse -->
 			<div class="navbar-collapse collapse">
@@ -85,8 +85,28 @@
 	</div> <!-- /Navbar -->
 
 
+
+	<!-- Header -->
 	{% block header %}{% endblock %}
-	{% block content %}{% endblock %}
+
+	<!-- Container -->
+	<div class="container">
+		<!-- Breadcrumb -->
+		{% include 'base/base_breadcrumb.html' %}
+
+		<!-- Main content-->
+		<div class="row">
+			<article class="col-xs-12 maincontent">
+				<!-- Page header -->
+				{% block page_header %}{% endblock %}
+				
+				<!-- Content -->
+				{% block content %}{% endblock %}
+			</article>
+		</div>
+	</div>
+
+
 
 	<!-- Footer -->
 	<footer id="footer" class="top-space">
@@ -111,15 +131,14 @@
 						<h3 class="widget-title">Adresse</h3>
 						<div class="widget-body">
 							<p>
-								<a href="https://goo.gl/maps/xwy7vnXwuFTFXfJA8" target="_blank">
-									1 Rue du Bouvreuil,<br>
-									Parc d'activité de la Danne<br>
-									95610, Eragny-sur-Oise
-								</a>
+ 								<a href="https://goo.gl/maps/xwy7vnXwuFTFXfJA8" target="_blank">
+ 									1 Rue du Bouvreuil,<br>
+ 									Parc d'activité de la Danne<br>
+ 									95610, Eragny-sur-Oise
+ 								</a>
 							</p>
 						</div>
 					</div>
-					
 
 					<div class="col-md-3 widget">
 						<h3 class="widget-title">Horaires</h3>
