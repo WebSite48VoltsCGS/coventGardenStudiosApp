@@ -474,60 +474,48 @@ Password reset
 """
 class CustomPasswordResetForgot(PasswordResetView):
     template_name = 'password_reset/password_reset_forgot.html'
-    html_email_template_name = 'password_reset/password_reset_email.html'
+    email_template_name = 'password_reset/password_reset_email.html'
     form_class = UserPasswordResetForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Context: Variables passed to the web page
-        context["title"] = "Récupérer son compte"
-        context["breadcrumb"] = [
+    extra_context = {
+        "title": "Récupérer son compte",
+        "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Mot de passe oublié"}]
-        return context
+    }
 
-class CustomPasswordResetDone(PasswordResetView):
+class CustomPasswordResetDone(PasswordResetDoneView):
     template_name = 'password_reset/password_reset_done.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Context: Variables passed to the web page
-        context["title"] = "Validation de la demande"
-        context["breadcrumb"] = [
+    extra_context = {
+        "title": "Validation de la demande",
+        "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"}]
-        return context
+    }
 
-class CustomPasswordResetConfirm(PasswordResetView):
-    template_name = 'password_reset/password_reset_confirm.html',
+class CustomPasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'password_reset/password_reset_confirm.html'
     form_class = UserPasswordSetForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Context: Variables passed to the web page
-        context["title"] = "Modifier mon mot de passe"
-        context["breadcrumb"] = [
+    extra_context = {
+        "title": "Modifier mon mot de passe",
+        "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"},
             {"view": None, "name": "Modifier"}]
-        return context
+    }
 
-class CustomPasswordResetComplete(PasswordResetView):
+class CustomPasswordResetComplete(PasswordResetCompleteView):
     template_name = 'password_reset/password_reset_complete.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # Context: Variables passed to the web page
-        context["title"] = "Confirmation"
-        context["breadcrumb"] = [
+    extra_context = {
+        "title": "Confirmation",
+        "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"},
             {"view": None, "name": "Modifier"},
             {"view": None, "name": "Confirmation"}]
-        return context
+    }
 
 
 
