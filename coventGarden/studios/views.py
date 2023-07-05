@@ -1,3 +1,4 @@
+from datetime import datetime, time 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -16,7 +17,7 @@ from django.views import View
 
 from .forms import UserPasswordResetForm, UserPasswordSetForm
 
-from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
+from .models import Concert, CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
@@ -772,7 +773,8 @@ def pro_area(request):
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Espace Pro"}],
-        "form": None, "form2": None,
+        "form": None,
+        "form2": None,
         "user_files": None
     }
 
@@ -790,10 +792,34 @@ def pro_area(request):
 
         context["form2"] = ConcertForm(request.POST)
         if context["form2"].is_valid():
-            context["form2"].save()
+            concert_date = context["form2"].cleaned_data['date']
+            start_time = time(20, 30)  # Heure de début à 20h30
+            end_time = time(23, 30)  # Heure de fin à 23h30
+
+            event_start_time = datetime.combine(concert_date, start_time)
+            event_end_time = datetime.combine(concert_date, end_time)
+
+            concert = context["form2"].save(commit=False)  # Enregistrement différé pour associer l'Event
+            concert.user = request.user
+            concert.save()
+
+            event = Event.objects.create(
+                user=request.user,
+                title=f"Concert {concert.pk} - Planning",
+                start_time=event_start_time,
+                end_time=event_end_time,
+                description=f"Planning du Concert {concert.pk} avec les groupes : "
+                            f"{concert.groupe1}, {concert.groupe2}, {concert.groupe3}."
+            )
+
+            # Associer l'objet Event au modèle Concert
+            concert.planning = event
+            concert.save()
+
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
+
             return redirect('pro_area')
 
     else:
@@ -801,6 +827,7 @@ def pro_area(request):
         context["form2"] = ConcertForm()
 
     return render(request, 'pro_area.html', context)
+
 
 @login_required
 def delete_technical_sheet(request, pk):
