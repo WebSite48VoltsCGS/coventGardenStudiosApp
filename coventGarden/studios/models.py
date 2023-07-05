@@ -69,6 +69,7 @@ class CustomGroup(models.Model):
     instagram = MODEL_INSTAGRAM
     twitter = MODEL_TWITTER
     biography = MODEL_BIOGRAPHY
+    validated = MODEL_VALIDATED
 
     def __str__(self):
         return f"{self.name}"

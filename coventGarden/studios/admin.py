@@ -10,7 +10,8 @@ class CustomUserAdmin(UserAdmin):
 class CustomGroupAdmin(admin.ModelAdmin):
     list_display = ["user", "name", "email",
                     "phone", "members", "genre",
-                    "facebook", "instagram", "biography"]
+                    "facebook", "instagram", "biography",
+                    "validated"]
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "start_time", "end_time", "description"]

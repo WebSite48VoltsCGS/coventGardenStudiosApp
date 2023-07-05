@@ -65,7 +65,7 @@ class CustomGroupForm(forms.ModelForm):
     class Meta:
         model = CustomGroup
         fields = '__all__'
-        exclude = ('user',)
+        exclude = ('user', 'validated')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
