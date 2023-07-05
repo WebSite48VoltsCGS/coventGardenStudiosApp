@@ -29,13 +29,6 @@ class ReservationAdmin(admin.ModelAdmin):
     list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user')
 
 admin.site.register(CustomUser, CustomUserAdmin)
-
-#nouvelle class
-
-class eventAdmin(admin.ModelAdmin):
-    list_display = ["Utilisateur","title", "start_time","end_time","description",'url']
-
-admin.site.register(Events,eventAdmin)
 admin.site.register(CustomGroup, CustomGroupAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(TechnicalSheet, TechnicalSheetAdmin)

@@ -52,7 +52,7 @@
   
   .modal-content {
     margin: 10% auto;
-    width: 100%;
+    width: 50%;
     max-height: 70vh;
     background-color: #fff; /* Ajoutez une couleur de fond pour la fenêtre modale */
   }
@@ -112,12 +112,4 @@
   
 
 /* explications*/ 
-
-
-/*lien*/ 
-
-.lien a{ color: #c3b988;
-}
-
-.lien a:hover {color: #fff;}
 
