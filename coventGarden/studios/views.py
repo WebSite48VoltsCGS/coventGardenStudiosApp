@@ -280,13 +280,13 @@ class ProfileUpdateView(View):
             # Password verification failed
             else:
                 self.context["form"] = form
-                self.context["form_confirm"] = form
+                self.context["form_confirm"] = form_confirm
                 return render(request, self.template_name, self.context)
 
         # Failure
         else:
             self.context["form"] = form
-            self.context["form_confirm"] = form
+            self.context["form_confirm"] = form_confirm
             return render(request, self.template_name, self.context)
 
 

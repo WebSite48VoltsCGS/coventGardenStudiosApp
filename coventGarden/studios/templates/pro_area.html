@@ -24,17 +24,24 @@
 <!-- Main content -->
 {% block content %}
 
-<!-- Content 1 -->
-<div class="row">
-	<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
+<div class="container">
+	<!-- Content 1 -->
+	<div class="row">
+		<!-- Button(s) -->
+		<div class="col-lg-6 text-left">
+			<form action="{% url 'groups_create' %}">
+				<button class="btn btn-action" >Créer un groupe</button>
+			</form>
+		</div>
+		<div class="col-lg-6 text-right">
+			<form action="{% url 'pro_area' %}">
+				<button class="btn btn-action">Programmer un concert*</button>
+				<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
+			</form>
+		</div>
+	</div> <!-- /Button(s)-->
 
-	<div class="row-button">
-		<a href="{% url 'booking' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
-		<a href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
 	</div>
-
-	<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
-
 	{% if messages %}
 	<ul class="messages">
 		{% for message in messages %}
@@ -44,7 +51,6 @@
 	{% endif %}
 </div>
 
-<br>
 
 <!-- Content 2: Technical Sheet -->
 <div class="stud">
@@ -91,19 +97,29 @@
 <br>
 
 <!-- Content 3: Upload Technical Sheet -->
+<div class="container">
 <div class="row">
 	<h2>Vos fiches techniques</h2>
 
 	<br>
 
 	<ul class="mesfiches">
+<table class="table">
+	<thead>
+		<tr>
+			<th>Nom du fichier</th>
+			<th>Supprimer</th>
+		</tr>
+	</thead>
+	<tbody>
 		{% for file in user_files %}
-			<li>
-				<a href="{{ file.pdf_file.url }}" target="_blank">{{ file.pdf_file.name }}</a> - 
-				<a href="{% url 'delete_technical_sheet' file.pk %}">[Supprimer]</a>
-			</li>
+		<tr>
+			<td><a href="{{ file.pdf_file.url }}" target="_blank">{{ file.pdf_file.name }}</a></td>
+			<td class="delete-link"><a href="{% url 'delete_technical_sheet' file.pk %}">[Supprimer]</a></td>
+		</tr>
 		{% endfor %}
-	</ul>
+	</tbody>
+</table>
 
 	<h2>Déposer une nouvelle fiche technique</h2>
 
@@ -118,7 +134,7 @@
 		</button>
 	</form>	
 </div>
-
+</div>
 
 <!-- Content 4 -->
 <div class="row">
@@ -145,6 +161,11 @@
 	<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
 	<link rel="stylesheet" href="{% static 'studios/css/news.css' %}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		.delete-link a {
+			color: red;
+		}
+		</style>
 
 {% endblock %}
 
