@@ -1,16 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-<!-- Insert title -->
-{% block title %}
-
-<title>Espace Pro</title>
-
-{% endblock %}
-
-
-
-<!-- Insert main header -->
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,88 +10,150 @@
 
 
 
-<!-- Insert content -->
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
 <div class="container">
-
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Espace Pro</li>
-	</ol> <!-- /Breadcrumb -->
-
-	<!-- Main content -->
+	<!-- Content 1 -->
 	<div class="row">
-
-		<!-- Article -->
-		<article class="col-sm-12 maincontent">
-
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Espace Pro</h1>
-		  	</header>
-
-            <!-- Content 1 -->
-			<p>Salut "PLACEHOLDER USER NAME", que souhaites-tu faire ? </p>
-
-			<div class="row-button">
-				<a href="{% url 'booking' %}"><button class="btn btn-action btn-lg">Réserver un studio</button></a>
-				<a href="{% url 'placeholder' %}"><button class="btn btn-action btn-lg">Programmer un Concert *</button></a>
-			</div>
-
-			<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
-
-			<br>
-
-			<!-- Content 2: Technical Sheet -->
-			<div class="exemple-fiche-technique">
-				<p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
-
-				<!-- Image -->
-				<div class="image-container">
-					<a href="#" id="image-link">
-						<div class="image-overlay">
-							<img src="{% static 'studios/images/modèle fiche technique.png' %}" alt="Image fiche technique" onclick="showImage(this)">
-							<div class="overlay-text">
-								<p>Modèle fiche Technique</p>
-							</div>
-						</div>
-					</a>
-				</div>
-				
-				<!-- Image click -->
-				<div id="imageModal" class="modal">
-					<span class="close" onclick="hideImage()">&times;</span>
-					<img id="modalImage" src="" alt="Image en grand">
-				</div>
-
-				<br>
-				
-				<p>Document vierge téléchargeable ci-dessous : </p>
-
-				<br>
-				
-				<a href="{% static 'studios/images/modèle fiche technique.png' %}" download>
-					<button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button>
-				</a>
-			</div>
-
-			<!-- Content 3: Upload Technical Sheet -->
-			<form method="POST" enctype="multipart/form-data" name="test">
-				{% csrf_token %}
-				{{ form.as_p }}
-				<input type="file" name="fichier">
-				<button type="submit">Enregistrer</button>
+		<!-- Button(s) -->
+		<div class="col-lg-6 text-left">
+			<form action="{% url 'groups_create' %}">
+				<button class="btn btn-action" >Créer un groupe</button>
 			</form>
+		</div>
+		<div class="col-lg-6 text-right">
+			<form action="{% url 'pro_area' %}">
+				<button class="btn btn-action">Programmer un concert*</button>
+				<p>* Voir <a href="{% url 'placeholder' %}">Actualités</a></p>
+			</form>
+		</div>
+	</div> <!-- /Button(s)-->
 
-		</article> <!-- /Article -->
-	
-	</div> <!-- /Main content -->
+	</div>
+	{% if messages %}
+	<ul class="messages">
+		{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
 
-</div> <!-- /Container -->
 
+<<<<<<< HEAD
+=======
+<!-- Content 2: Technical Sheet -->
+<div class="stud">
+	<h2 class="ft">Espace Fiche Technique</h2>
+
+	<br>
+
+	<p>Lorsque vous souhaitez vous produire sur scène avec un groupe, le "leader" du groupe se doit de déposer la fiche technique correspondante sur son compte (une seule upload par groupe est nécéssaire)</p>
+
+	<br>
+
+	<div class="exemple-fiche-technique">
+		<p>Comment remplir une fiche technique ? Voici un modèle valide : </p>
+		<!-- Image -->
+		<div class="image-container">
+			<a href="#" id="image-link">
+				<div class="image-overlay">
+					<img src="{% static 'studios/images/modèle fiche technique.png' %}" alt="Image fiche technique" onclick="showImage(this)">
+						<div class="overlay-text">
+							<p>Modèle fiche Technique</p>
+						</div>
+				</div>
+			</a>
+		</div>
+
+		<!-- Image click -->
+		<div id="imageModal" class="modal">
+			<span class="close" onclick="hideImage()"> &times; </span>
+			<img id="modalImage" src="" alt="Image en grand">
+		</div>
+
+		<br>
+
+		<p>Document vierge téléchargeable ci-dessous : </p>
+
+		<br>
+
+		<a href="{% static 'studios/images/modèle fiche technique.png' %}" download>
+			<button class="btnt"><i class="fa fa-download"></i> Fiche Technique</button>
+		</a>
+	</div>
+</div>
+
+<br>
+
+<!-- Content 3: Upload Technical Sheet -->
+<div class="container">
+<div class="row">
+	<h2>Vos fiches techniques</h2>
+
+	<br>
+
+	<ul class="mesfiches">
+<table class="table">
+	<thead>
+		<tr>
+			<th>Nom du fichier</th>
+			<th>Supprimer</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for file in user_files %}
+		<tr>
+			<td><a href="{{ file.pdf_file.url }}" target="_blank">{{ file.pdf_file.name }}</a></td>
+			<td class="delete-link"><a href="{% url 'delete_technical_sheet' file.pk %}">[Supprimer]</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+	<h2>Déposer une nouvelle fiche technique</h2>
+
+	<br>
+
+	<form method="post" enctype="multipart/form-data" class="custom-form">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<!--<input type="file" name="fichier" class="custom-file-input">-->
+		<button type="submit" name="submit" class="custom-button">
+			Enregistrer
+		</button>
+	</form>	
+</div>
+</div>
+
+<!-- Content 4 -->
+<div class="row">
+	<div class="stud">
+	<h2 class="ft">Programmer un concert FreeFriday</h2>
+	<br>
+	<form method="post" class="custom-form">
+		<p>Formulaire de demande de Concert </p>
+		{% csrf_token %}
+		{{ form2.as_p }}
+		<button type="submit" class="custom-button">
+			Envoyer
+		</button>
+	</form>
+</div>
+
+>>>>>>> e8ef0676b57fd4fb5591658b5c99d4f0d18af9f1
 {% endblock %}
 
 
@@ -109,7 +162,13 @@
 {% block style %}
 
 	<link rel="stylesheet" href="{% static 'studios/css/espace-pro.css' %}"/>
+	<link rel="stylesheet" href="{% static 'studios/css/news.css' %}"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		.delete-link a {
+			color: red;
+		}
+		</style>
 
 {% endblock %}
 

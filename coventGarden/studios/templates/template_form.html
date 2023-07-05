@@ -1,17 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}
-
-<title>Placeholder</title>
-
-{% endblock %}
-
-
-{% block style %}
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,79 +9,82 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
+<!-- Content 1: Form -->
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<!-- Title / Text -->
+				<h3 class="thin text-center">Placeholder</h3>
+				<p class="text-center text-muted">Placeholder? <a href="{% url 'placeholder' %}">Ajouter un lien</a></p>
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li>Placeholder</li>
-		<li class="active">Placeholder</li>
-	</ol> <!-- /Breadcrumb -->
+				<hr>
 
-	<div class="row">
+				<!-- Include form(s) here -->
+				{% include "base/base_form.html" %}
 
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
+				<hr>
 
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Placeholder</h1>
-			</header>
+				<!-- Button(s) -->
+				<div class="row">
+					<!-- Left: Redirect -->
+					<div class="col-lg-6 text-left">
+						<b><a href="{% url 'placeholder' %}">Ajouter un lien</a></b>
+					</div>
 
-			<!-- Form -->
-			<form method="post">
-				{% csrf_token %}
-				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<!-- Text -->
-							<h3 class="thin text-center">Placeholder</h3>
-							<p class="text-center text-muted">Placeholder? <a href="{% url 'placeholder' %}">Ajouter un lien</a></p>
-
-							<hr>
-
-							<!-- Include form(s) here -->
-							{% include "base/base_form.html" %}
-
-							<hr>
-
-							<!-- Button(s) -->
-							<div class="row">
-								<!-- Redirect -->
-								<div class="col-lg-6 text-left">
-									<b><a href="{% url 'placeholder' %}">Ajouter un lien</a></b>
-								</div>
-
-								<!-- Confirm -->
-								<div class="col-lg-6 text-right">
-									<button class="btn btn-action" type="submit">Confirmer</button>
-								</div>
-							</div>
-						</div>
+					<!-- Right: Confirm -->
+					<div class="col-lg-6 text-right">
+						<button class="btn btn-action" type="submit">Confirmer</button>
 					</div>
 				</div>
-			</form> <!-- /Form -->
+			</div>
+		</div>
+	</div>
+</form>
 
-			<!-- Button(s) -->
-			<div class="row">
-				<div class="col-lg-6 text-left">
-					<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'placeholder' %}'">Annuler</button>
-				</div>
-
-				<div class="col-lg-6 text-right">
-					<form action="{% url 'placeholder' %}">
-						<button class="btn btn-action">Placeholder</button>
-					</form>
-				</div>
-			</div> <!-- /Button(s) -->
-
-		</article> <!-- /Article -->
-
+<!-- Button(s) -->
+<div class="row">
+	<!-- Left -->
+	<div class="col-lg-6 text-left">
+		<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'placeholder' %}'">Annuler</button>
 	</div>
 
-</div> <!-- /Container -->
+	<!-- Right -->
+	<div class="col-lg-6 text-right">
+		<form action="{% url 'placeholder' %}">
+			<button class="btn btn-action">Placeholder</button>
+		</form>
+	</div>
+</div>
+
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}

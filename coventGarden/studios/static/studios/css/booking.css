@@ -2,3 +2,17 @@
     border-bottom: 0px;
     height: 4.5em;
 }
+
+.fc-v-event .fc-event-title{
+    text-align: center;
+    font-weight: bold;
+}
+
+.fc-timegrid-event .fc-event-time{
+    padding-top: 4px;
+    text-align: center;
+}
+
+.fc .fc-toolbar-title{
+    font-size: 1.25em;
+}

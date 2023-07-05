@@ -110,6 +110,7 @@ class Reservation(models.Model):
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
 
+<<<<<<< HEAD
 ##############################################################################
 
 
@@ -125,3 +126,13 @@ def create_user_payment(sender, instance, created, **kwargs):
 	if created:
 		UserPayment.objects.create(app_user=instance)
 
+=======
+class Concert(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    groupe1 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe1', null=True)
+    groupe2 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe2', null=True)
+    groupe3 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe3', null=True)
+    date = models.DateField()
+    validated = models.BooleanField(default=False)
+    planning = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True)
+>>>>>>> e8ef0676b57fd4fb5591658b5c99d4f0d18af9f1

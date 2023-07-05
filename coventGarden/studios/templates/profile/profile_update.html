@@ -1,17 +1,7 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}
-
-<title>Modifier mon profil</title>
-
-{% endblock %}
-
-
-{% block style %}
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,72 +9,73 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
+<!-- Content 1: Form -->
+<form method="post">
+	{% csrf_token %}
+	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<!-- Title / Text -->
+				<h3 class="thin text-center">Changer ses informations</h3>
+				<p class="text-center text-muted">Vous voulez revenir à votre profil? <a href="{% url 'profile_detail' %}">Cliquez ici</a></p>
 
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-		<li><a href="{% url 'home' %}">Accueil</a></li>
-		<li><a href="{% url 'profile_detail' %}">Compte</a></li>
-		<li class="active">Modifier</li>
-	</ol> <!-- /Breadcrumb -->
+				<hr>
 
-	<div class="row">
+				<!-- Include form(s) here -->
+				{% include "base/base_form.html" %}
 
-		<!-- Article main content -->
-		<article class="col-xs-12 maincontent">
+				<hr>
 
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Modifier mon profil</h1>
-			</header>
+				<h3 class="thin text-center">Vérification</h3>
+				<p class="text-center text-muted">Veuillez rentrer votre mot de passe afin de compléter vos changements.</a></p>
+				{% include "base/base_form_confirm.html" %}
 
-			<!-- Form -->
-			<form method="post">
-				{% csrf_token %}
-				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<!-- Title / Text -->
-							<h3 class="thin text-center">Changer ses informations</h3>
-							<p class="text-center text-muted">Vous voulez revenir à votre profil? <a href="{% url 'profile_detail' %}">Cliquez ici</a></p>
+				<hr>
 
-							<hr>
+				<!-- Button(s) -->
+				<div class="row">
+					<!-- Left: Redirect -->
+					<div class="col-lg-6 text-left">
+						<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'profile_detail' %}'">Annuler</button>
+					</div>
 
-							<!-- Include form(s) here -->
-							{% include "base/base_form.html" %}
-
-							<hr>
-
-							<h3 class="thin text-center">Vérification</h3>
-							<p class="text-center text-muted">Veuillez rentrer votre mot de passe afin de compléter vos changements.</a></p>
-							{% include "base/base_confirm_form.html" %}
-
-							<hr>
-
-							<!-- Button(s) -->
-							<div class="row">
-								<!-- Redirect -->
-								<div class="col-lg-6 text-left">
-									<button class="btn btn-action" type="button" onclick="window.location.href='{% url 'profile_detail' %}'">Annuler</button>
-								</div>
-
-								<!-- Confirm -->
-								<div class="col-lg-6 text-right">
-									<button class="btn btn-action" type="submit">Confirmer</button>
-								</div>
-							</div>
-						</div>
+					<!-- Right: Confirm -->
+					<div class="col-lg-6 text-right">
+						<button class="btn btn-action" type="submit">Confirmer</button>
 					</div>
 				</div>
-			</form> <!-- /Form -->
-
-		</article> <!-- /Article -->
-
+			</div>
+		</div>
 	</div>
+</form>
 
-</div> <!-- /Container -->
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+{% endblock %}
+
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
 
 {% endblock %}
