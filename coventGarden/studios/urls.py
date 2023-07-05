@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from coventGarden import settings
 from studios import views
 from .forms import UserPasswordResetForm, UserPasswordSetForm
+#################################
 
 
 urlpatterns = [
@@ -62,6 +63,12 @@ urlpatterns = [
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
     path('payment/', views.payment, name='payment'),
+    path('payment_successful', views.payment_successful, name='payment_successful'),
+    path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
+    path('stripe_webhook', views.stripe_webhook, name='stripe_web'),
+
+    # WIP
+    path('create-checkout-session/', views.product_page, name='product_page'),
 
     # Deleted
     path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),

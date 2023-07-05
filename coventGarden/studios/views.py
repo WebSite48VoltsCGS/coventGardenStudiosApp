@@ -1,3 +1,4 @@
+from datetime import datetime, time 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
@@ -16,12 +17,14 @@ from django.views import View
 
 from .forms import UserPasswordResetForm, UserPasswordSetForm
 
-from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
+from .models import Concert, CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
     TechnicalSheetForm, ConcertForm,
     EventForm, ReservationForm)
+
+
 
 
 User = get_user_model()
@@ -281,13 +284,13 @@ class ProfileUpdateView(View):
             # Password verification failed
             else:
                 self.context["form"] = form
-                self.context["form_confirm"] = form
+                self.context["form_confirm"] = form_confirm
                 return render(request, self.template_name, self.context)
 
         # Failure
         else:
             self.context["form"] = form
-            self.context["form_confirm"] = form
+            self.context["form_confirm"] = form_confirm
             return render(request, self.template_name, self.context)
 
 
@@ -788,6 +791,80 @@ Pro area
     - Concert
 """
 
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from studios.models import UserPayment
+import stripe
+import time
+
+
+@login_required(login_url='login')
+def product_page(request):
+	stripe.api_key = settings.STRIPE_SECRET_KEY
+	if request.method == 'POST':
+		checkout_session = stripe.checkout.Session.create(
+			payment_method_types = ['card'],
+			line_items = [
+				{
+					'price': settings.PRODUCT_PRICE,
+					'quantity': 1,
+				},
+			],
+			mode = 'payment',
+			customer_creation = 'always',
+			# success_url = settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
+			# cancel_url = settings.REDIRECT_DOMAIN + '/payment_cancelled',
+            success_url = 'http://example.com/payment_successful?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url = 'http://example.com/payment_cancelled',
+        )
+		return redirect(checkout_session.url, code=303)
+	return render(request, 'studios/product_page.html')
+
+
+## use Stripe dummy card: 4242 4242 4242 4242
+def payment_successful(request):
+	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	checkout_session_id = request.GET.get('session_id', None)
+	session = stripe.checkout.Session.retrieve(checkout_session_id)
+	customer = stripe.Customer.retrieve(session.customer)
+	user_id = request.user.user_id
+	studios = UserPayment.objects.get(app_user=user_id)
+	studios.stripe_checkout_id = checkout_session_id
+	studios.save()
+	return render(request, 'studios/payment_successful.html', {'customer': customer})
+
+
+def payment_cancelled(request):
+	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	return render(request, 'studios/payment_cancelled.html')
+
+
+@csrf_exempt
+def stripe_webhook(request):
+	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	time.sleep(10)
+	payload = request.body
+	signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+	event = None
+	try:
+		event = stripe.Webhook.construct_event(
+			payload, signature_header, settings.STRIPE_WEBHOOK_SECRET_TEST
+		)
+	except ValueError as e:
+		return HttpResponse(status=400)
+	except stripe.error.SignatureVerificationError as e:
+		return HttpResponse(status=400)
+	if event['type'] == 'checkout.session.completed':
+		session = event['data']['object']
+		session_id = session.get('id', None)
+		time.sleep(15)
+		studios = UserPayment.objects.get(stripe_checkout_id=session_id)
+		studios.payment_bool = True
+		studios.save()
+	return HttpResponse(status=200)
 @login_required
 def pro_area(request):
     # Context: Variables passed to the web page
@@ -796,7 +873,8 @@ def pro_area(request):
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Espace Pro"}],
-        "form": None, "form2": None,
+        "form": None,
+        "form2": None,
         "user_files": None
     }
 
@@ -814,10 +892,34 @@ def pro_area(request):
 
         context["form2"] = ConcertForm(request.POST)
         if context["form2"].is_valid():
-            context["form2"].save()
+            concert_date = context["form2"].cleaned_data['date']
+            start_time = time(20, 30)  # Heure de début à 20h30
+            end_time = time(23, 30)  # Heure de fin à 23h30
+
+            event_start_time = datetime.combine(concert_date, start_time)
+            event_end_time = datetime.combine(concert_date, end_time)
+
+            concert = context["form2"].save(commit=False)  # Enregistrement différé pour associer l'Event
+            concert.user = request.user
+            concert.save()
+
+            event = Event.objects.create(
+                user=request.user,
+                title=f"Concert {concert.pk} - Planning",
+                start_time=event_start_time,
+                end_time=event_end_time,
+                description=f"Planning du Concert {concert.pk} avec les groupes : "
+                            f"{concert.groupe1}, {concert.groupe2}, {concert.groupe3}."
+            )
+
+            # Associer l'objet Event au modèle Concert
+            concert.planning = event
+            concert.save()
+
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
+
             return redirect('pro_area')
 
     else:
@@ -825,6 +927,7 @@ def pro_area(request):
         context["form2"] = ConcertForm()
 
     return render(request, 'pro_area.html', context)
+
 
 @login_required
 def delete_technical_sheet(request, pk):
