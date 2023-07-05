@@ -56,6 +56,8 @@ urlpatterns = [
 
     # Booking
     path('api/all_booking/', views.all_booking, name='all_booking'),
+    path('api/all_booking_event/', views.all_booking_event, name='all_booking_event'),
+
     path('users/', views.list_users, name='list_users'),
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),

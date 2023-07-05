@@ -1,7 +1,8 @@
+from datetime import datetime, time 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from datetime import timedelta, datetime
 from django.contrib import messages
@@ -16,7 +17,7 @@ from django.views import View
 
 from .forms import UserPasswordResetForm, UserPasswordSetForm
 
-from .models import CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
+from .models import Concert, CustomGroup, Event, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
     SignInForm, SignUpForm, GroupCreateForm,
     UserUpdateForm, ConfirmPasswordForm,
@@ -91,7 +92,8 @@ def contact(request):
     return render(request, 'contact.html', context)
 
 def booking(request):
-    return render(request, 'booking.html')
+    salles = Salle.objects.all()
+    return render(request, 'booking.html', context={"salles": salles})
 
 
 """
@@ -457,7 +459,7 @@ Bookings
 def bookings_detail(request):
     # Context: Variables passed to the web page
     context = {
-        "title": "Supprimer un groupe",
+        "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Réservations"}],
@@ -470,6 +472,10 @@ def bookings_detail(request):
 
     # Get all groups object related to the current user
     context["my_groups"] = request.user.my_groups.all()
+
+    #Get all reservations for user
+    reservations = Reservation.objects.filter(user_id=request.user.id)
+    context["reservations"] = reservations
 
     return render(request, 'bookings/bookings_detail.html', context)
 
@@ -639,6 +645,12 @@ Salles
 Reservation
     - Listing reservation
 """
+
+
+def is_in_group(CustomUser):
+    return CustomUser.groups.filter(name='Client_Regulier').exists()
+
+
 def list_salles(request):
     salles = Salle.objects.all()
     salle_data = [{"id": salle.id, "title": salle.name} for salle in salles]
@@ -649,14 +661,13 @@ def list_users(request):
     user_data = [{"id": user.id, "title": user.username} for user in users]
     return JsonResponse(user_data, safe=False)
 
-
+@login_required(login_url='account_sign_in')
 def accompte(request):
 
     # Submit form
     if request.method == 'POST':
 
         salle_id = int(request.POST["salle_id"])
-        #salle_id = int(request.POST["salle_id"])
         salle = Salle.objects.get(id= salle_id)
 
         user_id = int(request.POST["user_id"])
@@ -667,21 +678,37 @@ def accompte(request):
 
         form = ReservationForm()
 
-        #print(form)
-
         duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
         print(duration_hours)
+        
+        #duration = 1
 
-        duration = 1
-        return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
-        "end_date": end_date, "duration": duration_hours, "form": form})
+        if is_in_group(user):
+            description = "Reservation for user "+ user.username
+            status = "En cours"
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration_hours,
+                date_start=start_date,
+                date_end=end_date,
+                price=0,
+                status=status,
+                salle=salle,
+                user=user
+            )
+            messages.success(request, "Votre réservation a bien été prise en compte !")
+            return redirect('booking')
+    
+        else:
+            return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
+            "end_date": end_date, "duration": duration_hours, "form": form})
 
     else:
         return redirect('booking')
 
-
+@login_required(login_url='account_sign_in')
 def payment(request):
 
     print(request.POST)
@@ -705,25 +732,7 @@ def payment(request):
             date_end = form.cleaned_data["date_end"]
             price = form.cleaned_data["price"]
             status = "En cours"
-            """
-            description = ""
-            duration = request.POST["duration"]
-            date_start = request.POST["date_start"]
-            date_end = request.POST["date_end"]
-            price = request.POST["price"]
-            status = "En cours"
-            """
-            """
-            description = models.fields.CharField(max_length=1000)
-            duration = models.fields.IntegerField(choices=Duration.choices)
-            date_start = models.DateTimeField(null=False)
-            date_end = models.DateTimeField(null=False)
-            hour_begin = models.TimeField(null=False)
-            price = models.fields.IntegerField(validators=[MinValueValidator(1)])
-            status = models.fields.CharField(choices=Status.choices, max_length=20)
-            salle = models.ForeignKey(Salle, null=True, on_delete=models.SET_NULL)
-            user = models.ForeignKey(Utilisateur, null=True, on_delete=models.SET_NULL)
-            """
+           
             reservation = Reservation.objects.create(
                 description=description,
                 duration=duration,
@@ -736,7 +745,6 @@ def payment(request):
             )
 
             messages.success(request, "Votre réservation a bien été prise en compte !")
-            # Redirect to the detail page of the band we just created
             return redirect('booking')
 
     else:
@@ -756,6 +764,23 @@ def all_booking(request):
     return JsonResponse(datas, safe=False)
 
 
+def all_booking_event(request):
+    reservations = Reservation.objects.all()
+    datas = []
+    for current in reservations:
+        data = {
+            'id': current.id,
+            'resourceId': current.salle.id,
+            'title': 'Indisponible',
+            'start': current.date_start.strftime("%Y-%m-%d %H:%M:%S"),
+            'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        data['color'] = 'gainsboro'
+        data['textColor'] = 'black'
+        datas.append(data)
+    return JsonResponse(datas, safe=False)
+
+
 
 """
 Pro area
@@ -772,7 +797,8 @@ def pro_area(request):
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
             {"view": None, "name": "Espace Pro"}],
-        "form": None, "form2": None,
+        "form": None,
+        "form2": None,
         "user_files": None
     }
 
@@ -790,10 +816,34 @@ def pro_area(request):
 
         context["form2"] = ConcertForm(request.POST)
         if context["form2"].is_valid():
-            context["form2"].save()
+            concert_date = context["form2"].cleaned_data['date']
+            start_time = time(20, 30)  # Heure de début à 20h30
+            end_time = time(23, 30)  # Heure de fin à 23h30
+
+            event_start_time = datetime.combine(concert_date, start_time)
+            event_end_time = datetime.combine(concert_date, end_time)
+
+            concert = context["form2"].save(commit=False)  # Enregistrement différé pour associer l'Event
+            concert.user = request.user
+            concert.save()
+
+            event = Event.objects.create(
+                user=request.user,
+                title=f"Concert {concert.pk} - Planning",
+                start_time=event_start_time,
+                end_time=event_end_time,
+                description=f"Planning du Concert {concert.pk} avec les groupes : "
+                            f"{concert.groupe1}, {concert.groupe2}, {concert.groupe3}."
+            )
+
+            # Associer l'objet Event au modèle Concert
+            concert.planning = event
+            concert.save()
+
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
+
             return redirect('pro_area')
 
     else:
@@ -801,6 +851,7 @@ def pro_area(request):
         context["form2"] = ConcertForm()
 
     return render(request, 'pro_area.html', context)
+
 
 @login_required
 def delete_technical_sheet(request, pk):
@@ -819,3 +870,4 @@ def concert(request):
     }
 
     return render(request, 'concert.html', context)
+
