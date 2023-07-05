@@ -85,3 +85,59 @@ function startCalendar(calendarEl, params, events_booking) {
   });
   calendar.render();
 }
+<<<<<<< HEAD
+
+$(document).ready(function() {
+    // Afficher la modale de confirmation lorsqu'on clique sur le bouton
+    $('#open-modal').on('click', function() {
+        $('#confirmation-modal').modal('show');
+    });
+
+    // Lors de la confirmation du formulaire
+    $('#confirm-form').on('submit', function(e) {
+        //e.preventDefault();
+        $('#getReservation').submit();
+        // Actions à effectuer si le formulaire est confirmé
+        // Exemple : envoyer une requête AJAX pour traiter les données
+
+        // Fermer la modale
+        $('#confirmation-modal').modal('hide');
+    });
+
+    // Lors de l'annulation du formulaire
+    $('#cancel-btn').on('click', function() {
+        // Actions à effectuer si le formulaire est annulé
+        // Exemple : réinitialiser les champs du formulaire
+
+        // Fermer la modale
+        $('#confirmation-modal').modal('hide');
+    });
+});
+
+const button = document.querySelector("button")
+button.addEventListener("click", () => {
+  fetch("http://localhost:3000/create-checkout-session", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      items: [
+        { id: 1, quantity: 3 },
+        { id: 2, quantity: 1 },
+      ],
+    }),
+  })
+    .then(res => {
+      if (res.ok) return res.json()
+      return res.json().then(json => Promise.reject(json))
+    })
+    .then(({ url }) => {
+      window.location = url
+    })
+    .catch(e => {
+      console.error(e.error)
+    })
+})
+=======
+>>>>>>> e8ef0676b57fd4fb5591658b5c99d4f0d18af9f1
