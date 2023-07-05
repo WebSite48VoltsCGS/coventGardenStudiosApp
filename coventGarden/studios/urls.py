@@ -56,20 +56,6 @@ urlpatterns = [
     path('compte/mot-de-passe-oublie/confirmation/', views.CustomPasswordResetComplete.as_view(), name='password_reset_complete'),
 
     # Booking
-<<<<<<< HEAD
-    path('users/', views.list_users, name='list_users'),
-    path('salles/', views.list_salles, name='list_salles'),
-    path('pa/', views.accompte, name='accompte'),
-    path('all_booking/', views.all_booking, name='all_booking'),
-    path('payment_successful', views.payment_successful, name='payment_successful'),
-    path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
-    path('stripe_webhook', views.stripe_webhook, name='stripe_web'),
-
-
-
-    # WIP
-    path('create-checkout-session/', views.product_page, name='product_page')
-=======
     path('api/all_booking/', views.all_booking, name='all_booking'),
     path('api/all_booking_event/', views.all_booking_event, name='all_booking_event'),
 
@@ -77,8 +63,13 @@ urlpatterns = [
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
     path('payment/', views.payment, name='payment'),
+    path('payment_successful', views.payment_successful, name='payment_successful'),
+    path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
+    path('stripe_webhook', views.stripe_webhook, name='stripe_web'),
+
+    # WIP
+    path('create-checkout-session/', views.product_page, name='product_page'),
 
     # Deleted
     path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
->>>>>>> e8ef0676b57fd4fb5591658b5c99d4f0d18af9f1
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
