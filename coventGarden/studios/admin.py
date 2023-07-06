@@ -25,7 +25,7 @@ class SalleAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user')
+    list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user', 'is_active')
 
 class ConcertAdmin(admin.ModelAdmin):
     list_display = ["user",'groupe1', 'groupe2', 'groupe3', 'date', 'validated']

@@ -758,14 +758,16 @@ def accompte(request):
 
         start_date = request.POST["date_start"]
         end_date = request.POST["date_end"]
-
+        
         form = ReservationForm()
 
         duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
-        print(duration_hours)
 
+        price = 0.5*duration_hours*20
+        start_date = datetime.fromisoformat(start_date.rstrip('Z'))
+        end_date = datetime.fromisoformat(end_date.rstrip('Z'))
         #duration = 1
 
         if is_in_group(user):
@@ -779,14 +781,15 @@ def accompte(request):
                 price=0,
                 status=status,
                 salle=salle,
-                user=user
+                user=user,
+                is_active=True
             )
             messages.success(request, "Votre réservation a bien été prise en compte !")
             return redirect('booking')
 
         else:
             return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
-            "end_date": end_date, "duration": duration_hours, "form": form})
+            "end_date": end_date, "duration": duration_hours,"price":price, "form": form})
 
     else:
         return redirect('booking')
@@ -824,7 +827,8 @@ def payment(request):
                 price=price,
                 status=status,
                 salle=salle,
-                user=user
+                user=user,
+                is_active=True
             )
 
             messages.success(request, "Votre réservation a bien été prise en compte !")
@@ -845,7 +849,6 @@ def all_booking(request):
         })
     return JsonResponse(datas, safe=False)
 
-
 def all_booking_event(request):
     reservations = Reservation.objects.all()
     
@@ -855,8 +858,8 @@ def all_booking_event(request):
             'id': current.id,
             'resourceId': current.salle.id,
             'title': 'Indisponible',
-            'start': current.date_start.strftime("%Y-%m-%d %H:%M:%S"),
-            'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
+            'start': current.date_start,
+            'end': current.date_end,
         }
         data['color'] = 'gainsboro'
         data['textColor'] = 'black'
@@ -887,6 +890,26 @@ def all_booking_event(request):
 
     return JsonResponse(datas, safe=False)
 
+@login_required(login_url='account_sign_in')
+def set_reservation(request, id_reservation):
+    reservation = Reservation.objects.get(id=id_reservation)
+
+    current_datetime = datetime.now()
+    start_datetime = reservation.date_start
+
+    if current_datetime < start_datetime - timedelta(hours=48) or reservation.date_end > current_datetime :
+        if reservation.is_active == True:
+            reservation.is_active = False
+            message = "Votre réservation a bien été annuler !"
+        else:
+            reservation.is_active=True
+            message = "Votre réservation a bien été prise en compte !"
+        reservation.save()
+    else:
+        message = "Votre réservation ne peut plus être modifiée !"
+
+    messages.success(request, message)  
+    return redirect('bookings_detail')
 
 from django.shortcuts import render, redirect
 from django.conf import settings
