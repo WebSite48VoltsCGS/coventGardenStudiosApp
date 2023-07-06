@@ -2,27 +2,14 @@ from django.contrib.auth.forms import (UserCreationForm, UserChangeForm, Passwor
 from django.forms import ModelChoiceField, SelectDateWidget, ValidationError
 from django_select2.forms import Select2Widget
 
-from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Concert
+from .models import CustomGroup, Event, TechnicalSheet, Concert
 from .fields import *
 
 # Register your forms here
 """
-CustomUser (Tutorial)
-"""
-class CustomUserCreationForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ("username", "email")
-
-class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        model = CustomUser
-        fields = ("username", "email")
-
-"""
 Account
-    - Sign In
-    - Sign Up
+    - SignInForm
+    - SignUpForm
 """
 class SignInForm(forms.Form):
     username = FORM_USERNAME
@@ -36,10 +23,12 @@ class SignUpForm(forms.Form):
     password = FORM_PASSWORD
     confirm_password = FORM_PASSWORD_CONFIRM
 
+
+
 """
 Profile
-    - User Update
-    - Confirm Password
+    - UserUpdateForm
+    - ConfirmPasswordForm
 """
 class UserUpdateForm(forms.Form):
     username = FORM_USERNAME
@@ -51,47 +40,53 @@ class ConfirmPasswordForm(forms.Form):
     current_password = FORM_PASSWORD_CURRENT
     confirm_password = FORM_PASSWORD_CONFIRM
 
+
+
 """
 Password Reset
-    - Reset
-    - Set
+    - UserPasswordResetForm
+    - UserPasswordSetForm
 """
 class UserPasswordResetForm(PasswordResetForm):
-    # Replaced PasswordResetForm fields with custom fields (See docs)
     email = FORM_EMAIL
 
 class UserPasswordSetForm(SetPasswordForm):
-    # Replaced SetPasswordForm fields with custom fields (See docs)
     new_password1 = FORM_PASSWORD
     new_password2 = FORM_PASSWORD_CONFIRM
 
+
+
 """
-CustomGroup
-    - Create
+Group
+    - GroupCreateForm
 """
-class GroupCreateForm(forms.ModelForm):
+class CustomGroupForm(forms.ModelForm):
     # User will be added manually in views.py
     class Meta:
         model = CustomGroup
         fields = '__all__'
-        exclude = ('user',)
+        exclude = ('user', 'validated')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+
+
 """
-Planning
-    - Event
+Booking
+    - EventForm
 """
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'start_time', 'end_time', 'recurrence']
 
+
+
 """
-Concert
+Pro Area
     - TechnicalSheetForm
     - ConcertForm
 """

@@ -90,6 +90,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'coventgarden',
+#        'USER': 'admin',
+#        'PASSWORD': 'admin123',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 
 
 # Password validation
@@ -151,8 +161,7 @@ EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = '/media/'
 
-# stripe
-
+# Stripe
 STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
 STRIPE_SECRET_KEY = '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'
 

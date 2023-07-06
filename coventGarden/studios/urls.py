@@ -14,14 +14,13 @@ urlpatterns = [
     path('', views.placeholder, name='placeholder'),
 
     # Navigation
-    path('', views.home, name='home'),
-    path('actualites/', views.news, name='news'),
-    path('studios/', views.studios, name='studios'),
-    path('concert/', views.concert, name='concert'),
-    path('bar/', views.bar, name='bar'),
-    path('espace_pro/', views.pro_area, name='pro_area'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('actualites/', views.NewsView.as_view(), name='news'),
+    path('studios/', views.StudiosView.as_view(), name='studios'),
+    path('concert/', views.ConcertView.as_view(), name='concert'),
+    path('bar/', views.BarView.as_view(), name='bar'),
     path('reservation/', views.booking, name='booking'),
-    path('contact/', views.contact, name='contact'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
 
     # Account
     path('compte/connexion/', views.AccountSignInView.as_view(), name='account_sign_in'),
@@ -39,8 +38,11 @@ urlpatterns = [
     path('compte/mes_groupes/supprimer/<int:group_id>/', views.GroupDeleteView.as_view(), name='groups_delete'),
 
     # Bookings
-    path('compte/mes_reservations/', views.bookings_detail, name='bookings_detail'),
-    path('compte/mes_reservations/ajouter/', views.bookings_create, name='bookings_create'),
+    path('compte/mes_reservations/', views.BookingsDetailView.as_view(), name='bookings_detail'),
+    path('compte/mes_reservations/ajouter/', views.BookingsCreateView.as_view(), name='bookings_create'),
+
+    # Pro Area
+    path('espace_pro/', views.ProAreaView.as_view(), name='pro_area'),
 
     # Planning
     path('all_events/', views.all_events, name='all_events'),

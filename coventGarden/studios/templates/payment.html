@@ -73,7 +73,7 @@
 								<div class="col-lg-12 text-right">
 									<form action="{% url 'payment' %}" method="POST">
 										{% csrf_token %}
-										<button type="submit" id="checkout-button">Confirmer</button>
+										<button class="btn btn-success" type="submit" id="checkout-button">Confirmer</button>
 									  </form>
 								</div>
 							</div>
@@ -113,5 +113,16 @@
     $('#id_duration').val("{{duration}}");
     $('#id_date_start').val("{{ start_date }}");
     $('#id_date_end').val("{{ end_date }}");
+	$('#id_price').val(20);
+	
+	window.addEventListener('DOMContentLoaded', function() {
+		var form = document.querySelector('form');
+		if (form) {
+			var inputs = form.querySelectorAll('input');
+			inputs.forEach(function(input) {
+			input.setAttribute('readonly', 'readonly');
+			});
+		}
+	});
 </script>
 {% endblock %}
