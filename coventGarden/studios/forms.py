@@ -147,7 +147,7 @@ class ReservationForm(forms.Form):
     date_start = forms.DateTimeField(label="Date de début reservation")
     date_end = forms.DateTimeField(label="Date de fin reservation")
     # hour_begin = forms.TimeField( label="Heure de début de la réservation")
-    price = forms.IntegerField(label="Montant payé en £")
+    price = forms.IntegerField(label="Montant payé en €")
 
     # status = models.fields.CharField(choices=Status.choices, max_length=20)
 

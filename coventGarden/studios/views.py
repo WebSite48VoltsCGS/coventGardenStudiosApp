@@ -802,7 +802,7 @@ import time
 
 
 @login_required(login_url='login')
-def product_page(request):
+def payment(request):
 	stripe.api_key = settings.STRIPE_SECRET_KEY
 	if request.method == 'POST':
 		checkout_session = stripe.checkout.Session.create(
@@ -821,7 +821,7 @@ def product_page(request):
             cancel_url = 'http://example.com/payment_cancelled',
         )
 		return redirect(checkout_session.url, code=303)
-	return render(request, 'studios/product_page.html')
+	return render(request, 'studios/payment.html')
 
 
 ## use Stripe dummy card: 4242 4242 4242 4242

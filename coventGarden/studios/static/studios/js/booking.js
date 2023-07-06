@@ -57,6 +57,7 @@ function startCalendar(calendarEl, params, events_booking) {
     slotMaxTime:"23:59",
     initialView: 'timeGridWeek',
     allDaySlot: false,
+    fristDay: 1,
     headerToolbar: {
       left: 'prev,next',
       center: 'title',
