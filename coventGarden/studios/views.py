@@ -752,7 +752,6 @@ def payment(request):
     else:
         return redirect('booking')
 
-
 def all_booking(request):
     reservations = Reservation.objects.all()
     datas = []
@@ -768,6 +767,7 @@ def all_booking(request):
 
 def all_booking_event(request):
     reservations = Reservation.objects.all()
+    
     datas = []
     for current in reservations:
         data = {
@@ -780,6 +780,30 @@ def all_booking_event(request):
         data['color'] = 'gainsboro'
         data['textColor'] = 'black'
         datas.append(data)
+    
+    dataD = []
+    dateInit = datetime(2023, 1, 2)
+    currentD = {
+        'id': 1,
+        'resourceId': 1,
+        'title': 'Indisponible',
+        'start': dateInit.replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+        'end': dateInit.replace(hour=10, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S")
+    }
+
+    resources = Salle.objects.all()
+    for resource in resources:
+        for i in range(365): 
+            for j in range(10, 16):  
+                new_data = currentD.copy()
+                new_data['id'] += 1 
+                new_data['resourceId'] = resource.id
+                new_data['start'] = (dateInit + timedelta(days=i)).replace(hour=j, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
+                new_data['end'] = (dateInit + timedelta(days=i)).replace(hour=j+1, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
+                new_data['color'] = 'gainsboro'
+                new_data['textColor'] = 'black'
+                datas.append(new_data)
+
     return JsonResponse(datas, safe=False)
 
 
