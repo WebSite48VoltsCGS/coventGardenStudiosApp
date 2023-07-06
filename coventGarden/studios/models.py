@@ -7,27 +7,12 @@ from django.db.models.signals import post_save
 from .fields import *
 
 
-# class CustomUserManager(BaseUserManager):
-# 	def create_user(self, email, password=None):
-# 		if not email:
-# 			raise ValueError('An email is required.')
-# 		if not password:
-# 			raise ValueError('A password is required.')
-# 		email = self.normalize_email(email)
-# 		user = self.model(email=email)
-# 		user.set_password(password)
-# 		user.save()
-# 		return user
-# 	def create_superuser(self, email, password=None):
-# 		if not email:
-# 			raise ValueError('An email is required.')
-# 		if not password:
-# 			raise ValueError('A password is required.')
-# 		user = self.create_user(email, password)
-# 		user.is_superuser = True
-# 		user.save()
-# 		return user
-
+# Create your models here.
+"""
+User
+    - CustomUser
+    - CustomGroup
+"""
 class CustomUser(AbstractUser):
     """
     Default
@@ -37,12 +22,14 @@ class CustomUser(AbstractUser):
         email
         password
     """
-    # user_id = models.AutoField(primary_key=True)
-	# USERNAME_FIELD = 'email'
-	# REQUIRED_FIELDS = ['username']
-    # objects = CustomUserManager()
-    test_field = MODELS_TEST
+    username = MODEL_USERNAME
+    first_name = MODEL_FIRST_NAME
+    last_name = MODEL_LAST_NAME
+    email = MODEL_EMAIL
     phone = MODEL_USER_PHONE
+    password = MODEL_PASSWORD
+
+    test_field = MODELS_TEST
 
     def __str__(self):
         return self.username
@@ -53,8 +40,8 @@ class CustomGroup(models.Model):
         on_delete=models.CASCADE,
         related_name='my_groups'
     )
-    name = MODEL_NAME
-    email = MODEL_EMAIL
+    name = MODEL_GROUP_NAME
+    email = MODEL_GROUP_EMAIL
     phone = MODEL_GROUP_PHONE
     members = MODEL_MEMBERS
     genre = MODEL_GENRE

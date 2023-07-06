@@ -5,7 +5,9 @@ from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Salle, Reser
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
-    list_display = ["email", "username"]
+    list_display = ["email", "username",
+                    "last_name", "first_name",
+                    "phone"]
 
 class CustomGroupAdmin(admin.ModelAdmin):
     list_display = ["user", "name", "email",
