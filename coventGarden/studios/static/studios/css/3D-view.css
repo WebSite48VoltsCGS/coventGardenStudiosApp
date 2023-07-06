@@ -1,93 +1,54 @@
 /* Visite virtuelle */
 
-#panorama-supernova {
+#panorama {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
-.panorama-supernova-container {
-	max-width: 350px; /* ajustez la valeur selon vos besoins */
+.panorama-container {
+	max-width: 525px; /* ajustez la valeur selon vos besoins */
 	margin: 0 auto; /* centre l'élément horizontalement */
-}
-
-.content-supernova {
-	display: flex;
-	align-items: flex-start;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
 }
 
 #panorama-octopuss {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
 .panorama-octopuss-container {
-	max-width: 350px; /* ajustez la valeur selon vos besoins */
+	max-width: 525px; /* ajustez la valeur selon vos besoins */
 	margin: 0 auto; /* centre l'élément horizontalement */
 }
 
-.content-octopuss {
-	display: flex;
-	align-items: flex-start;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
-}
 
 #panorama-rainbow {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
 .panorama-rainbow-container {
-	max-width: 350px; /* ajustez la valeur selon vos besoins */
+	max-width: 525px; /* ajustez la valeur selon vos besoins */
 	margin: 0 auto; /* centre l'élément horizontalement */
-}
-
-.content-rainbow {
-	display: flex;
-	align-items: flex-start;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
 }
 
 #panorama-california {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
 .panorama-california-container {
-	max-width: 350px; /* ajustez la valeur selon vos besoins */
+	max-width: 525px; /* ajustez la valeur selon vos besoins */
 	margin: 0 auto; /* centre l'élément horizontalement */
-}
-
-.content-california {
-	display: flex;
-	align-items: flex-start;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
 }
 
 #panorama-scene {
 	width: 100%;
-	height: 200px;
+	height: 300px;
 }
 
 .panorama-scene-container {
-	max-width: 350px; /* ajustez la valeur selon vos besoins */
+	max-width: 525px; /* ajustez la valeur selon vos besoins */
 	margin: 0 auto; /* centre l'élément horizontalement */
-}
-
-.content-scene{
-	display: flex;
-	align-items: flex-start;
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
 }
 
 .image-container {
