@@ -1,16 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-<!-- Insert title -->
-{% block title %}
-
-<title>Studios</title>
-
-{% endblock %}
-
-
-
-<!-- Insert main header -->
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -19,251 +10,213 @@
 
 
 
-<!-- Insert content -->
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<!-- Container -->
-<div class="container">
-
-	<!-- Breadcrumb -->
-	<ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Studios</li>
-	</ol> <!-- /Breadcrumb -->
-
-	<!-- Main content -->
+<!-- Content 1 -->
+<div class="stud">
 	<div class="row">
+		<!-- Left -->
+		<div class="col-sm-6">
+			<h2>Horaires :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>Lundi - Vendredi</td><td>16h00 -  </td><td>00h00</td></tr>
+					<tr><td>Samedi *</td><td>10h00 - </td><td>18h00</td></tr>
+					<tr><td>Dimanche</td><td>13h00 - </td><td>21h00</td></tr>
+				</tbody>
+			</table>
+			
+			<!-- Add link concert-->
+			<br><p>*Ouverture jusqu'à minuit les soirs de concerts. <a href="{% url 'placeholder' %}">Placeholder!</a></p>
+		</div>
 
-		<!-- Article -->
-		<article class="col-sm-12 maincontent">
+		<!-- Right -->
+		<div class="col-sm-6">
+			<h2>Tarifs :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>1 heure</td><td>20€</td></tr>
+					<tr><td>2 heures</td><td>38€</td></tr>
+					<tr><td>3 heures</td><td>54€</td></tr>
+					<tr><td>4 heures</td><td>68€</td></tr>
+					<tr><td>Heure supplémentaire</td><td>17€</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 
-			<!-- Header -->
-			<header class="page-header">
-				<h1 class="page-title">Studios</h1>
-		  	</header>
+	<!-- Button(s) -->
+	<div class="button">
+		<a class="btn btn-action btn-lg" href="{% url 'booking' %}" role="button">Réserver un studio</a>
+	</div>
+</div>
 
-            <!-- Content 1 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Left -->
-					<div class="col-sm-6">
-						<h2>Horaires :</h2><br>
-						<table class="table-center">
-							<tbody>
-								<tr><td>Lundi - Vendredi</td><td>16h00 -  </td><td>00h00</td></tr>
-								<tr><td>Samedi *</td><td>10h00 - </td><td>18h00</td></tr>
-								<tr><td>Dimanche</td><td>13h00 - </td><td>21h00</td></tr>
-							</tbody>
-						</table>
-						
-						<!-- Add link concert-->
-						<br><p>*Ouverture jusqu'à minuit les soirs de concerts. <a href="{% url 'placeholder' %}">Placeholder!</a></p>
-					</div>
+<!-- Content 2 -->
+<div class="stud">
+	<div class="row">
+		<!-- Title-->
+		<h3>Supernova</h3>
 
-					<!-- Right -->
-					<div class="col-sm-6">
-						<h2>Tarifs :</h2><br>
-						<table class="table-center">
-							<tbody>
-								<tr><td>1 heure</td><td>20€</td></tr>
-								<tr><td>2 heures</td><td>38€</td></tr>
-								<tr><td>3 heures</td><td>54€</td></tr>
-								<tr><td>4 heures</td><td>68€</td></tr>
-								<tr><td>Heure supplémentaire</td><td>17€</td></tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
+		<!-- Left -->
+		<div class="col-sm-6">
+			<div id="panorama-supernova" class="panorama-supernova-container"></div>
+		</div>
 
-				<!-- Button(s) -->
-				<div class="button">
-					<a class="btn btn-action btn-lg" href="{% url 'booking' %}" role="button">Réserver un studio</a>
-				</div>
+		<!-- Right -->
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 48m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl Export 5 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Maryland (2x 1500w)</li>
+				</ul>
 			</div>
+		</div>
+	</div>
+</div>
 
-			<!-- Content 2 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Title-->
-					<h3>Supernova</h3><br>
+<!-- Content 3 -->
+<div class="stud">
+	<div class="row">
+		<!-- Title-->
+		<h3>Octopuss</h3>
 
-					<!-- Left -->
-					<div class="col-sm-6">
-						<div id="panorama-supernova" class="panorama-supernova-container"></div>
-					</div>
-
-					<!-- Right -->
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 48m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl Export 5 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Maryland (2x 1500w)</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+		<!-- Left -->
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 48m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl Export 5 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Maryland (2x 1500w)</li>
+				</ul>
 			</div>
+		</div>
 
-			<!-- Content 3 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Title-->
-					<h3>Octopuss</h3><br>
+		<!-- Right -->
+		<div class="col-sm-6">
+			<div id="panorama-octopuss" class="panorama-octopuss-container"></div>
+		</div>
+	</div>
+</div>
 
-					<!-- Left -->
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 48m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl Export 5 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Maryland (2x 1500w)</li>
-							</ul>
-						</div>
-					</div>
+<!-- Content 4 -->
+<div class="stud">
+	<div class="row">
+		<!-- Title-->
+		<h3>Rainbow</h3>
 
-					<!-- Right -->
-					<div class="col-sm-6">
-						<div id="panorama-octopuss" class="panorama-octopuss-container"></div>
-					</div>
-				</div>
+		<!-- Left -->
+		<div class="col-sm-6">
+			<div id="panorama-rainbow" class="panorama-rainbow-container"></div>
+		</div>
+
+		<!-- Right -->
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 31m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl Export 5 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Nexo PS15 (2x 1000w)</li>
+				</ul>
 			</div>
+		</div>
+	</div>
+</div>
 
-			<!-- Content 4 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Title-->
-					<h3>Rainbow</h3><br>
+<!-- Content 5 -->
+<div class="stud">
+	<div class="row">
+		<!-- Title-->
+		<h3>California</h3>
 
-					<!-- Left -->
-					<div class="col-sm-6">
-						<div id="panorama-rainbow" class="panorama-rainbow-container"></div>
-					</div>
-
-					<!-- Right -->
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 31m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl Export 5 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Nexo PS15 (2x 1000w)</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+		<!-- Left -->
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : 25m²</li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie Pearl CZX custom fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>Diffusion Nexo PS15 (2x 1000w)</li>
+				</ul>
 			</div>
+		</div>
 
-			<!-- Content 5 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Title-->
-					<h3>California</h3><br>
+		<!-- Right -->
+		<div class="col-sm-6">
+			<div id="panorama-california" class="panorama-california-container"></div>
+		</div>
+	</div>
+</div>
 
-					<!-- Left -->
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : 25m²</li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie Pearl CZX custom fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>Diffusion Nexo PS15 (2x 1000w)</li>
-							</ul>
-						</div>
-					</div>
+<!-- Content 6 -->
+<div class="stud">
+	<div class="row">
+		<!-- Title-->
+		<h3>Scène</h3>
 
-					<!-- Right -->
-					<div class="col-sm-6">
-						<div id="panorama-california" class="panorama-california-container"></div>
-					</div>
-				</div>
+		<!-- Left -->
+		<div class="col-sm-6">
+			<div id="panorama-scene" class="panorama-scene-container"></div>
+		</div>
+
+		<!-- Right -->
+		<div class="col-sm-6">
+			<div class="text-container">
+				<ul>
+					<li>Superficie : Plateau 25m² / Fosse : 60m² </li>
+					<li>2 amplis guitare à lampe 2 corps</li>
+					<li>Ampli basse Hartke 250w</li>
+					<li>Batterie PDP Concept 6 fûts</li>
+					<li>3 micros AKG D5</li>
+					<li>Console Soundfraft EFX8</li>
+					<li>6 JBL SRX712</li>
+				</ul>
 			</div>
-
-			<!-- Content 6 -->
-			<div class="stud">
-				<div class="row">
-					<!-- Title-->
-					<h3>Scène</h3><br>
-
-					<!-- Left -->
-					<div class="col-sm-6">
-						<div id="panorama-scene" class="panorama-scene-container"></div>
-					</div>
-
-					<!-- Right -->
-					<div class="col-sm-6">
-						<div class="text-container">
-							<ul>
-								<li>Superficie : Plateau 25m² / Fosse : 60m² </li>
-								<li>2 amplis guitare à lampe 2 corps</li>
-								<li>Ampli basse Hartke 250w</li>
-								<li>Batterie PDP Concept 6 fûts</li>
-								<li>3 micros AKG D5</li>
-								<li>Console Soundfraft EFX8</li>
-								<li>6 JBL SRX712</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
+		</div>
+	</div>
+</div>
 
 
-			<!-- Swiper -->
-			<div class="swiper mySwiper">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Shure.png' %}" alt="Shure">
-					</div>
-					
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Peavey.png' %}" alt="Peavey">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Pearl.png' %}" alt="Pearl">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Pdp.png' %}" alt="Pdp">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Marshall.png' %}" alt="Marshall">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Fender.png' %}" alt="Fender">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Ampeg.png' %}" alt="Ampeg">
-					</div>
-
-					<div class="swiper-slide">
-						<img src="{% static 'studios/images/Soundcraft.png' %}" alt="Soundcraft">
-					</div>
-				</div>
-			</div>
-	
-		</article> <!-- /Article -->
-	
-	</div> <!-- /Main content -->
-
-</div> <!-- /Container -->
+<!-- Content 7: Swiper -->
+<div class="swiper mySwiper">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide"><img src="{% static 'studios/images/Shure.png' %}" alt="Shure"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Peavey.png' %}" alt="Peavey"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Pearl.png' %}" alt="Pearl"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Pdp.png' %}" alt="Pdp"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Marshall.png' %}" alt="Marshall"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Fender.png' %}" alt="Fender"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Ampeg.png' %}" alt="Ampeg"></div>
+		<div class="swiper-slide"><img src="{% static 'studios/images/Soundcraft.png' %}" alt="Soundcraft"></div>
+	</div>
+</div>
 
 {% endblock %}
 
@@ -278,6 +231,7 @@
 
 	<!-- Link Swiper's CSS -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
 	<!-- Demo styles -->
 	<style>
 	  .swiper {
@@ -316,7 +270,7 @@
 		"autoRotate": -2,
 		"title": "Studio SUPERNOVA",
 		"author": "CoventGardenStudios",
-		"hotSpots": [
+		"hotSpots": [	
 					{
 						"pitch": -40,
 						"yaw": 225,

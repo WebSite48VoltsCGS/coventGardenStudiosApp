@@ -22,6 +22,10 @@
 <!-- Insert content -->
 {% block content %}
 
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
 <!-- Container -->
 <div class="container">
 
@@ -51,7 +55,7 @@
 						<div class="panel-body">
 							<!-- Title / Text -->
 							<h3 class="thin text-center">Paiement accompte</h3>
-							<p class="text-center text-muted">Nous demandons le paiement d’un acompte pour la réservation d’une aventure. Nous ajusterons le tarif le jour de l’événement en fonction du nombre de personnes présentes.</p>
+							<p class="text-center text-muted">Nous demandons le paiement d’un acompte pour la réservation.</p>
 
 							<hr>
 
@@ -60,13 +64,17 @@
                             <input type="hidden" name="salle_id" value="{{ salle.id }}">
                             <input type="hidden" name="user_id" value="{{ user.id }}">
 
+
 							<hr>
 
 							<!-- Button(s) -->
 							<div class="row">
 								<!-- Confirm -->
 								<div class="col-lg-12 text-right">
-									<button class="btn btn-success" type="submit">Confirmer</button>
+									<form action="{% url 'payment' %}" method="POST">
+										{% csrf_token %}
+										<button class="btn btn-success" type="submit" id="checkout-button">Confirmer</button>
+									  </form>
 								</div>
 							</div>
 						</div>
@@ -105,5 +113,16 @@
     $('#id_duration').val("{{duration}}");
     $('#id_date_start').val("{{ start_date }}");
     $('#id_date_end').val("{{ end_date }}");
+	$('#id_price').val(20);
+	
+	window.addEventListener('DOMContentLoaded', function() {
+		var form = document.querySelector('form');
+		if (form) {
+			var inputs = form.querySelectorAll('input');
+			inputs.forEach(function(input) {
+			input.setAttribute('readonly', 'readonly');
+			});
+		}
+	});
 </script>
 {% endblock %}

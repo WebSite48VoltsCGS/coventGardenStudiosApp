@@ -100,20 +100,6 @@
 	text-align: justify;
 }
 
-/* Mise en page Hoarires et prix */
-
-    .horaires-tarifs-container {
-        display: flex;
-    }
-
-    .horaires {
-        flex: 1;
-    }
-
-    .tarifs {
-        flex: 1;
-    }
-
 /* Ligne entre les studios */ 
 
   .stud {
