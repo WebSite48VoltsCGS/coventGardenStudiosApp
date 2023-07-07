@@ -2,7 +2,7 @@ from django.contrib.auth.forms import (UserCreationForm, UserChangeForm, Passwor
 from django.forms import ModelChoiceField, SelectDateWidget, ValidationError
 from django_select2.forms import Select2Widget
 
-from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Concert
+from .models import CustomUser, CustomGroup, Event, Concert
 from .fields import *
 
 # Register your forms here
@@ -11,20 +11,14 @@ Account
     - SignInForm
     - SignUpForm
 """
-class SignInForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'password')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
+class SignInForm(forms.Form):
+    username = FORM_USERNAME
+    password = FORM_PASSWORD
 
 class SignUpForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'last_name', 'first_name', 'phone', 'password', 'password_confirm')
+        fields = ('username', 'email', 'last_name', 'first_name', 'phone', 'password')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,34 +27,24 @@ class SignUpForm(forms.ModelForm):
 
 
 """
-Profile
+Update User
     - UserUpdateForm
     - ConfirmPasswordForm
 """
-class UserUpdateForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'last_name', 'first_name', 'phone')
+class UserUpdateForm(forms.Form):
+    username = FORM_USERNAME
+    email = FORM_EMAIL
+    last_name = FORM_LAST_NAME
+    first_name = FORM_FIRST_NAME
+    phone = FORM_PHONE
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
-class ConfirmPasswordForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ('password', 'password_confirm')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
-
+class ConfirmPasswordForm(forms.Form):
+    password = FORM_PASSWORD
+    password_confirm = FORM_PASSWORD_CONFIRM
 
 
 """
-Password Reset
+Password Forgot
     - UserPasswordResetForm
     - UserPasswordSetForm
 """
@@ -72,15 +56,13 @@ class UserPasswordSetForm(SetPasswordForm):
     new_password2 = FORM_PASSWORD_CONFIRM
 
 
-
 """
-Group
-    - GroupCreateForm
-    - TechnicalsheetForm
-    - LogoForm
+CustomGroup
+    - CustomGroupForm
+    - UploadTechnicalSheetForm
+    - UploadLogoForm
 """
 class CustomGroupForm(forms.ModelForm):
-    # User will be added manually in views.py
     class Meta:
         model = CustomGroup
         fields = '__all__'
@@ -91,15 +73,6 @@ class CustomGroupForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
-class TechnicalSheetForm(forms.ModelForm):
-    class Meta:
-        model = TechnicalSheet
-        fields = ['pdf_file']
-
-class LogoForm(forms.ModelForm):
-    class Meta:
-        model = TechnicalSheet
-        fields = ['pdf_logo']
 
 """
 Booking

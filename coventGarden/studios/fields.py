@@ -62,12 +62,15 @@ MODEL_PASSWORD = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL
 MODEL_PASSWORD_CONFIRM = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD_CONFIRM)
 
 # CustomGroup
-MODEL_GROUP_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name="Nom de groupe")
-MODEL_GROUP_EMAIL = models.EmailField(max_length=LENGTH_EMAIL, verbose_name="E-mail")
-MODEL_GROUP_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name="Numéro de téléphone")
-MODEL_MEMBERS = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)], verbose_name="Nombre de membres")
-MODEL_GENRE = models.CharField(max_length=LENGTH_NAME, verbose_name="Style musicale")
+MODEL_GROUP_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name="Nom de groupe", blank=True)
+MODEL_GROUP_EMAIL = models.EmailField(max_length=LENGTH_EMAIL, verbose_name="E-mail", blank=True)
+MODEL_GROUP_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name="Numéro de téléphone", blank=True)
+MODEL_MEMBERS = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)], verbose_name="Nombre de membres", default=1, blank=True)
+MODEL_GENRE = models.CharField(max_length=LENGTH_NAME, verbose_name="Style musicale", blank=True)
 MODEL_FACEBOOK = models.URLField(max_length=LENGTH_URL, blank=True)
 MODEL_INSTAGRAM = models.URLField(max_length=LENGTH_URL, blank=True)
-MODEL_BIOGRAPHY = models.TextField(max_length=LENGTH_TEXT, verbose_name="Biographie")
-MODEL_VALIDATED = models.BooleanField(default=False, verbose_name="Vérifié")
+MODEL_BIOGRAPHY = models.TextField(max_length=LENGTH_TEXT, verbose_name="Biographie", blank=True)
+MODEL_TECHNICAL_SHEET = models.FileField(upload_to='media/public', verbose_name="Fiche technique", null=True, blank=True)
+MODEL_LOGO = models.FileField(upload_to='media/public', verbose_name="Logo", null=True, blank=True)
+MODEL_VALIDATED = models.BooleanField(default=False, verbose_name="Vérifié", blank=True)
+

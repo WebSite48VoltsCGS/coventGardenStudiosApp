@@ -6,7 +6,6 @@ from django.db.models.signals import post_save
 
 from .fields import *
 
-
 # Create your models here.
 """
 User
@@ -20,7 +19,6 @@ class CustomUser(AbstractUser):
     last_name = MODEL_LAST_NAME
     phone = MODEL_USER_PHONE
     password = MODEL_PASSWORD
-    password_confirm = MODEL_PASSWORD_CONFIRM
     # is_active = False by default when creating an account using the SignUpForm
 
     def __str__(self):
@@ -40,11 +38,12 @@ class CustomGroup(models.Model):
     facebook = MODEL_FACEBOOK
     instagram = MODEL_INSTAGRAM
     biography = MODEL_BIOGRAPHY
+    technical_sheet = MODEL_TECHNICAL_SHEET
+    logo = MODEL_LOGO
     validated = MODEL_VALIDATED
 
     def __str__(self):
         return f"{self.name}"
-
 
 
 """
@@ -88,14 +87,8 @@ class Reservation(models.Model):
 
 """
 Pro Area
-    - TechnicalSheet
     - Concert
 """
-class TechnicalSheet(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    pdf_file = models.FileField(upload_to='media/public', null=True, blank= True)
-    pdf_logo = models.FileField(upload_to='media/public', null=True, blank= True)
-
 class Concert(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     groupe1 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe1', null=True)
