@@ -31,21 +31,26 @@
 		<div class="panel panel-default">
 			<div class="panel-body">
 				<!-- Title / Text -->
-				<h3 class="thin text-center">Nouveau mot de passe</h3>
-				<p class="text-center text-muted">Vous connaissez votre mot de passe? <a href="{% url 'account_sign_in' %}">Cliquez ici</a></p>
-			
+				<h3 class="thin text-center">Mon compte</h3>
+				<p class="text-center text-muted">Vous n'avez pas encore de compte? <a href="{% url 'account_sign_up_form' %}">Inscrivez-vous</a></p>
+
 				<hr>
 
 				<!-- Include form(s) here -->
 				{% include "base/base_form.html" %}
 
 				<hr>
-				
+
 				<!-- Button(s) -->
 				<div class="row">
-					<div class="col-lg-12 text-right">
-						<!-- Confirm -->
-						<button class="btn btn-action" type="submit">Confirmer</button>
+					<!-- Left: Redirect -->
+					<div class="col-lg-6 text-left">
+						<b><a href="{% url 'account_password_forgot_form' %}">Mot de passe oublié?</a></b>
+					</div>
+
+					<!-- Right: Confirm -->
+					<div class="col-lg-6 text-right">
+						<button class="btn btn-action" type="submit">Connexion</button>
 					</div>
 				</div>
 			</div>

@@ -11,9 +11,7 @@ class CustomUserAdmin(UserAdmin):
 
 class CustomGroupAdmin(admin.ModelAdmin):
     list_display = ["user", "name", "email",
-                    "phone", "members", "genre",
-                    "facebook", "instagram", "biography",
-                    "validated"]
+                    "phone", "members", "validated"]
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "start_time", "end_time", "description"]
@@ -28,7 +26,7 @@ class ReservationAdmin(admin.ModelAdmin):
     list_display = ('description', 'duration', 'date_start','date_end', 'price', 'status', 'salle', 'user', 'is_active')
 
 class ConcertAdmin(admin.ModelAdmin):
-    list_display = ["user",'groupe1', 'groupe2', 'groupe3', 'date', 'validated']
+    list_display = ["user", 'groupe1', 'groupe2', 'groupe3', 'date', 'validated']
     list_filter = ['validated']
 
 admin.site.register(CustomUser, CustomUserAdmin)

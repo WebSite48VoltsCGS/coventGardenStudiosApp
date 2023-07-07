@@ -146,11 +146,11 @@ New
 # Custom user
 AUTH_USER_MODEL = "studios.CustomUser"
 
-# Authentication
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+# Redirection if user is not authenticated
+# https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-loginrequired-mixin
+LOGIN_URL = "account_sign_in_form"
 
-# Forgot password
+# Email
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
@@ -174,5 +174,5 @@ REDIRECT_DOMAIN = "home"
 # ---------- Required ----------
 # pip3 install django-select2
 # pip3 install stripe
-# pip3 install 
+# pip3 install six
 # ------------------------------
