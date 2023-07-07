@@ -19,7 +19,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "start_time", "end_time", "description"]
 
 class TechnicalSheetAdmin(admin.ModelAdmin):
-    list_display = ["user", "pdf_file"]
+    list_display = ["user", "pdf_file", "pdf_logo"]
 
 class SalleAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')

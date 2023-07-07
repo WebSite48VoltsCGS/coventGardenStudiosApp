@@ -25,7 +25,7 @@ from django.contrib import messages
 # Import
 from .models import CustomGroup, Event, Concert, TechnicalSheet, CustomUser, Reservation, Salle
 from .forms import (
-    SignInForm, SignUpForm,
+    LogoForm, SignInForm, SignUpForm,
     UserUpdateForm, ConfirmPasswordForm,
     UserPasswordResetForm, UserPasswordSetForm,
     CustomGroupForm, TechnicalSheetForm, ConcertForm,
@@ -411,9 +411,32 @@ class GroupDetailView(View):
             return redirect("account_sign_in")
 
         self.context["my_groups"] = request.user.my_groups.all()
+        self.context["user_files"] = TechnicalSheet.objects.filter(user=request.user)
+        self.context["form"] = TechnicalSheetForm()
+        self.context["form3"] = LogoForm()
         return render(request, self.template_name, self.context)
 
-
+    def post(self, request):
+        self.context["form"] = TechnicalSheetForm(request.POST, request.FILES)
+        if self.context["form"].is_valid():
+            deposited_files = request.FILES.getlist('pdf_file')
+            for file in deposited_files:
+                technical_sheet = TechnicalSheet(pdf_file=file, user=request.user)
+                technical_sheet.save()
+            messages.success(request, 'Vos fiches techniques ont été déposées avec succès !')
+            return redirect('groups_detail')
+        
+        self.context["form3"] = LogoForm(request.POST, request.FILES)
+        if self.context["form3"].is_valid():
+            deposited_logos = request.FILES.getlist('pdf_logo')
+            for file in deposited_logos:
+                logo = LogoForm(pdf_logo=file, user=request.user)
+                logo.save()
+            messages.success(request, 'Vos Logos ont été déposées avec succès !')
+            return redirect('groups_detail')
+        
+        return render(request, self.template_name, self.context)
+        
 class GroupCreateView(View):
     form_class = CustomGroupForm
     template_name = "groups/groups_create.html"
@@ -506,6 +529,12 @@ class GroupUpdateView(View):
             self.context["form"] = form
             return render(request, self.template_name, self.context)
 
+@login_required
+def delete_technical_sheet(request, pk):
+    technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
+    technical_sheet.delete()
+    messages.success(request, 'La fiche technique a été supprimée avec succès !')
+    return redirect('groups_detail')
 
 class GroupDeleteView(View):
     template_name = "groups/groups_delete.html"
@@ -625,15 +654,8 @@ class ProAreaView(View):
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
             return redirect('pro_area')
-
-
-def delete_technical_sheet(request, pk):
-    # Log-in required
-    if not request.user.is_authenticated:
-        technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
-        technical_sheet.delete()
-        messages.success(request, 'La fiche technique a été supprimée avec succès !')
-        return redirect('pro_area')
+        
+        return render(request, self.template_name, self.context)
 
 
 """

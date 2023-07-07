@@ -109,7 +109,8 @@ Pro Area
 """
 class TechnicalSheet(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    pdf_file = models.FileField(upload_to='media/public', null=True)
+    pdf_file = models.FileField(upload_to='media/public', null=True, blank= True)
+    pdf_logo = models.FileField(upload_to='media/public', null=True, blank= True)
 
 class Concert(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)

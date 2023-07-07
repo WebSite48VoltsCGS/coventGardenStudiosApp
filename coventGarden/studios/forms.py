@@ -60,6 +60,8 @@ class UserPasswordSetForm(SetPasswordForm):
 """
 Group
     - GroupCreateForm
+    - TechnicalsheetForm
+    - LogoForm
 """
 class CustomGroupForm(forms.ModelForm):
     # User will be added manually in views.py
@@ -73,7 +75,15 @@ class CustomGroupForm(forms.ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
 
+class TechnicalSheetForm(forms.ModelForm):
+    class Meta:
+        model = TechnicalSheet
+        fields = ['pdf_file']
 
+class LogoForm(forms.ModelForm):
+    class Meta:
+        model = TechnicalSheet
+        fields = ['pdf_logo']
 
 """
 Booking
@@ -91,10 +101,6 @@ Pro Area
     - TechnicalSheetForm
     - ConcertForm
 """
-class TechnicalSheetForm(forms.ModelForm):
-    class Meta:
-        model = TechnicalSheet
-        fields = ['pdf_file']
 
 
 class ConcertForm(forms.ModelForm):
