@@ -57,7 +57,7 @@ MODEL_USERNAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_USE
 MODEL_EMAIL = models.EmailField(max_length=LENGTH_EMAIL, verbose_name=LABEL_EMAIL, unique=True, error_messages=UNIQUE_EMAIL)
 MODEL_LAST_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_FIRST_NAME)
 MODEL_FIRST_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_LAST_NAME)
-MODEL_USER_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name=LABEL_PHONE, blank=True)
+MODEL_USER_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name=LABEL_PHONE)
 MODEL_PASSWORD = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD)
 MODEL_PASSWORD_CONFIRM = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD_CONFIRM)
 

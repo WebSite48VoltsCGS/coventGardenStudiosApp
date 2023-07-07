@@ -11,14 +11,17 @@ Account
     - SignInForm
     - SignUpForm
 """
-class SignInForm(forms.Form):
-    username = FORM_USERNAME
-    password = FORM_PASSWORD
+class SignInForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'password')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 class SignUpForm(forms.ModelForm):
-    password = FORM_PASSWORD
-    password_confirm = FORM_PASSWORD_CONFIRM
-
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'last_name', 'first_name', 'phone', 'password', 'password_confirm')
@@ -34,15 +37,25 @@ Profile
     - UserUpdateForm
     - ConfirmPasswordForm
 """
-class UserUpdateForm(forms.Form):
-    username = FORM_USERNAME
-    email = FORM_EMAIL
-    last_name = FORM_LAST_NAME
-    first_name = FORM_FIRST_NAME
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'last_name', 'first_name', 'phone')
 
-class ConfirmPasswordForm(forms.Form):
-    current_password = FORM_PASSWORD_CURRENT
-    password_confirm = FORM_PASSWORD_CONFIRM
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
+
+class ConfirmPasswordForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('password', 'password_confirm')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 
