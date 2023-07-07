@@ -127,7 +127,7 @@ TIME_ZONE = 'Europe/Paris'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -146,11 +146,11 @@ New
 # Custom user
 AUTH_USER_MODEL = "studios.CustomUser"
 
-# Authentication
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+# Redirection if user is not authenticated
+# https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-loginrequired-mixin
+LOGIN_URL = "account_sign_in_form"
 
-# Forgot password
+# Email
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
@@ -160,15 +160,20 @@ MEDIA_URL = '/media/'
 
 
 # Stripe
-STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
-STRIPE_SECRET_KEY = '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'
+# STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
+# STRIPE_SECRET_KEY = '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'
+
+# TEST 
+STRIPE_PUBLIC_KEY = 'pk_test_51NQQVfLFsoxR8h1Yndczqu5Pua3froKLX6SjaUGccAohgdctcGe5xgTB6BTDGO1llhNZB79P3o82WBijdPkROpjO00EJDP0rLA'
+STRIPE_SECRET_KEY = 'sk_test_51NQQVfLFsoxR8h1Yxrz0JtBAsW2K7dEsm44c1fLV9krojEP8YTK29lbBp3MeljYsF1eg3sFoQIJwTEhLbk5BO5VQ00Sy7aNZtB'
 
 PRODUCT_PRICE = 'price_1NQRh0LFsoxR8h1YJfhWjrxJ'
 # PRODUCT_PRICE = 'price_1NQlqPLFsoxR8h1Y6DL1xPOL'
+PRODUCT_PRICE = 'price_1NQs5gLFsoxR8h1YmIbmCZHV'
 REDIRECT_DOMAIN = "home"
 
 # ---------- Required ----------
 # pip3 install django-select2
 # pip3 install stripe
-# pip3 install 
+# pip3 install six
 # ------------------------------

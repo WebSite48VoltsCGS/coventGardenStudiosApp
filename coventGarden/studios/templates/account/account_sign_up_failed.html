@@ -24,10 +24,15 @@
 <!-- Main content -->
 {% block content %}
 
-<body>
-  <h1>Merci pour votre paiement !</h1>
-  <p>Nous vous remercions d'avoir effectué votre paiement.</p>
-</body>
+<!-- Content 1: Text -->
+<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			Une erreur s'est produite et votre compte ne s'est pas créé!<br>
+			Cliquez <a href="{% url 'account_sign_up_form' %}">ici</a> pour retourner à la page d'inscription!
+		</div>
+	</div>
+</div>
 
 {% endblock %}
 
@@ -36,14 +41,11 @@
 <!-- Custom CSS styles file(s) -->
 {% block style %}
 
-<link rel="stylesheet" href="{% static 'studios/css/payment_success.css' %}"/>
-
 {% endblock %}
+
 
 
 <!-- Custom JavaScript file(s) -->
 {% block scripts %}
 
-
 {% endblock %}
-

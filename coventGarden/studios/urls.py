@@ -22,10 +22,31 @@ urlpatterns = [
     path('reservation/', views.booking, name='booking'),
     path('contact/', views.ContactView.as_view(), name='contact'),
 
-    # Account
-    path('compte/connexion/', views.AccountSignInView.as_view(), name='account_sign_in'),
-    path('compte/inscription/', views.AccountSignUpView.as_view(), name='account_sign_up'),
-    path('compte/deconnexion/', views.account_log_out, name='account_log_out'),
+    # Account: Login / Logout
+    path('compte/connexion/', views.AccountSignInFormView.as_view(),
+         name='account_sign_in_form'),
+    path('compte/deconnexion/', views.account_log_out,
+         name='account_log_out'),
+
+    # Account: Sign Up
+    path('compte/inscription/', views.AccountSignUpFormView.as_view(),
+         name='account_sign_up_form'),
+    path('compte/inscription/envoi/', views.AccountSignUpDoneView.as_view(),
+         name="account_sign_up_done"),
+    path('compte/inscription/confirmation/<uidb64>/<token>/', views.AccountSignUpConfirmView.as_view(),
+         name='account_sign_up_confirm'),
+    path('compte/inscription/failed/', views.AccountSignUpFailedView.as_view(),
+         name='account_sign_up_failed'),
+
+    # Account: Password Forgot
+    path('compte/mot-de-passe-oublie/', views.AccountPasswordForgotForm.as_view(),
+         name='account_password_forgot_form'),
+    path('compte/mot-de-passe-oublie/envoi/', views.AccountPasswordForgotDone.as_view(),
+         name='account_password_forgot_done'),
+    path('compte/mot-de-passe-oublie/modification/<uidb64>/<token>/', views.AccountPasswordForgotConfirm.as_view(),
+         name='account_password_forgot_confirm'),
+    path('compte/mot-de-passe-oublie/confirmation/', views.AccountPasswordForgotComplete.as_view(),
+         name='account_password_forgot_complete'),
 
     # Profile
     path('compte/', views.ProfileDetailView.as_view(), name='profile_detail'),
@@ -42,7 +63,7 @@ urlpatterns = [
     path('compte/mes_reservations/ajouter/', views.BookingsCreateView.as_view(), name='bookings_create'),
 
     # Pro Area
-    path('espace_pro/', views.ProAreaView.as_view(), name='pro_area'),
+    path('compte/espace_pro/', views.ProAreaView.as_view(), name='pro_area'),
 
     # Planning
     path('all_events/', views.all_events, name='all_events'),
@@ -51,21 +72,15 @@ urlpatterns = [
     path('remove/', views.remove, name='remove'),
     path('calendar/', views.calendar_view, name='calendar'),
 
-    # Password Reset
-    path('compte/mot-de-passe/oublie/', views.CustomPasswordResetForgot.as_view(), name='password_reset_forgot'),
-    path('compte/mot-de-passe-oublie/envoi/', views.CustomPasswordResetDone.as_view(), name='password_reset_done'),
-    path('compte/mot-de-passe-oublie/modification/<uidb64>/<token>/', views.CustomPasswordResetConfirm.as_view(), name='password_reset_confirm'),
-    path('compte/mot-de-passe-oublie/confirmation/', views.CustomPasswordResetComplete.as_view(), name='password_reset_complete'),
-
     # Booking
     path('api/all_booking/', views.all_booking, name='all_booking'),
     path('api/all_booking_event/', views.all_booking_event, name='all_booking_event'),
-
+    path('set-reservation/<int:id_reservation>/', views.set_reservation, name='set_reservation'),
     path('users/', views.list_users, name='list_users'),
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
-#    path('payment_successful', views.payment_successful, name='payment_successful'),
-    path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
+    # path('payment_successful', views.payment_successful, name='payment_successful'),
+    # path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
     path('stripe_webhook', views.stripe_webhook, name='stripe_web'),
 
     # WIP
@@ -73,5 +88,6 @@ urlpatterns = [
 
     # Deleted
     path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -2,7 +2,7 @@ from django.contrib.auth.forms import (UserCreationForm, UserChangeForm, Passwor
 from django.forms import ModelChoiceField, SelectDateWidget, ValidationError
 from django_select2.forms import Select2Widget
 
-from .models import CustomGroup, Event, TechnicalSheet, Concert
+from .models import CustomUser, CustomGroup, Event, TechnicalSheet, Concert
 from .fields import *
 
 # Register your forms here
@@ -15,15 +15,18 @@ class SignInForm(forms.Form):
     username = FORM_USERNAME
     password = FORM_PASSWORD
 
-class SignUpForm(forms.Form):
-    username = FORM_USERNAME
-    email = FORM_EMAIL
-    last_name = FORM_LAST_NAME
-    first_name = FORM_FIRST_NAME
-    phone = FORM_PHONE
-    password = FORM_PASSWORD_NEW
-    confirm_password = FORM_PASSWORD_CONFIRM
+class SignUpForm(forms.ModelForm):
+    password = FORM_PASSWORD
+    password_confirm = FORM_PASSWORD_CONFIRM
 
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'last_name', 'first_name', 'phone', 'password', 'password_confirm')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 """
@@ -39,7 +42,7 @@ class UserUpdateForm(forms.Form):
 
 class ConfirmPasswordForm(forms.Form):
     current_password = FORM_PASSWORD_CURRENT
-    confirm_password = FORM_PASSWORD_CONFIRM
+    password_confirm = FORM_PASSWORD_CONFIRM
 
 
 
