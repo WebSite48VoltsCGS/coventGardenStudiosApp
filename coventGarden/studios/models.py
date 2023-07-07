@@ -82,23 +82,16 @@ class Reservation(models.Model):
         RESERVED = 'Reserver'
         INPROGRESS = 'En cours'
 
-    class Duration(models.TextChoices):
-        ONE_HOUR = 1
-        TWO_HOUR = 2
-        THREE_HOUR = 3
-        FOUR_HOUR = 4
-        FIVE_HOUR = 5
-
     # title = models.fields.CharField(default='Item', max_length=100)
     description = models.fields.CharField(max_length=1000)
-    duration = models.fields.IntegerField(choices=Duration.choices)
+    duration = models.fields.IntegerField(validators=[MinValueValidator(0)])
     date_start = models.DateTimeField(null=False)
     date_end = models.DateTimeField(null=False)
-    # hour_begin = models.TimeField(null=False)
     price = models.fields.IntegerField(validators=[MinValueValidator(1)])
     status = models.fields.CharField(choices=Status.choices, max_length=20)
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    is_active = models.BooleanField(default=True)
 
 
 
