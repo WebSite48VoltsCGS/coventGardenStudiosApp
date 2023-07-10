@@ -112,24 +112,3 @@ class UserPayment(models.Model):
 def create_user_payment(sender, instance, created, **kwargs):
     if created:
         UserPayment.objects.create(app_user=instance)
-
-
-# pour vérification du num de tel
-import re
-from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
-from django.db import models
-
-
-
-class NumTel(models.Model):
-    LENGTH_PHONE = 10  # Définissez la longueur maximale autorisée pour le champ
-
-    MODEL_GROUP_PHONE = models.CharField(
-        max_length=LENGTH_PHONE,
-        verbose_name="Numéro de téléphone",
-        blank=True,
-        validators=[validate_phone_number]  # Utilisez le validateur personnalisé
-    )
-
-    # Autres champs et méthodes de votre modèle

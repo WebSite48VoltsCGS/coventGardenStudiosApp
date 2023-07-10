@@ -1,3 +1,12 @@
+# Django
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse
+
+# Functions-based views
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 # Class-based views
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,8 +32,13 @@ from datetime import timedelta, datetime, time
 # Pro Area
 from django.contrib import messages
 
+# Payment
+from django.conf import settings
+import stripe
+import time
+
 # Import
-from .models import CustomGroup, Event, CustomUser, Reservation, Salle
+from .models import CustomGroup, Event, CustomUser, Reservation, Salle, UserPayment
 from .forms import (
     UserSignInForm, UserSignUpForm,
     UserUpdateForm, UserPasswordConfirmForm,
@@ -757,10 +771,9 @@ def list_users(request):
     users = CustomUser.objects.all()
     user_data = [{"id": user.id, "title": user.username} for user in users]
     return JsonResponse(user_data, safe=False)
-@login_required(login_url='account_sign_in')
+
 @login_required(login_url='account_sign_in_form')
 def accompte(request):
-
     # Submit form
     if request.method == 'POST':
 
@@ -976,20 +989,6 @@ def set_reservation(request, id_reservation):
     messages.success(request, message)  
     return redirect('bookings_detail')
 
-from django.shortcuts import render, redirect
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from .models import UserPayment
-import stripe
-import time
-
-
-from django.shortcuts import redirect, render
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-import stripe
 
 @login_required(login_url='login')
 def payment(request):

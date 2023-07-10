@@ -16,10 +16,12 @@ from django.core.mail import EmailMessage
 # Password reset
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 
-# Payment
-from django_select2.forms import Select2Widget
+# Pro Area
 from tempus_dominus.widgets import DatePicker, DateTimePicker
 from bootstrap_datepicker_plus.widgets import DatePickerInput
+
+# Payment
+from django_select2.forms import Select2Widget
 from django.utils.html import format_html
 
 # Models & Fields
