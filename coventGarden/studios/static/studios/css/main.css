@@ -117,3 +117,25 @@ body {
 	max-width: 100%;
 	height: auto;
 }
+
+.description {
+	font-size: 18px;
+	line-height: 1.5;
+	margin-bottom: 20px;
+	opacity: 0;
+  }
+  
+  .fade-in {
+	animation: fade-in 1s ease-in-out forwards;
+  }
+  
+  @keyframes fade-in {
+	0% {
+	  opacity: 0;
+	}
+	100% {
+	  opacity: 1;
+	}
+  }
+  
+  
