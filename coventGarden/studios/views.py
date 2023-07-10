@@ -548,7 +548,7 @@ class BookingsDetailView(View):
         "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": None, "name": "Réservations"}]
+            {"view": None, "name": "Mes réservations"}]
     }
 
     def get(self, request):
