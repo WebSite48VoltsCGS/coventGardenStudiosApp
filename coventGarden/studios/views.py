@@ -650,8 +650,8 @@ class GroupUpdateView(LoginRequiredMixin, View):
 
 @login_required
 def delete_technical_sheet(request, pk):
-    technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
-    technical_sheet.delete()
+    # technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
+    # technical_sheet.delete()
     messages.success(request, 'La fiche technique a été supprimée avec succès !')
     return redirect('groups_detail')
 
@@ -861,7 +861,7 @@ def list_users(request):
     users = CustomUser.objects.all()
     user_data = [{"id": user.id, "title": user.username} for user in users]
     return JsonResponse(user_data, safe=False)
-
+@login_required(login_url='account_sign_in')
 @login_required(login_url='account_sign_in_form')
 def accompte(request):
 
@@ -883,7 +883,22 @@ def accompte(request):
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
 
-        price = 0.5*duration_hours*20
+        if duration_hours == 1. : 
+            price = 10.0
+        elif duration_hours == 2. : 
+            price = 19.0
+        elif duration_hours == 3. : 
+            price = 27.0
+        elif duration_hours == 4. : 
+            price = 34.0
+        elif duration_hours == 5. : 
+            price = 42.0 
+        elif duration_hours == 6. : 
+            price = 51.0
+        elif duration_hours == 7. : 
+            price = 59.0
+        else: 
+            price = 68.0        
         start_date = datetime.fromisoformat(start_date.rstrip('Z'))
         end_date = datetime.fromisoformat(end_date.rstrip('Z'))
         #duration = 1
@@ -911,6 +926,7 @@ def accompte(request):
 
     else:
         return redirect('booking')
+    
 
 @login_required(login_url='account_sign_in_form')
 def payment(request):
@@ -969,43 +985,78 @@ def all_booking(request):
 
 def all_booking_event(request):
     reservations = Reservation.objects.all()
-
     datas = []
+    datas.append({'firstDay': 1})
+
     for current in reservations:
-        data = {
-            'id': current.id,
-            'resourceId': current.salle.id,
-            'title': 'Indisponible',
-            'start': current.date_start,
-            'end': current.date_end,
-        }
-        data['color'] = 'gainsboro'
-        data['textColor'] = 'black'
-        datas.append(data)
+        # Vérifier si le jour de la réservation est du lundi au vendredi
+        if current.date_start.weekday() < 5:
+            data = {
+                'id': current.id,
+                'resourceId': current.salle.id,
+                'title': 'Indisponible',
+                'start': current.date_start,
+                'end': current.date_end,
+                'color': '#b22222',
+                'textColor': 'black'
+            }
+            datas.append(data)
 
     dataD = []
     dateInit = datetime(2023, 1, 2)
-    currentD = {
-        'id': 1,
-        'resourceId': 1,
-        'title': 'Indisponible',
-        'start': dateInit.replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
-        'end': dateInit.replace(hour=10, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S")
-    }
 
-    resources = Salle.objects.all()
-    for resource in resources:
+    for resource in Salle.objects.all():
         for i in range(365):
-            for j in range(10, 16):
-                new_data = currentD.copy()
-                new_data['id'] += 1
-                new_data['resourceId'] = resource.id
-                new_data['start'] = (dateInit + timedelta(days=i)).replace(hour=j, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['end'] = (dateInit + timedelta(days=i)).replace(hour=j+1, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['color'] = 'gainsboro'
-                new_data['textColor'] = 'black'
+            # Vérifier si le jour est du lundi au vendredi
+            if (dateInit + timedelta(days=i)).weekday() < 5:
+                
+                new_data = {
+                    'id': 1,  # Modifier ici
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=16, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
                 datas.append(new_data)
-
+                new_data['id'] += 1  # Modifier ici
+            if (dateInit + timedelta(days=i)).weekday() == 5:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=18, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 0,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=13, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=21, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
     return JsonResponse(datas, safe=False)
 
 @login_required(login_url='account_sign_in')
@@ -1039,28 +1090,79 @@ import stripe
 import time
 
 
+from django.shortcuts import redirect, render
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+import stripe
+
 @login_required(login_url='login')
 def payment(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY
-	if request.method == 'POST':
-		checkout_session = stripe.checkout.Session.create(
-			payment_method_types = ['card'],
-			line_items = [
-				{
-					'price': settings.PRODUCT_PRICE,
-					'quantity': 1,
-				},
-			],
-			mode = 'payment',
-			customer_creation = 'always',
-            success_url = 'http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url = 'http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    if request.method == 'POST':
+        salle_id = int(request.POST["salle_id"])
+        user_id = int(request.POST["user_id"])
+
+        form = ReservationForm(request.POST)
+
+        if form.is_valid():
+            salle = Salle.objects.get(id=salle_id)
+            user = CustomUser.objects.get(id=user_id)
+
+            description = "Reservation for user " + user.username
+            duration = form.cleaned_data["duration"]
+            date_start = form.cleaned_data["date_start"]
+            date_end = form.cleaned_data["date_end"]
+            price = form.cleaned_data["price"]
+            status = "En cours"
+
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration,
+                date_start=date_start,
+                date_end=date_end,
+                price=price,
+                status=status,
+                salle=salle,
+                user=user,
+                is_active=True
+            )
+        if price == 10.0 :
+                settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_1H
+        elif price == 19.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_2H
+        elif price == 27.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_3H
+        elif price == 34.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_4H
+        elif price == 42.0:        
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_5H
+        elif price == 51.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_6H
+        elif price == 59.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_7H
+        else:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_8H
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': settings.PRODUCT_PRICE,
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            customer_creation='always',
+            success_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
         )
-		return redirect(checkout_session.url, code=303)
-	return render(request, 'studios/payment.html')
+
+        return redirect(checkout_session.url)
+    
+    return render(request, 'studios/payment.html')
 
 
-## use Stripe dummy card: 4242 4242 4242 4242
 def payment_successful(request):
 	stripe.api_key = settings.STRIPE_SECRET_KEY
 	checkout_session_id = request.GET.get('session_id', None)

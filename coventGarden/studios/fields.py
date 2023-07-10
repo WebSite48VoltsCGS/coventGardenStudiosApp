@@ -64,10 +64,26 @@ MODEL_PASSWORD_CONFIRM = models.CharField(max_length=LENGTH_PASSWORD, verbose_na
 # CustomGroup
 MODEL_GROUP_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name="Nom de groupe", blank=True)
 MODEL_GROUP_EMAIL = models.EmailField(max_length=LENGTH_EMAIL, verbose_name="E-mail", blank=True)
-MODEL_GROUP_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name="Numéro de téléphone", blank=True)
+
+import re
+from django.core.exceptions import ValidationError
+
+def validate_phone_number(value):
+    phone_regex = r'^\d{10}$'  # Regex pour vérifier les 10 chiffres
+    if not re.match(phone_regex, value):
+        raise ValidationError("Le numéro de téléphone est incorrecte")
+    
+
+MODEL_GROUP_PHONE = models.CharField(
+    max_length=LENGTH_PHONE,
+    verbose_name="Numéro de téléphone",
+    blank=True,
+    validators=[validate_phone_number]  # Utilisez le validateur personnalisé
+)
+
 MODEL_MEMBERS = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(20)], verbose_name="Nombre de membres", default=1, blank=True)
 MODEL_GENRE = models.CharField(max_length=LENGTH_NAME, verbose_name="Style musicale", blank=True)
-MODEL_FACEBOOK = models.URLField(max_length=LENGTH_URL, blank=True)
+MODEL_FACEBOOK = models.URLField(max_length=LENGTH_URL, blank=True, verbose_name="URL Facebook")
 MODEL_INSTAGRAM = models.URLField(max_length=LENGTH_URL, blank=True)
 MODEL_BIOGRAPHY = models.TextField(max_length=LENGTH_TEXT, verbose_name="Biographie", blank=True)
 MODEL_TECHNICAL_SHEET = models.FileField(upload_to='media/public', verbose_name="Fiche technique", null=True, blank=True)
