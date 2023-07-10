@@ -58,6 +58,7 @@
 					<li><a href="{% url 'bar' %}">Bar</a></li>
 					<li><a href="{% url 'booking' %}">Réservation</a></li>
 					<li><a href="{% url 'contact' %}">Contact</a></li>
+					<li><a href="{% url 'eula' %}">CGU</a></li>
 
 					<!-- Button(s) -->
 					{% if user.is_authenticated %}
@@ -184,6 +185,7 @@
 								<a href="{% url 'bar' %}">Bar</a> /
 								<a href="{% url 'booking' %}">Réservation</a> /
 								<a href="{% url 'contact' %}">Contact</a> /
+								<a href="{% url 'eula' %}">CGU</a>
 							</p>
 						</div>
 					</div>
