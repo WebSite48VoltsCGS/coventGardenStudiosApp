@@ -19,7 +19,7 @@ urlpatterns = [
     path('studios/', views.StudiosView.as_view(), name='studios'),
     path('concert/', views.ConcertView.as_view(), name='concert'),
     path('bar/', views.BarView.as_view(), name='bar'),
-    path('reservation/', views.booking, name='booking'),
+    path('reservation/', views.BookingView.as_view(), name='booking'),
     path('contact/', views.ContactView.as_view(), name='contact'),
 
     # Account: Login / Logout
@@ -85,9 +85,6 @@ urlpatterns = [
 
     # WIP
     path('create-checkout-session/', views.payment, name='payment'),
-
-    # Deleted
-    path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
