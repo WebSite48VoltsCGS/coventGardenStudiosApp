@@ -39,8 +39,7 @@ from .forms import (
     UserUpdateForm, ConfirmPasswordForm,
     UserPasswordResetForm, UserPasswordSetForm,
     CustomGroupForm, ConcertForm,
-    EventForm, ReservationForm,
-    UploadTechnicalSheetForm, UploadLogoForm)
+    EventForm, ReservationForm)
 
 User = get_user_model()
 
@@ -547,8 +546,6 @@ Groups
 """
 
 class GroupDetailView(LoginRequiredMixin, View):
-    form_technical_sheet = UploadTechnicalSheetForm
-    form_logo = UploadLogoForm
     redirect_field_name = ''
     template_name = "groups/groups_detail.html"
     context = {
@@ -560,19 +557,10 @@ class GroupDetailView(LoginRequiredMixin, View):
 
     def get(self, request):
         self.context["my_groups"] = request.user.my_groups.all()
-        self.context["form_technical_sheet"] = self.form_technical_sheet()
-        self.context["form_logo"] = self.form_logo()
 
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        self.context["form_technical_sheet"] = self.form_technical_sheet(request.POST, request.FILES)
-        self.context["form_logo"] = self.form_logo(request.POST, request.FILES)
-        if self.context["form_technical_sheet"].is_valid():
-            pass
-        if self.context["form_logo"].is_valid():
-            pass
-
         return render(request, self.template_name, self.context)
 
 
@@ -751,29 +739,18 @@ class ProAreaView(LoginRequiredMixin, View):
     }
 
     def get(self, request):
-        self.context["user_files"] = TechnicalSheet.objects.filter(user=request.user)
-        self.context["form"] = TechnicalSheetForm()
-        self.context["form2"] = ConcertForm()
+        self.context["form"] = ConcertForm()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        self.context["form"] = TechnicalSheetForm(request.POST, request.FILES)
+        self.context["form"] = ConcertForm(request.POST)
         if self.context["form"].is_valid():
-            deposited_files = request.FILES.getlist('pdf_file')
-            for file in deposited_files:
-                technical_sheet = TechnicalSheet(pdf_file=file, user=request.user)
-                technical_sheet.save()
-            messages.success(request, 'Vos fiches techniques ont été déposées avec succès !')
-            return redirect('pro_area')
-
-        self.context["form2"] = ConcertForm(request.POST)
-        if self.context["form2"].is_valid():
-            self.context["form2"].save()
+            self.context["form"].save()
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
             return redirect('pro_area')
-        
+
         return render(request, self.template_name, self.context)
 
 
