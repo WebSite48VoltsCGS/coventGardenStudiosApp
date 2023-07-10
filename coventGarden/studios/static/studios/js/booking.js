@@ -49,8 +49,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendar = new FullCalendar.Calendar(calendarEl, {
       timeZone: 'UTC',
       aspectRatio: 1.5,
-      editable: true,
-      selectable: true,
+      editable: false,
+      selectable: false,
       locale: 'fr',
       slotDuration: '01:00',
       slotMinTime:"10:00",
