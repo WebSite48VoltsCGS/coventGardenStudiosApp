@@ -1,18 +1,28 @@
-from datetime import datetime, time
+# Django
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse
 
-import django.contrib.auth.password_validation
-from django.shortcuts import redirect, render, get_object_or_404
+# Functions-based views
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 # Class-based views
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Account
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.db import IntegrityError
+from django.contrib.auth import logout, get_user_model
 
-# Password Reset
+# Email confirmation
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from .tokens import account_activation_token
+
+# Password reset
 from django.contrib.auth.views import (
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView)
+    PasswordResetView, PasswordResetDoneView,PasswordResetConfirmView, PasswordResetCompleteView)
+from django.urls import reverse_lazy
 
 # Booking
 from django.http import JsonResponse
@@ -22,16 +32,24 @@ from datetime import timedelta, datetime, time
 # Pro Area
 from django.contrib import messages
 
+# Payment
+from django.conf import settings
+import stripe
+import time
+
 # Import
-from .models import CustomGroup, Event, Concert, TechnicalSheet, CustomUser, Reservation, Salle
+from .models import CustomGroup, Event, CustomUser, Reservation, Salle, UserPayment
 from .forms import (
-    SignInForm, SignUpForm,
-    UserUpdateForm, ConfirmPasswordForm,
+    UserSignInForm, UserSignUpForm,
+    UserUpdateForm, UserPasswordConfirmForm,
     UserPasswordResetForm, UserPasswordSetForm,
-    CustomGroupForm, TechnicalSheetForm, ConcertForm,
+    CustomGroupForm,
+    ConcertForm,
     EventForm, ReservationForm)
 
 User = get_user_model()
+
+
 
 # Create your views here.
 """
@@ -48,7 +66,7 @@ Navigation
     - StudiosView
     - ConcertView
     - BarView
-    - booking
+    - BookingView
     - ContactView
 """
 class HomeView(View):
@@ -113,9 +131,18 @@ class BarView(View):
         return render(request, self.template_name, self.context)
 
 
-def booking(request):
-    salles = Salle.objects.all()
-    return render(request, 'booking.html', context={"salles": salles})
+class BookingView(View):
+    template_name = "booking.html"
+    context = {
+        "title": "Réservation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Réservation"}]
+    }
+
+    def get(self, request):
+        self.context["salles"] = Salle.objects.all()
+        return render(request, self.template_name, self.context)
 
 
 class ContactView(View):
@@ -131,175 +158,275 @@ class ContactView(View):
         return render(request, self.template_name, self.context)
 
 
+
+class EulaView(View):
+    template_name = "cgu.html"
+    context = {
+        "title": "Conditions générales d'utilisation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Conditions générales d'utilisation"}]
+    }
+
+    def get(self, request):
+        return render(request, self.template_name, self.context)
+
+
+
+
 """
 Account
-    - AccountSignInView
-    - AccountSignUpView
-    - Log out (Redirect)
+    - AccountSignInFormView
+    - AccountSignUpFormView
+    - AccountSignUpDoneView
+    - AccountSignUpCompleteView
+    - AccountSignUpFailedView
+    - AccountPasswordForgotForm
+    - AccountPasswordForgotDone
+    - AccountPasswordForgotConfirm
+    - AccountPasswordForgotComplete
+    - account_log_out
+    
+WIP
+    - AccountSignInFormView: Add a "User not found" error message
+    - AccountSignUpFormView: Add a "Password verification failed" error message
+    - account_sign_up_email: Update the email template
+    - AccountPasswordForgotConfirm:
+        - Find out how to modify the "Password reset unsuccessful" view
+        - Find the source code for PasswordResetConfirmView
 """
-class AccountSignInView(View):
-    form_class = SignInForm
-    template_name = "account/account_sign_in.html"
+
+class AccountSignInFormView(View):
+    form_class = UserSignInForm
+    template_name = "account/account_sign_in_form.html"
     context = {
         "title": "Se connecter à son compte",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
+            {"view": "profile_detail", "name": "Compte"},
             {"view": None, "name": "Connexion"}]
     }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
 
     def get(self, request):
         self.context["form"] = self.form_class()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
         form = self.form_class(request.POST)
 
-        # Success
         if form.is_valid():
-            # Form processing
-            username = request.POST["username"]
-            password = request.POST["password"]
-
-            # Log in the user
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-
-                # Redirect on success
-                return redirect('profile_detail')
-
-            # User not found
-            else:
-                self.context["form"] = form
-                return render(request, self.template_name, self.context)
+            form.login(request)
+            return redirect('profile_detail')
 
         # Failure
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
 
-class AccountSignUpView(View):
-    form_class = SignUpForm
-    template_name = "account/account_sign_up.html"
+class AccountSignUpFormView(View):
+    form_class = UserSignUpForm
+    template_name = "account/account_sign_up_form.html"
     context = {
         "title": "Créer un compte",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
+            {"view": "profile_detail", "name": "Compte"},
             {"view": None, "name": "Inscription"}]
     }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
 
     def get(self, request):
         self.context["form"] = self.form_class()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
         form = self.form_class(request.POST)
 
-        # Success
         if form.is_valid():
-            # Form processing
-            username = request.POST["username"]
-            first_name = request.POST["first_name"]
-            last_name = request.POST["last_name"]
-            email = request.POST["email"]
-            password = request.POST["password"]
-            confirm_password = request.POST["confirm_password"]
-
-            # Password verification successful
-            if password == confirm_password:
-                # Create a new user
-                try:
-                    print("?????????????????")
-                    user = User.objects.create_user(
-                        username=username, email=email, password=password,
-                        last_name=last_name, first_name=first_name)
-                except IntegrityError:
-                    # WIP: Add a "unique" error message
-                    self.context["form"] = form
-                    return render(request, self.template_name, self.context)
-                user.save()
-
-                # Log in the user
-                user = authenticate(request, username=username, password=password)
-                if user is not None:
-                    login(request, user)
-
-                    # Redirect on success
-                    return redirect('profile_detail')
-
-            # Password verification failed
-            else:
-                self.context["form"] = form
-                return render(request, self.template_name, self.context)
+            form.save_user(request)
+            return redirect("account_sign_up_done")
 
         # Failure
-        else:
-            self.context["form"] = form
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
+
+
+class AccountSignUpDoneView(View):
+    template_name = "account/account_sign_up_done.html"
+    context = {
+        "title": "Envoi du mail de confirmation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": "account_sign_up_form", "name": "Inscription"},
+            {"view": None, "name": "Envoi"}]
+    }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request):
+        return render(request, self.template_name, self.context)
+
+
+class AccountSignUpConfirmView(View):
+    template_name = "account/account_sign_up_confirm.html"
+    context = {
+        "title": "Confirmation de la création du compte",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": "account_sign_up_form", "name": "Inscription"},
+            {"view": None, "name": "Envoi"},
+            {"view": None, "name": "Confirmation"}]
+    }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request, uidb64, token):
+        # Create user
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+
+        # Check for error
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        # Check for user and token
+        if user is not None and account_activation_token.check_token(user, token):
+            # Activate the new user
+            user.is_active = True
+            user.save()
+
             return render(request, self.template_name, self.context)
 
-
-def account_log_out(request):
-    logout(request)
-    return redirect('account_sign_in')
+        # Failure
+        return redirect("account_sign_up_failed")
 
 
-"""
-Password Reset
-    - CustomPasswordResetForgot
-    - CustomPasswordResetDone
-    - CustomPasswordResetConfirm
-    - CustomPasswordResetComplete
-"""
-class CustomPasswordResetForgot(PasswordResetView):
+class AccountSignUpFailedView(View):
+    template_name = "account/account_sign_up_failed.html"
+    context = {
+        "title": "Échec de la création du compte",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": "account_sign_up_form", "name": "Inscription"},
+            {"view": None, "name": "Envoi"},
+            {"view": None, "name": "Échec"}]
+    }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
+
+    def get(self, request):
+        return render(request, self.template_name, self.context)
+
+
+class AccountPasswordForgotForm(PasswordResetView):
     form_class = UserPasswordResetForm
-    template_name = 'password_reset/password_reset_forgot.html'
-    email_template_name = 'password_reset/password_reset_email.html'
+    template_name = 'account/account_password_forgot_form.html'
+    email_template_name = 'account/account_password_forgot_email.html'
+    success_url = reverse_lazy('account_password_forgot_done')
     extra_context = {
         "title": "Récupérer son compte",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
+            {"view": "profile_detail", "name": "Compte"},
             {"view": None, "name": "Mot de passe oublié"}]
     }
 
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
 
-class CustomPasswordResetDone(PasswordResetDoneView):
-    template_name = 'password_reset/password_reset_done.html'
+
+class AccountPasswordForgotDone(PasswordResetDoneView):
+    template_name = 'account/account_password_forgot_done.html'
     extra_context = {
         "title": "Validation de la demande",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
+            {"view": "profile_detail", "name": "Compte"},
+            {"view": "account_password_forgot_form", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"}]
     }
 
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
 
-class CustomPasswordResetConfirm(PasswordResetConfirmView):
+
+class AccountPasswordForgotConfirm(PasswordResetConfirmView):
     form_class = UserPasswordSetForm
-    template_name = 'password_reset/password_reset_confirm.html'
+    template_name = 'account/account_password_forgot_confirm.html'
+    success_url = reverse_lazy('account_password_forgot_complete')
     extra_context = {
         "title": "Modifier mon mot de passe",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
+            {"view": "profile_detail", "name": "Compte"},
+            {"view": "account_password_forgot_form", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"},
             {"view": None, "name": "Modifier"}]
     }
 
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
 
-class CustomPasswordResetComplete(PasswordResetCompleteView):
-    template_name = 'password_reset/password_reset_complete.html'
+
+class AccountPasswordForgotComplete(PasswordResetCompleteView):
+    template_name = 'account/account_password_forgot_complete.html'
     extra_context = {
         "title": "Confirmation",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": "password_reset_forgot", "name": "Mot de passe oublié"},
+            {"view": "profile_detail", "name": "Compte"},
+            {"view": "account_password_forgot_form", "name": "Mot de passe oublié"},
             {"view": None, "name": "Envoi"},
             {"view": None, "name": "Modifier"},
             {"view": None, "name": "Confirmation"}]
     }
+
+    def dispatch(self, *args, **kwargs):
+        # Redirect if user is already authenticated
+        if self.request.user.is_authenticated:
+            return redirect('profile_detail')
+        return super().dispatch(*args, **kwargs)
+
+
+def account_log_out(request):
+    logout(request)
+    return redirect('account_sign_in_form')
+
+
+
 
 
 """
@@ -307,7 +434,8 @@ Profile
     - ProfileDetailView
     - ProfileUpdateView
 """
-class ProfileDetailView(View):
+class ProfileDetailView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "profile/profile_detail.html"
     context = {
         "title": "Mon compte",
@@ -317,16 +445,13 @@ class ProfileDetailView(View):
     }
 
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         return render(request, self.template_name, self.context)
 
 
-class ProfileUpdateView(View):
+class ProfileUpdateView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     form_class = UserUpdateForm
-    form_confirm_class = ConfirmPasswordForm
+    form_confirm_class = UserPasswordConfirmForm
     template_name = "profile/profile_update.html"
     context = {
         "title": "Modifier mon profil",
@@ -336,57 +461,27 @@ class ProfileUpdateView(View):
             {"view": None, "name": "Modifier"}],
     }
 
-    def form_class_initial(self):
-        initial = {
-            "username": self.request.user.username,
-            "email": self.request.user.email,
-            "last_name": self.request.user.last_name,
-            "first_name": self.request.user.first_name
-        }
-        return initial
-
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
-        self.context["form"] = self.form_class(initial=self.form_class_initial())
+        self.context["form"] = self.form_class(instance=request.user)
         self.context["form_confirm"] = self.form_confirm_class()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, instance=request.user)
         form_confirm = self.form_confirm_class(request.POST)
 
-        # Success
         if form.is_valid() and form_confirm.is_valid():
-            # Password verification successful
-            if request.POST["current_password"] == request.POST["confirm_password"]:
-                # Form processing
-                user = request.user
-                user.username = request.POST["username"]
-                user.email = request.POST["email"]
-                user.last_name = request.POST["last_name"]
-                user.first_name = request.POST["first_name"]
-
-                # Update the user
-                user.save()
-
-                # Redirect on success
+            if form_confirm.password_check(request):
+                form.update(request)
                 return redirect('profile_detail')
 
-            # Password verification failed
-            else:
-                self.context["form"] = form
-                self.context["form_confirm"] = form_confirm
-                return render(request, self.template_name, self.context)
-
         # Failure
-        else:
-            self.context["form"] = form
-            self.context["form_confirm"] = form_confirm
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        self.context["form_confirm"] = form_confirm
+        return render(request, self.template_name, self.context)
+
+
+
 
 
 """
@@ -396,7 +491,9 @@ Groups
     - GroupUpdateView
     - GroupDeleteView
 """
-class GroupDetailView(View):
+
+class GroupDetailView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "groups/groups_detail.html"
     context = {
         "title": "Mes groupes",
@@ -406,15 +503,16 @@ class GroupDetailView(View):
     }
 
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         self.context["my_groups"] = request.user.my_groups.all()
+
+        return render(request, self.template_name, self.context)
+
+    def post(self, request):
         return render(request, self.template_name, self.context)
 
 
-class GroupCreateView(View):
+class GroupCreateView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     form_class = CustomGroupForm
     template_name = "groups/groups_create.html"
     context = {
@@ -425,46 +523,31 @@ class GroupCreateView(View):
             {"view": None, "name": "Créer"}]
     }
 
-    def form_class_initial(self):
-        initial = {
-            "email": self.request.user.email,
-            "phone": self.request.user.phone,
-        }
-        return initial
-
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
-        self.context["form"] = self.form_class(initial=self.form_class_initial())
+        initial = {
+            "name": self.request.user.username,
+            "email": self.request.user.email,
+            "phone": self.request.user.phone
+        }
+        self.context["form"] = self.form_class(initial=initial)
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
 
-        # Success
         if form.is_valid():
-            # Associate the current user to the group
-            group = form.save(commit=False)
-            group.user = request.user
-
-            # Create a new group
-            group.save()
-
-            # Redirect on success
+            form.save_group(request)
             return redirect('groups_detail')
 
         # Failure
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
 
-class GroupUpdateView(View):
+class GroupUpdateView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     form_class = CustomGroupForm
-    template_name = "groups/groups_create.html"
+    template_name = "groups/groups_update.html"
     context = {
         "title": "Modifier un groupe",
         "breadcrumb": [
@@ -474,40 +557,24 @@ class GroupUpdateView(View):
     }
 
     def get(self, request, group_id):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         group = CustomGroup.objects.get(id=group_id)
         self.context["form"] = self.form_class(instance=group)
         return render(request, self.template_name, self.context)
 
     def post(self, request, group_id):
-        # Get group object with its id
         group = CustomGroup.objects.get(id=group_id)
+        form = self.form_class(request.POST, request.FILES, instance=group)
 
-        # Form input
-        form = self.form_class(request.POST, instance=group)
-
-        # Success
         if form.is_valid():
-            # Associate the current user to the group
-            group = form.save(commit=False)
-            group.user = request.user
-
-            # Create a new group
-            group.save()
-
-            # Redirect on success
+            form.save_group(request)
             return redirect('groups_detail')
 
         # Failure
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
-
-class GroupDeleteView(View):
+class GroupDeleteView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "groups/groups_delete.html"
     context = {
         "title": "Supprimer un groupe",
@@ -518,23 +585,25 @@ class GroupDeleteView(View):
     }
 
     def get(self, request, group_id):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         return render(request, self.template_name, self.context)
 
     def post(self, request, group_id):
         # Redirect to login page if user is not logged in
         if not request.user.is_authenticated:
-            return redirect("account_sign_in")
+            return redirect("account_sign_in_form")
 
-        # Delete the group
-        group = CustomGroup.objects.get(id=group_id)
-        group.delete()
-
-        # Redirect on success
+        CustomGroup.objects.get(id=group_id).delete()
         return redirect('groups_detail')
+
+
+
+
+
+
+
+
+
+
 
 
 """
@@ -542,7 +611,8 @@ Bookings
     - BookingsDetailView
     - BookingsCreateView
 """
-class BookingsDetailView(View):
+class BookingsDetailView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "bookings/bookings_detail.html"
     context = {
         "title": "Historique des réservations",
@@ -552,10 +622,6 @@ class BookingsDetailView(View):
     }
 
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         # Get all groups object related to the current user
         self.context["my_groups"] = request.user.my_groups.all()
 
@@ -566,7 +632,8 @@ class BookingsDetailView(View):
         return render(request, self.template_name, self.context)
 
 
-class BookingsCreateView(View):
+class BookingsCreateView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "bookings/bookings_create.html"
     context = {
         "title": "Créer une réservation",
@@ -577,19 +644,15 @@ class BookingsCreateView(View):
     }
 
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
         return render(request, self.template_name, self.context)
 
 
 """
 Pro area
     - ProAreaView
-    - Delete technical sheet
 """
-class ProAreaView(View):
+class ProAreaView(LoginRequiredMixin, View):
+    redirect_field_name = ''
     template_name = "pro_area.html"
     context = {
         "title": "Espace Pro",
@@ -599,41 +662,19 @@ class ProAreaView(View):
     }
 
     def get(self, request):
-        # Redirect to login page if user is not logged in
-        if not request.user.is_authenticated:
-            return redirect("account_sign_in")
-
-        self.context["user_files"] = TechnicalSheet.objects.filter(user=request.user)
-        self.context["form"] = TechnicalSheetForm()
-        self.context["form2"] = ConcertForm()
+        self.context["form"] = ConcertForm()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        self.context["form"] = TechnicalSheetForm(request.POST, request.FILES)
+        self.context["form"] = ConcertForm(request.POST)
         if self.context["form"].is_valid():
-            deposited_files = request.FILES.getlist('pdf_file')
-            for file in deposited_files:
-                technical_sheet = TechnicalSheet(pdf_file=file, user=request.user)
-                technical_sheet.save()
-            messages.success(request, 'Vos fiches techniques ont été déposées avec succès !')
-            return redirect('pro_area')
-
-        self.context["form2"] = ConcertForm(request.POST)
-        if self.context["form2"].is_valid():
-            self.context["form2"].save()
+            self.context["form"].save()
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
             return redirect('pro_area')
 
-
-def delete_technical_sheet(request, pk):
-    # Log-in required
-    if not request.user.is_authenticated:
-        technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
-        technical_sheet.delete()
-        messages.success(request, 'La fiche technique a été supprimée avec succès !')
-        return redirect('pro_area')
+        return render(request, self.template_name, self.context)
 
 
 """
@@ -744,9 +785,8 @@ def list_users(request):
     user_data = [{"id": user.id, "title": user.username} for user in users]
     return JsonResponse(user_data, safe=False)
 
-@login_required(login_url='account_sign_in')
+@login_required(login_url='account_sign_in_form')
 def accompte(request):
-
     # Submit form
     if request.method == 'POST':
 
@@ -758,14 +798,31 @@ def accompte(request):
 
         start_date = request.POST["date_start"]
         end_date = request.POST["date_end"]
-
+        
         form = ReservationForm()
 
         duration = datetime.fromisoformat(end_date.rstrip('Z')) - datetime.fromisoformat(start_date.rstrip('Z'))
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
-        print(duration_hours)
 
+        if duration_hours == 1. : 
+            price = 10.0
+        elif duration_hours == 2. : 
+            price = 19.0
+        elif duration_hours == 3. : 
+            price = 27.0
+        elif duration_hours == 4. : 
+            price = 34.0
+        elif duration_hours == 5. : 
+            price = 42.0 
+        elif duration_hours == 6. : 
+            price = 51.0
+        elif duration_hours == 7. : 
+            price = 59.0
+        else: 
+            price = 68.0        
+        start_date = datetime.fromisoformat(start_date.rstrip('Z'))
+        end_date = datetime.fromisoformat(end_date.rstrip('Z'))
         #duration = 1
 
         if is_in_group(user):
@@ -779,19 +836,21 @@ def accompte(request):
                 price=0,
                 status=status,
                 salle=salle,
-                user=user
+                user=user,
+                is_active=True
             )
             messages.success(request, "Votre réservation a bien été prise en compte !")
             return redirect('booking')
 
         else:
             return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
-            "end_date": end_date, "duration": duration_hours, "form": form})
+            "end_date": end_date, "duration": duration_hours,"price":price, "form": form})
 
     else:
         return redirect('booking')
+    
 
-@login_required(login_url='account_sign_in')
+@login_required(login_url='account_sign_in_form')
 def payment(request):
 
     print(request.POST)
@@ -824,7 +883,8 @@ def payment(request):
                 price=price,
                 status=status,
                 salle=salle,
-                user=user
+                user=user,
+                is_active=True
             )
 
             messages.success(request, "Votre réservation a bien été prise en compte !")
@@ -845,89 +905,178 @@ def all_booking(request):
         })
     return JsonResponse(datas, safe=False)
 
-
 def all_booking_event(request):
     reservations = Reservation.objects.all()
-    
     datas = []
+    datas.append({'firstDay': 1})
+
     for current in reservations:
-        data = {
-            'id': current.id,
-            'resourceId': current.salle.id,
-            'title': 'Indisponible',
-            'start': current.date_start.strftime("%Y-%m-%d %H:%M:%S"),
-            'end': current.date_end.strftime("%Y-%m-%d %H:%M:%S"),
-        }
-        data['color'] = 'gainsboro'
-        data['textColor'] = 'black'
-        datas.append(data)
-    
+        # Vérifier si le jour de la réservation est du lundi au vendredi
+        if current.date_start.weekday() < 5:
+            data = {
+                'id': current.id,
+                'resourceId': current.salle.id,
+                'title': 'Indisponible',
+                'start': current.date_start,
+                'end': current.date_end,
+                'color': '#b22222',
+                'textColor': 'black'
+            }
+            datas.append(data)
+
     dataD = []
     dateInit = datetime(2023, 1, 2)
-    currentD = {
-        'id': 1,
-        'resourceId': 1,
-        'title': 'Indisponible',
-        'start': dateInit.replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
-        'end': dateInit.replace(hour=10, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S")
-    }
 
-    resources = Salle.objects.all()
-    for resource in resources:
-        for i in range(365): 
-            for j in range(10, 16):  
-                new_data = currentD.copy()
-                new_data['id'] += 1 
-                new_data['resourceId'] = resource.id
-                new_data['start'] = (dateInit + timedelta(days=i)).replace(hour=j, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['end'] = (dateInit + timedelta(days=i)).replace(hour=j+1, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['color'] = 'gainsboro'
-                new_data['textColor'] = 'black'
+    for resource in Salle.objects.all():
+        for i in range(365):
+            # Vérifier si le jour est du lundi au vendredi
+            if (dateInit + timedelta(days=i)).weekday() < 5:
+                
+                new_data = {
+                    'id': 1,  # Modifier ici
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=16, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
                 datas.append(new_data)
-
+                new_data['id'] += 1  # Modifier ici
+            if (dateInit + timedelta(days=i)).weekday() == 5:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=18, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 0,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=13, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=21, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
     return JsonResponse(datas, safe=False)
 
+@login_required(login_url='account_sign_in')
+def set_reservation(request, id_reservation):
+    reservation = Reservation.objects.get(id=id_reservation)
 
-from django.shortcuts import render, redirect
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from .models import UserPayment
-import stripe
-import time
+    current_datetime = datetime.now()
+    start_datetime = reservation.date_start
+
+    if current_datetime < start_datetime - timedelta(hours=48) or reservation.date_end > current_datetime :
+        if reservation.is_active == True:
+            reservation.is_active = False
+            message = "Votre réservation a bien été annuler !"
+        else:
+            reservation.is_active=True
+            message = "Votre réservation a bien été prise en compte !"
+        reservation.save()
+    else:
+        message = "Votre réservation ne peut plus être modifiée !"
+
+    messages.success(request, message)  
+    return redirect('bookings_detail')
 
 
 @login_required(login_url='login')
 def payment(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY
-	if request.method == 'POST':
-		checkout_session = stripe.checkout.Session.create(
-			payment_method_types = ['card'],
-			line_items = [
-				{
-					'price': settings.PRODUCT_PRICE,
-					'quantity': 1,
-				},
-			],
-			mode = 'payment',
-			customer_creation = 'always',
-			# success_url = settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-			# cancel_url = settings.REDIRECT_DOMAIN + '/payment_cancelled',
-            success_url = 'http://example.com/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url = 'http://example.com/payment_cancelled',
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    if request.method == 'POST':
+        salle_id = int(request.POST["salle_id"])
+        user_id = int(request.POST["user_id"])
+
+        form = ReservationForm(request.POST)
+
+        if form.is_valid():
+            salle = Salle.objects.get(id=salle_id)
+            user = CustomUser.objects.get(id=user_id)
+
+            description = "Reservation for user " + user.username
+            duration = form.cleaned_data["duration"]
+            date_start = form.cleaned_data["date_start"]
+            date_end = form.cleaned_data["date_end"]
+            price = form.cleaned_data["price"]
+            status = "En cours"
+
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration,
+                date_start=date_start,
+                date_end=date_end,
+                price=price,
+                status=status,
+                salle=salle,
+                user=user,
+                is_active=True
+            )
+        if price == 10.0 :
+                settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_1H
+        elif price == 19.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_2H
+        elif price == 27.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_3H
+        elif price == 34.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_4H
+        elif price == 42.0:        
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_5H
+        elif price == 51.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_6H
+        elif price == 59.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_7H
+        else:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_8H
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': settings.PRODUCT_PRICE,
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            customer_creation='always',
+            success_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
         )
-		return redirect(checkout_session.url, code=303)
-	return render(request, 'studios/payment.html')
+
+        return redirect(checkout_session.url)
+    
+    return render(request, 'studios/payment.html')
 
 
-## use Stripe dummy card: 4242 4242 4242 4242
 def payment_successful(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	stripe.api_key = settings.STRIPE_SECRET_KEY
 	checkout_session_id = request.GET.get('session_id', None)
 	session = stripe.checkout.Session.retrieve(checkout_session_id)
 	customer = stripe.Customer.retrieve(session.customer)
-	user_id = request.user.user_id
+	user_id = request.user.user_userna
 	studios = UserPayment.objects.get(app_user=user_id)
 	studios.stripe_checkout_id = checkout_session_id
 	studios.save()
@@ -935,20 +1084,20 @@ def payment_successful(request):
 
 
 def payment_cancelled(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	stripe.api_key = settings.STRIPE_SECRET_KEY
 	return render(request, 'studios/payment_cancelled.html')
 
 
 @csrf_exempt
 def stripe_webhook(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY_TEST
+	stripe.api_key = settings.STRIPE_SECRET_KEY
 	time.sleep(10)
 	payload = request.body
 	signature_header = request.META['HTTP_STRIPE_SIGNATURE']
 	event = None
 	try:
 		event = stripe.Webhook.construct_event(
-			payload, signature_header, settings.STRIPE_WEBHOOK_SECRET_TEST
+			payload, signature_header, settings.STRIPE_WEBHOOK_SECRET
 		)
 	except ValueError as e:
 		return HttpResponse(status=400)

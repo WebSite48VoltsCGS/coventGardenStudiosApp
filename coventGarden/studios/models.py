@@ -1,11 +1,9 @@
-from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from .fields import *
-
 
 # Create your models here.
 """
@@ -14,22 +12,15 @@ User
     - CustomGroup
 """
 class CustomUser(AbstractUser):
-    """
-    Default
-        username
-        first_name
-        last_name
-        email
-        password
-    """
     username = MODEL_USERNAME
-    first_name = MODEL_FIRST_NAME
-    last_name = MODEL_LAST_NAME
     email = MODEL_EMAIL
-    phone = MODEL_USER_PHONE
+    last_name = MODEL_LAST_NAME
+    first_name = MODEL_FIRST_NAME
+    phone = MODEL_PHONE
     password = MODEL_PASSWORD
-
-    test_field = MODELS_TEST
+    password_confirm = MODEL_PASSWORD_CONFIRM
+    # is_active = False by default when creating an account using the SignUpForm
+    # my_groups (See CustomGroup)
 
     def __str__(self):
         return self.username
@@ -47,13 +38,13 @@ class CustomGroup(models.Model):
     genre = MODEL_GENRE
     facebook = MODEL_FACEBOOK
     instagram = MODEL_INSTAGRAM
-    twitter = MODEL_TWITTER
     biography = MODEL_BIOGRAPHY
+    technical_sheet = MODEL_TECHNICAL_SHEET
+    logo = MODEL_LOGO
     validated = MODEL_VALIDATED
 
     def __str__(self):
         return f"{self.name}"
-
 
 
 """
@@ -82,35 +73,23 @@ class Reservation(models.Model):
         RESERVED = 'Reserver'
         INPROGRESS = 'En cours'
 
-    class Duration(models.TextChoices):
-        ONE_HOUR = 1
-        TWO_HOUR = 2
-        THREE_HOUR = 3
-        FOUR_HOUR = 4
-        FIVE_HOUR = 5
-
     # title = models.fields.CharField(default='Item', max_length=100)
     description = models.fields.CharField(max_length=1000)
-    duration = models.fields.IntegerField(choices=Duration.choices)
+    duration = models.fields.IntegerField(validators=[MinValueValidator(0)])
     date_start = models.DateTimeField(null=False)
     date_end = models.DateTimeField(null=False)
-    # hour_begin = models.TimeField(null=False)
     price = models.fields.IntegerField(validators=[MinValueValidator(1)])
     status = models.fields.CharField(choices=Status.choices, max_length=20)
     salle = models.ForeignKey(Salle, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    is_active = models.BooleanField(default=True)
 
 
 
 """
 Pro Area
-    - TechnicalSheet
     - Concert
 """
-class TechnicalSheet(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    pdf_file = models.FileField(upload_to='media/public', null=True)
-
 class Concert(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     groupe1 = models.ForeignKey(CustomGroup, on_delete=models.CASCADE, related_name='concerts_groupe1', null=True)

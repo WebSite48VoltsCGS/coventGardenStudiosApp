@@ -1,15 +1,49 @@
-{% extends 'general/base.html' %}
-
+{% extends 'base/base.html' %}
 {% load static %}
 
-{% block body %}
+<!-- Header -->
+{% block header %}
+
+<header id="head" class="secondary"></header>
+
+{% endblock %}
+
+
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
+{% block content %}
 
 <body>
-
-  <div class="container home_msg">
-    <h1>Thanks for your order {{ customer.name }}!</h1>
-  </div>
-
+  <h1>Merci pour votre paiement !</h1>
+  <p>Nous vous remercions d'avoir effectué votre paiement.</p>
 </body>
 
-{% endblock %} 
+{% endblock %}
+
+
+
+<!-- Custom CSS styles file(s) -->
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'studios/css/payment_success.css' %}"/>
+
+{% endblock %}
+
+
+<!-- Custom JavaScript file(s) -->
+{% block scripts %}
+
+
+{% endblock %}
+

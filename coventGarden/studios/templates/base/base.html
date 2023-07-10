@@ -58,6 +58,7 @@
 					<li><a href="{% url 'bar' %}">Bar</a></li>
 					<li><a href="{% url 'booking' %}">Réservation</a></li>
 					<li><a href="{% url 'contact' %}">Contact</a></li>
+					<li><a href="{% url 'eula' %}">CGU</a></li>
 
 					<!-- Button(s) -->
 					{% if user.is_authenticated %}
@@ -66,15 +67,15 @@
 							<a class="btn" href="#" class="dropdown-toggle" data-toggle="dropdown">MON COMPTE <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="{% url 'profile_detail' %}">Profil</a></li>
-								<li><a href="{% url 'groups_detail' %}">Groupes</a></li>
-								<li><a href="{% url 'bookings_detail' %}">Mes Réservations</a></li>
+								<li><a href="{% url 'groups_detail' %}">Mes groupes</a></li>
+								<li><a href="{% url 'bookings_detail' %}">Mes réservations</a></li>
 								<li><a href="{% url 'pro_area' %}">Espace Pro</a></li>
 								<li><a href="{% url 'account_log_out' %}">Déconnexion</a></li>
 							</ul>
 						</li> <!-- /Dropdown -->
 
 					{% else %}
-						<li><a class="btn" href="{% url 'account_sign_in' %}">CONNEXION / INSCRIPTION</a></li>
+						<li><a class="btn" href="{% url 'account_sign_in_form' %}">CONNEXION / INSCRIPTION</a></li>
 
 					{% endif %} <!-- /Button(s) -->
 
@@ -136,7 +137,7 @@
 						<div class="widget-body">
 							<p>
 								Téléphone : <a href="tel:0130365291">01 30 36 52 91</a><br>
-								E-mail : <a href="mailto:#">contact@coventgarden.fr</a>
+								E-mail : <a href="mailto:contact@coventgarden.fr">contact@coventgarden.fr</a>
 							</p>	
 						</div>
 					</div>
@@ -197,6 +198,7 @@
 								<a href="{% url 'bar' %}">Bar</a> /
 								<a href="{% url 'booking' %}">Réservation</a> /
 								<a href="{% url 'contact' %}">Contact</a> /
+								<a href="{% url 'eula' %}">CGU</a>
 							</p>
 						</div>
 					</div>

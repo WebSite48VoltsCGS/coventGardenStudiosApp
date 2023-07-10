@@ -1,3 +1,11 @@
+{% if form_confirm.non_field_errors %}
+	<ul class='form-errors'>
+		{% for error in form_confirm.non_field_errors %}
+			<li>{{ error }}</li>
+		{% endfor %}
+	</ul>
+{% endif %}
+			
 {% for field in form_confirm %}
 	<div class="top-margin">
 		{{ field.errors }}

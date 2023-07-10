@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
       slotMinTime:"10:00",
       slotMaxTime:"23:59",
       initialView: 'timeGridWeek',
+      firstDay: 1,  // Définit le lundi comme premier jour de la semaine
       allDaySlot: false,
       headerToolbar: {
         left: 'prev,next',
@@ -66,19 +67,22 @@ document.addEventListener('DOMContentLoaded', function() {
       dateClick: function(info) {
         e.preventDefault();
         console.log(info);
-        
+        start = new Date(info.startStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
+        end = new Date(info.endStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
         $('#salleName').val(params.title);
         $('#idSalle').val(params.id);
-        $('#startDate').val(info.startStr);
-        $('#endDate').val(info.endStr);
+        $('#startDate').val(start);
+        $('#endDate').val(end);
         $('#confirmation-modal').modal('show');
-        
+
       },
       select: function(info) {
+        start = new Date(info.startStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
+        end = new Date(info.endStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
         $('#salleName').val(params.title);
         $('#idSalle').val(params.id);
-        $('#startDate').val(info.startStr);
-        $('#endDate').val(info.endStr);
+        $('#startDate').val(start);
+        $('#endDate').val(end);
         $('#confirmation-modal').modal('show');
         console.log(new Date(info.startStr));
       },
