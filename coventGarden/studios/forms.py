@@ -1,9 +1,12 @@
 from django.contrib.auth.forms import (UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm)
 from django.forms import ModelChoiceField, SelectDateWidget, ValidationError
 from django_select2.forms import Select2Widget
-
+from tempus_dominus.widgets import DatePicker, DateTimePicker
+from bootstrap_datepicker_plus.widgets import DatePickerInput
+from django.utils.html import format_html
 from .models import CustomUser, CustomGroup, Event, Concert
 from .fields import *
+
 
 # Register your forms here
 """
@@ -90,14 +93,19 @@ Pro Area
     - TechnicalSheetForm
     - ConcertForm
 """
-
+class DateInput(forms.DateInput):
+    input_type = 'date'
+    
+    
 
 class ConcertForm(forms.ModelForm):
     groupe1 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe2 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe3 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
 
-    date = forms.DateField(widget=SelectDateWidget)
+    date = forms.DateField( widget=DateInput )    
+    
+
     is_engaged = forms.BooleanField(
         required=True,
         label="Je m'engage à ce que les 3 groupes soient disponibles et que les fiches techniques de chacun soient déposées.",
@@ -112,7 +120,8 @@ class ConcertForm(forms.ModelForm):
         date = self.cleaned_data['date']
         if date.weekday() != 4:
             raise ValidationError("Vous devez choisir un vendredi.")
-
+        if Concert.objects.filter(date=date).exists() :
+            raise forms.ValidationError("Ce vendredi est indisponible.")
         group1 = self.cleaned_data['groupe1']
         group2 = self.cleaned_data['groupe2']
         group3 = self.cleaned_data['groupe3']

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'studios',
     'django_select2',
+    'tempus_dominus',
+    'bootstrap_datepicker_plus',
 ]
 
 
