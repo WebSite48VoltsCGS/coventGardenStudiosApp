@@ -1,4 +1,3 @@
-from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils import timezone
 from django.dispatch import receiver
@@ -15,11 +14,13 @@ User
 class CustomUser(AbstractUser):
     username = MODEL_USERNAME
     email = MODEL_EMAIL
-    first_name = MODEL_FIRST_NAME
     last_name = MODEL_LAST_NAME
-    phone = MODEL_USER_PHONE
+    first_name = MODEL_FIRST_NAME
+    phone = MODEL_PHONE
     password = MODEL_PASSWORD
+    password_confirm = MODEL_PASSWORD_CONFIRM
     # is_active = False by default when creating an account using the SignUpForm
+    # my_groups (See CustomGroup)
 
     def __str__(self):
         return self.username
@@ -111,24 +112,3 @@ class UserPayment(models.Model):
 def create_user_payment(sender, instance, created, **kwargs):
     if created:
         UserPayment.objects.create(app_user=instance)
-
-
-# pour vérification du num de tel
-import re
-from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
-from django.db import models
-
-
-
-class NumTel(models.Model):
-    LENGTH_PHONE = 10  # Définissez la longueur maximale autorisée pour le champ
-
-    MODEL_GROUP_PHONE = models.CharField(
-        max_length=LENGTH_PHONE,
-        verbose_name="Numéro de téléphone",
-        blank=True,
-        validators=[validate_phone_number]  # Utilisez le validateur personnalisé
-    )
-
-    # Autres champs et méthodes de votre modèle

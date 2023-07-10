@@ -190,4 +190,6 @@ REDIRECT_DOMAIN = "home"
 # pip3 install django-select2
 # pip3 install stripe
 # pip3 install six
+# pip3 install django-tempus-dominus
+# pip3 install django-bootstrap-datepicker-plus
 # ------------------------------
