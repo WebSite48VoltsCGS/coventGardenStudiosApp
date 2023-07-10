@@ -159,6 +159,19 @@ class ContactView(View):
 
 
 
+class EulaView(View):
+    template_name = "cgu.html"
+    context = {
+        "title": "Conditions générales d'utilisation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Conditions générales d'utilisation"}]
+    }
+
+    def get(self, request):
+        return render(request, self.template_name, self.context)
+
+
 
 
 """
@@ -605,7 +618,7 @@ class BookingsDetailView(LoginRequiredMixin, View):
         "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": None, "name": "Réservations"}]
+            {"view": None, "name": "Mes réservations"}]
     }
 
     def get(self, request):

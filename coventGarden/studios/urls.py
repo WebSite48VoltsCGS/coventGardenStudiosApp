@@ -1,14 +1,7 @@
 from django.urls import path
-from django.contrib.auth.views import (
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-)
 from django.conf.urls.static import static
-
 from coventGarden import settings
 from studios import views
-from .forms import UserPasswordResetForm, UserPasswordSetForm
-#################################
-
 
 urlpatterns = [
     path('', views.placeholder, name='placeholder'),
@@ -21,6 +14,7 @@ urlpatterns = [
     path('bar/', views.BarView.as_view(), name='bar'),
     path('reservation/', views.BookingView.as_view(), name='booking'),
     path('contact/', views.ContactView.as_view(), name='contact'),
+    path('cgu/', views.EulaView.as_view(), name='eula'),
 
     # Account: Login / Logout
     path('compte/connexion/', views.AccountSignInFormView.as_view(),

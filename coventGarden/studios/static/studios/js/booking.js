@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
       timeZone: 'UTC',
       aspectRatio: 1.5,
       editable: false,
-      selectable: false,
+      selectable: true,
       locale: 'fr',
       slotDuration: '01:00',
       slotMinTime:"10:00",
@@ -74,7 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#startDate').val(start);
         $('#endDate').val(end);
         $('#confirmation-modal').modal('show');
-        
+
+      },
+      select: function(info) {
+        start = new Date(info.startStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
+        end = new Date(info.endStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');
+        $('#salleName').val(params.title);
+        $('#idSalle').val(params.id);
+        $('#startDate').val(start);
+        $('#endDate').val(end);
+        $('#confirmation-modal').modal('show');
+        console.log(new Date(info.startStr));
       },
     });
     calendar.render();

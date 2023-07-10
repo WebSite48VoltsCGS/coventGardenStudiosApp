@@ -25,6 +25,40 @@
 {% block content %}
 
 <!-- Content 1 -->
+<div class="stud">
+	<div class="row">
+		<!-- Left -->
+		<div class="col-sm-6">
+			<h2>Horaires :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>Lundi - Vendredi</td><td>16h00 -  </td><td>00h00</td></tr>
+					<tr><td>Samedi *</td><td>10h00 - </td><td>18h00</td></tr>
+					<tr><td>Dimanche</td><td>13h00 - </td><td>21h00</td></tr>
+				</tbody>
+			</table>
+			
+			<!-- Add link concert-->
+			<br><p>*Ouverture jusqu'à minuit les soirs de concerts. <a href="{% url 'placeholder' %}">Placeholder!</a></p>
+		</div>
+
+		<!-- Right -->
+		<div class="col-sm-6">
+			<h2>Tarifs :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>1 heure</td><td>20€</td></tr>
+					<tr><td>2 heures</td><td>38€</td></tr>
+					<tr><td>3 heures</td><td>54€</td></tr>
+					<tr><td>4 heures</td><td>68€</td></tr>
+					<tr><td>Heure supplémentaire</td><td>17€</td></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- Content 1 -->
 {% for salle in salles %}
 <div class="col-xs-12">
     <h3 class="text-center mt-4">{{ salle.name }}</h3>
