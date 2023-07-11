@@ -51,11 +51,9 @@ WIDGET_PASSWORD = forms.PasswordInput(attrs={'class': 'form-control'})
 # Forms
 FORM_USERNAME = forms.CharField(max_length=LENGTH_NAME, label=LABEL_USERNAME, widget=WIDGET_TEXT)
 FORM_EMAIL = forms.EmailField(max_length=LENGTH_EMAIL, label=LABEL_EMAIL, widget=WIDGET_EMAIL)
-FORM_PASSWORD = forms.CharField(max_length=LENGTH_PASSWORD, label=LABEL_PASSWORD, widget=WIDGET_PASSWORD)
-FORM_PASSWORD_NEW = forms.CharField(max_length=LENGTH_PASSWORD, label=LABEL_PASSWORD, widget=WIDGET_PASSWORD, validators=CustomPasswordValidator)
-FORM_PASSWORD_CONFIRM = forms.CharField(max_length=LENGTH_PASSWORD, label=LABEL_PASSWORD_CONFIRM, widget=WIDGET_PASSWORD)
-
-
+FORM_PASSWORD = forms.CharField(label=LABEL_PASSWORD, max_length=LENGTH_PASSWORD, widget=WIDGET_PASSWORD)
+FORM_PASSWORD_NEW = forms.CharField(label=LABEL_PASSWORD, max_length=LENGTH_PASSWORD, widget=WIDGET_PASSWORD, validators=CustomPasswordValidator)
+FORM_PASSWORD_CONFIRM = forms.CharField(label=LABEL_PASSWORD_CONFIRM, max_length=LENGTH_PASSWORD, widget=WIDGET_PASSWORD)
 
 """
 Models
@@ -99,7 +97,7 @@ MODEL_LAST_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_FI
 MODEL_FIRST_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_LAST_NAME)
 MODEL_PHONE = models.CharField(max_length=LENGTH_PHONE, verbose_name=LABEL_PHONE, validators=[phone_validator])
 MODEL_PASSWORD = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD, validators=CustomPasswordValidator)
-MODEL_PASSWORD_CONFIRM = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD_CONFIRM)
+MODEL_PASSWORD_CONFIRM = models.CharField(max_length=LENGTH_PASSWORD, verbose_name=LABEL_PASSWORD_CONFIRM, null=True)
 
 # CustomGroup
 MODEL_GROUP_NAME = models.CharField(max_length=LENGTH_NAME, verbose_name=LABEL_GROUP_NAME, null=True)

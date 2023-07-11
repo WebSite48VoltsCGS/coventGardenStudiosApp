@@ -41,7 +41,7 @@ import time
 from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle, UserPayment 
 from .forms import (
     UserSignInForm, UserSignUpForm,
-    UserUpdateForm, UserPasswordConfirmForm,
+    UserProfileUpdateForm, UserPasswordConfirmForm,
     UserPasswordResetForm, UserPasswordSetForm,
     CustomGroupForm,
     ConcertForm,
@@ -451,7 +451,7 @@ class ProfileDetailView(LoginRequiredMixin, View):
 
 class ProfileUpdateView(LoginRequiredMixin, View):
     redirect_field_name = ''
-    form_class = UserUpdateForm
+    form_class = UserProfileUpdateForm
     form_confirm_class = UserPasswordConfirmForm
     template_name = "profile/profile_update.html"
     context = {
@@ -463,18 +463,17 @@ class ProfileUpdateView(LoginRequiredMixin, View):
     }
 
     def get(self, request):
-        self.context["form"] = self.form_class(instance=request.user)
-        self.context["form_confirm"] = self.form_confirm_class()
+        self.context["form"] = self.form_class(user=request.user, instance=request.user)
+        self.context["form_confirm"] = self.form_confirm_class(user=request.user)
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        form = self.form_class(request.POST, instance=request.user)
-        form_confirm = self.form_confirm_class(request.POST)
+        form = self.form_class(user=request.user, data=request.POST, instance=request.user)
+        form_confirm = self.form_confirm_class(user=request.user, data=request.POST)
 
         if form.is_valid() and form_confirm.is_valid():
-            if form_confirm.password_check(request):
-                form.update(request)
-                return redirect('profile_detail')
+            form.save()
+            return redirect('profile_detail')
 
         # Failure
         self.context["form"] = form
