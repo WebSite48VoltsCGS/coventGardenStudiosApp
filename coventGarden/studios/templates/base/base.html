@@ -58,7 +58,6 @@
 					<li><a href="{% url 'bar' %}">Bar</a></li>
 					<li><a href="{% url 'booking' %}">Réservation</a></li>
 					<li><a href="{% url 'contact' %}">Contact</a></li>
-					<li><a href="{% url 'eula' %}">CGU</a></li>
 
 					<!-- Button(s) -->
 					{% if user.is_authenticated %}
@@ -97,12 +96,14 @@
 
 		<!-- Main content-->
 		<div class="row">
-			<article class="col-xs-20 maincontent">
-				<!-- Page header -->
-				{% block page_header %}{% endblock %}
-				
-				<!-- Content -->
-				{% block content %}{% endblock %}
+			<article class="col-xs-18 maincontent">
+				<div class="container">
+					<!-- Page header -->
+					{% block page_header %}{% endblock %}
+					
+					<!-- Content -->
+					{% block content %}{% endblock %}
+				</div>
 			</article>
 		</div>
 	</div>
@@ -119,7 +120,7 @@
 			</div>
 			<div id="cookieConsentButtons">
 			  <button id="acceptCookiesButton">Accepter</button>
-			  <a href="#" id="learnMoreButton">En savoir plus</a>
+			  <a href="{% url 'eula' %}" id="learnMoreButton">En savoir plus</a>
 			</div>
 		</div>
 
