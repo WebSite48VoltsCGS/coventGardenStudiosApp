@@ -102,7 +102,7 @@ class ConcertForm(forms.ModelForm):
     groupe1 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe2 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe3 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
-
+    
     date = forms.DateField( widget=DateInput )    
     
 
@@ -120,7 +120,7 @@ class ConcertForm(forms.ModelForm):
         date = self.cleaned_data['date']
         if date.weekday() != 4:
             raise ValidationError("Vous devez choisir un vendredi.")
-        if Concert.objects.filter(date=date).exists() :
+        if Concert.objects.filter(date=date, validated=True).exists():
             raise forms.ValidationError("Ce vendredi est indisponible.")
         group1 = self.cleaned_data['groupe1']
         group2 = self.cleaned_data['groupe2']

@@ -33,7 +33,7 @@ from datetime import timedelta, datetime, time
 from django.contrib import messages
 
 # Import
-from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle
+from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle 
 from .forms import (
     SignInForm, SignUpForm,
     UserUpdateForm, ConfirmPasswordForm,
@@ -108,6 +108,7 @@ class ConcertView(View):
 
     def get(self, request):
         return render(request, self.template_name, self.context)
+    
 
 
 class BarView(View):
@@ -650,7 +651,7 @@ class GroupUpdateView(LoginRequiredMixin, View):
 
 @login_required
 def delete_technical_sheet(request, pk):
-    technical_sheet = get_object_or_404(TechnicalSheet, pk=pk, user=request.user)
+    technical_sheet = get_object_or_404(CustomGroup, pk=pk, user=request.user)
     technical_sheet.delete()
     messages.success(request, 'La fiche technique a été supprimée avec succès !')
     return redirect('groups_detail')
@@ -749,8 +750,7 @@ class ProAreaView(LoginRequiredMixin, View):
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
-            return redirect('pro_area')
-
+        
         return render(request, self.template_name, self.context)
 
 
@@ -767,6 +767,7 @@ def generate_occurrences(event):
             occurrences.append(current_time)
 
     return occurrences
+
 
 
 def add_event(request):
@@ -1101,3 +1102,9 @@ def stripe_webhook(request):
 		studios.payment_bool = True
 		studios.save()
 	return HttpResponse(status=200)
+
+
+
+
+
+

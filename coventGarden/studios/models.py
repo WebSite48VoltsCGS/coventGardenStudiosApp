@@ -1,8 +1,12 @@
+from datetime import timedelta
+import time
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.db import models
+
 
 from .fields import *
 
@@ -59,6 +63,7 @@ class Event(models.Model):
     end_time = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
     recurrence = models.CharField(max_length=200, blank=True)
+    date = models.DateField(default=timezone.now)
 
 class Salle(models.Model):
     name = models.fields.CharField(max_length=100)
@@ -97,7 +102,8 @@ class Concert(models.Model):
     date = models.DateField()
     validated = models.BooleanField(default=False)
     planning = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True)
-
+  
+        
 """
 Payment
 """
@@ -111,3 +117,24 @@ class UserPayment(models.Model):
 def create_user_payment(sender, instance, created, **kwargs):
     if created:
         UserPayment.objects.create(app_user=instance)
+
+
+#création freefriday
+
+@receiver(post_save, sender=Concert)
+def create_event(sender, instance, created, **kwargs):
+    if instance.validated:
+        description = f"FreeFriday en présence du groupe {instance.groupe1}, du groupe {instance.groupe2} et du groupe {instance.groupe3}"
+        date = instance.date  # Supposons que `date` est la date du concert
+
+        Event.objects.update_or_create(
+             user=instance.user,
+            title='FreeFriday',
+            defaults={
+                    'date': date,
+                    'start_time': date + timedelta(hours=20, minutes=30),
+                    'end_time': date + timedelta(hours=23, minutes=30),
+                    'description': description
+    }
+)
+        
