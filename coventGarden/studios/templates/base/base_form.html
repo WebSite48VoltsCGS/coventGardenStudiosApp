@@ -5,13 +5,14 @@
 		{% endfor %}
 	</ul>
 {% endif %}
-			
+
 {% for field in form %}
 	<div class="top-margin">
 		{{ field.errors }}
 		<label>
 			{{ field.label }}
 			{% if field.field.required == True %}<span class="text-danger">*</span>{% endif %}
+			{{ field.help_text }}
 		</label>
 		{{ field }}
 	</div>

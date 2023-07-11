@@ -575,13 +575,6 @@ class GroupUpdateView(LoginRequiredMixin, View):
             self.context["form"] = form
             return render(request, self.template_name, self.context)
 
-@login_required
-def delete_technical_sheet(request, pk):
-    technical_sheet = get_object_or_404(CustomGroup, pk=pk, user=request.user)
-    technical_sheet.delete()
-    messages.success(request, 'La fiche technique a été supprimée avec succès !')
-    return redirect('groups_detail')
-
 class GroupDeleteView(LoginRequiredMixin, View):
     redirect_field_name = ''
     template_name = "groups/groups_delete.html"
@@ -1120,9 +1113,3 @@ def stripe_webhook(request):
 		studios.payment_bool = True
 		studios.save()
 	return HttpResponse(status=200)
-
-
-
-
-
-

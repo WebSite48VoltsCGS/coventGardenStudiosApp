@@ -5,15 +5,10 @@ from .models import CustomUser, CustomGroup, Event, Salle, Reservation, Concert
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
-    list_display = ["email", "username",
-                    "last_name", "first_name",
-                    "phone"]
+    list_display = ["email", "username", "last_name", "first_name", "phone"]
 
 class CustomGroupAdmin(admin.ModelAdmin):
-    list_display = ["user", "name", "email",
-                    "phone", "members",
-                    "technical_sheet", "logo",
-                    "validated"]
+    list_display = ["user", "name", "email", "phone", "members", "technical_sheet", "logo", "validated"]
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "start_time", "end_time", "description"]

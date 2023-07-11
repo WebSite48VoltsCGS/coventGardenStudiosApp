@@ -8,6 +8,11 @@ MIN_SPECIAL = 1
 
 
 """
+User validator
+"""
+
+
+"""
 Password validator
 """
 def length_validator(password, user=None):

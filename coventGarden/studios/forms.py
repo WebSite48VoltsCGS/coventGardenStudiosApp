@@ -47,14 +47,17 @@ class UserSignInForm(forms.Form):
     password = FORM_PASSWORD
 
     def clean(self):
-        # Authenticate
-        username = self.cleaned_data.get('username')
-        password = self.cleaned_data.get('password')
+        cleaned_data = super().clean()
+
+        # Authentication validator
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
         user = authenticate(username=username, password=password)
-        if not user:
+        print(user)
+        if user is None:
             raise forms.ValidationError("Le nom d'utilisateur ou le mot de passe est incorrect.", code="authentication_failed")
 
-        return self.cleaned_data
+        return cleaned_data
 
     def login(self, request):
         username = self.cleaned_data.get('username')
@@ -71,16 +74,15 @@ class UserSignUpForm(forms.ModelForm):
                    'password_confirm': forms.PasswordInput()}
 
     def clean(self):
-        # Add to other validators such as "unique"
-        self.cleaned_data = super().clean()
+        cleaned_data = super().clean()
 
-        # Password confirmation
-        password = self.cleaned_data.get('password')
-        password_confirm = self.cleaned_data.get('password_confirm')
+        # Password confirmation validator
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
         if not password == password_confirm:
-            raise forms.ValidationError("Les deux mots de passes ne correspondent pas.", code="password_confirm")
+            self.add_error('password_mismatch', 'Les deux mots de passes ne correspondent pas.')
 
-        return self.cleaned_data
+        return cleaned_data
 
     def save_user(self, request):
         username = self.cleaned_data.get('username')
@@ -145,10 +147,15 @@ class UserPasswordConfirmForm(forms.Form):
     password_confirm = FORM_PASSWORD_CONFIRM
 
     def clean(self):
-        password = self.cleaned_data.get('password')
-        password_confirm = self.cleaned_data.get('password_confirm')
-        if password != password_confirm:
-            raise forms.ValidationError("Les deux mots de passes ne correspondent pas", code="password_confirm")
+        cleaned_data = super().clean()
+
+        # Password confirmation validator
+        password = cleaned_data.get('password')
+        password_confirm = cleaned_data.get('password_confirm')
+        if not password == password_confirm:
+            self.add_error('password_confirm', 'Les deux mots de passes ne correspondent pas.')
+
+        return cleaned_data
 
     def password_check(self, request):
         password_user = request.user.password
@@ -161,11 +168,43 @@ class UserPasswordConfirmForm(forms.Form):
 class UserPasswordResetForm(PasswordResetForm):
     email = FORM_EMAIL
 
+from django.contrib.auth import (
+    authenticate, get_user_model, password_validation,
+)
 
-class UserPasswordSetForm(SetPasswordForm):
+
+class UserPasswordSetForm(forms.Form):
+    """
+    A form that lets a user change set their password without entering the old password
+    """
+    error_messages = {
+        'password_mismatch': "The two password fields didn't match.",
+    }
     new_password1 = FORM_PASSWORD_NEW
     new_password2 = FORM_PASSWORD_CONFIRM
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        password_validation.validate_password(password2, self.user)
+        return password2
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password1"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user
 
 
 
@@ -178,39 +217,11 @@ class CustomGroupForm(forms.ModelForm):
         model = CustomGroup
         fields = '__all__'
         exclude = ('user', 'validated')
-    
-    genre_choices = [
-        ('black metal', 'Black Metal'),
-        ('death_metal', 'Death Metal'),
-        ('djent','Djent'),
-        ('doom_metal', 'Doom Metal'),
-        ('electro', 'Electro'),
-        ('folk_metal', 'Folk Metal'),
-        ('hardcore_punk', 'Punk Hardcore'),
-        ('heavy_metal', 'Heavy Metal'),
-        ('jazz', 'Jazz'),
-        ('metal', 'Metal'),
-        ('metalcore', 'Metalcore'),
-        ('metal_industriel', 'Metal Industriel'),
-        ('metal progressif', 'Metal Progressif'),
-        ('metal_symphonique', 'Metal Symphonique'),
-        ('modern_metal', 'Moderne Metal'),
-        ('nu_metal', 'Nu Metal'),
-        ('pop','Pop'),
-        ('pop_rock', 'Pop Rock'),
-        ('power_metal', 'Power Metal'),
-        ('punk', 'Punk'),
-        ('rock', 'Rock'),
-        ('rock_alternatif', 'Rock Alternatif'),
-        ('rock_progressif', 'Rock Progressif'),
-        ('trash_metal', 'Trash Metal'),
-    ]
-    genre = forms.ChoiceField(choices=genre_choices)
 
     def save_group(self, request):
-        self.save(commit=False)
-        self.user = request.user
-        self.save()
+        group = self.save(commit=False)
+        group.user = request.user
+        group.save()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
