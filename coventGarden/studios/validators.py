@@ -8,6 +8,11 @@ MIN_SPECIAL = 1
 
 
 """
+User validator
+"""
+
+
+"""
 Password validator
 """
 def length_validator(password, user=None):
@@ -44,5 +49,5 @@ def phone_validator(value):
     phone_regex = r'^\d{10}$'  # Regex pour vérifier les 10 chiffres
     if not re.match(phone_regex, value):
         raise ValidationError(
-            "Le numéro de téléphone est incorrecte",
-            code='phone')
+            "Le numéro de téléphone saisi n'est pas valide.",
+            code='phone_invalid')
