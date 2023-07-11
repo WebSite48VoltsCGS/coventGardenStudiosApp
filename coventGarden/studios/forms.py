@@ -174,7 +174,11 @@ CustomGroup
     - CustomGroupForm
 """
 class CustomGroupForm(forms.ModelForm):
-    # User will be added manually in views.py
+    class Meta:
+        model = CustomGroup
+        fields = '__all__'
+        exclude = ('user', 'validated')
+    
     genre_choices = [
         ('black metal', 'Black Metal'),
         ('death_metal', 'Death Metal'),
@@ -202,11 +206,6 @@ class CustomGroupForm(forms.ModelForm):
         ('trash_metal', 'Trash Metal'),
     ]
     genre = forms.ChoiceField(choices=genre_choices)
-    
-    class Meta:
-        model = CustomGroup
-        fields = '__all__'
-        exclude = ('user', 'validated')
 
     def save_group(self, request):
         self.save(commit=False)
@@ -244,7 +243,7 @@ class ConcertForm(forms.ModelForm):
     groupe1 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe2 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
     groupe3 = ModelChoiceField(queryset=CustomGroup.objects.all(), widget=Select2Widget)
-
+    
     date = forms.DateField( widget=DateInput )    
     
 
@@ -262,7 +261,7 @@ class ConcertForm(forms.ModelForm):
         date = self.cleaned_data['date']
         if date.weekday() != 4:
             raise ValidationError("Vous devez choisir un vendredi.")
-        if Concert.objects.filter(date=date).exists() :
+        if Concert.objects.filter(date=date, validated=True).exists():
             raise forms.ValidationError("Ce vendredi est indisponible.")
         group1 = self.cleaned_data['groupe1']
         group2 = self.cleaned_data['groupe2']
