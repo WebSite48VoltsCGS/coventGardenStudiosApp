@@ -136,30 +136,6 @@
   background-color: gold;
 }
 
-<<<<<<< HEAD
-=======
-/* boutton réservation*/
-
-
-.row-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  max-width: 80px;
-  margin-bottom: 10px;
-  margin-left: 535px;
-  padding: 40px;
-}
-  
-
-
-
->>>>>>> d13d34f3ad70c605cdb0a3f929e8f801c98ef13a
-
-/* explications*/ 
-
-
 /*lien*/ 
 
 .lien a{

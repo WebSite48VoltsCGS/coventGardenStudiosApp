@@ -174,7 +174,11 @@ CustomGroup
     - CustomGroupForm
 """
 class CustomGroupForm(forms.ModelForm):
-    # User will be added manually in views.py
+    class Meta:
+        model = CustomGroup
+        fields = '__all__'
+        exclude = ('user', 'validated')
+    
     genre_choices = [
         ('black metal', 'Black Metal'),
         ('death_metal', 'Death Metal'),
@@ -202,11 +206,6 @@ class CustomGroupForm(forms.ModelForm):
         ('trash_metal', 'Trash Metal'),
     ]
     genre = forms.ChoiceField(choices=genre_choices)
-    
-    class Meta:
-        model = CustomGroup
-        fields = '__all__'
-        exclude = ('user', 'validated')
 
     def save_group(self, request):
         self.save(commit=False)

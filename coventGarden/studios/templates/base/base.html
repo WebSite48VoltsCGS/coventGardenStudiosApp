@@ -98,13 +98,11 @@
 		<!-- Main content-->
 		<div class="row">
 			<article class="col-xs-20 maincontent">
-				<div class="container">
-					<!-- Page header -->
-					{% block page_header %}{% endblock %}
-					
-					<!-- Content -->
-					{% block content %}{% endblock %}
-				</div>
+				<!-- Page header -->
+				{% block page_header %}{% endblock %}
+				
+				<!-- Content -->
+				{% block content %}{% endblock %}
 			</article>
 		</div>
 	</div>
@@ -112,19 +110,18 @@
 
 
 	<!-- Footer -->
-	<div id="cookieConsentBanner" class="hidden">
-		<div id="cookieConsentContent text-center">
-		  <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer sur ce site, vous acceptez notre utilisation des cookies.</p>
-		</div>
-		<div id="cookieConsentButtons">
-		  <button id="acceptCookiesButton">Accepter</button>
-		  <a href="#" id="learnMoreButton">En savoir plus</a>
-		</div>
-	</div>
-	  
-	  
-	  
 	<footer id="footer" class="top-space">
+
+		<!-- Cookies -->
+		<div id="cookieConsentBanner" class="hidden">
+			<div id="cookieConsentContent text-center">
+			  <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer sur ce site, vous acceptez notre utilisation des cookies.</p>
+			</div>
+			<div id="cookieConsentButtons">
+			  <button id="acceptCookiesButton">Accepter</button>
+			  <a href="#" id="learnMoreButton">En savoir plus</a>
+			</div>
+		</div>
 
 		<!-- Footer 1 -->
 		<div class="footer1">
@@ -167,12 +164,13 @@
 					</div>
 
 					<div class="col-md-3 widget">
-						<h3 class="widget-title text">Réseaux sociaux</h3>
+						<h3 class="widget-title">Réseaux sociaux</h3>
 						<div class="widget-body">
 							<p class="follow-me-icons">
 								<a target="_blank" href="https://www.youtube.com/user/CoventGardenStudio"><i class="fa fa-youtube-play fa-2"></i></a>
 								<a target="_blank" href="https://www.facebook.com/CGS95"><i class="fa fa-facebook fa-2"></i></a>
 								<a target="_blank" href="https://www.instagram.com/coventgardenstudios/"><i class="fa fa-instagram fa-2"></i></a>
+								<a target="_blank" href=""><i class="fa fa-twitter fa-2"></i></a>
 							</p>
 						</div>
 					</div>
@@ -224,40 +222,40 @@
 	<script src="{% static 'studios/js/jQuery.headroom.min.js' %}"></script>
 	<script src="{% static 'studios/js/template.js' %}"></script>
 
+	<!-- Cookies -->
 	<script>
-document.addEventListener("DOMContentLoaded", function() {
-  var cookieConsentBanner = document.getElementById("cookieConsentBanner");
-  var acceptCookiesButton = document.getElementById("acceptCookiesButton");
-  var learnMoreButton = document.getElementById("learnMoreButton");
-
-  // Vérifie si le cookie d'acceptation est déjà présent
-  var isCookieAccepted = document.cookie.indexOf("cookieAccepted=true") !== -1;
-
-  if (!isCookieAccepted) {
-    cookieConsentBanner.classList.remove("hidden");
-  }
-
-  // Fonction pour accepter les cookies et masquer la bannière
-  function acceptCookies() {
-    cookieConsentBanner.classList.add("hidden");
-    // Définir un cookie d'acceptation pour une durée de validité (par exemple, 30 jours)
-    var expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 30);
-    document.cookie = "cookieAccepted=true; expires=" + expirationDate.toUTCString() + "; path=/";
-  }
-
-  acceptCookiesButton.addEventListener("click", acceptCookies);
-
-  // Fonction pour gérer l'action "En savoir plus" (à personnaliser selon vos besoins)
-  function learnMore() {
-    // Ajoutez ici votre logique pour rediriger l'utilisateur vers une page d'informations supplémentaires sur les cookies
-    console.log("Redirection vers la page d'informations sur les cookies");
-  }
-
-  learnMoreButton.addEventListener("click", learnMore);
-});
+		document.addEventListener("DOMContentLoaded", function() {
+		  var cookieConsentBanner = document.getElementById("cookieConsentBanner");
+		  var acceptCookiesButton = document.getElementById("acceptCookiesButton");
+		  var learnMoreButton = document.getElementById("learnMoreButton");
+	   
+		  // Vérifie si le cookie d'acceptation est déjà présent
+		  var isCookieAccepted = document.cookie.indexOf("cookieAccepted=true") !== -1;
+	   
+		  if (!isCookieAccepted) {
+			cookieConsentBanner.classList.remove("hidden");
+		  }
+	   
+		  // Fonction pour accepter les cookies et masquer la bannière
+		  function acceptCookies() {
+			cookieConsentBanner.classList.add("hidden");
+			// Définir un cookie d'acceptation pour une durée de validité (par exemple, 30 jours)
+			var expirationDate = new Date();
+			expirationDate.setDate(expirationDate.getDate() + 30);
+			document.cookie = "cookieAccepted=true; expires=" + expirationDate.toUTCString() + "; path=/";
+		  }
+	   
+		  acceptCookiesButton.addEventListener("click", acceptCookies);
+	   
+		  // Fonction pour gérer l'action "En savoir plus" (à personnaliser selon vos besoins)
+		  function learnMore() {
+			// Ajoutez ici votre logique pour rediriger l'utilisateur vers une page d'informations supplémentaires sur les cookies
+			console.log("Redirection vers la page d'informations sur les cookies");
+		  }
+	   
+		  learnMoreButton.addEventListener("click", learnMore);
+		});
 	</script>
-
 
 	<!-- Custom JavaSript for our template -->
 	{% block scripts %}{% endblock %}

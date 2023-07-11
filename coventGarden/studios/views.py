@@ -618,7 +618,7 @@ class BookingsDetailView(LoginRequiredMixin, View):
         "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": None, "name": "Mes réservations"}]
+            {"view": None, "name": "Réservations"}]
     }
 
     def get(self, request):
