@@ -1,8 +1,8 @@
 from datetime import datetime, time
-
+from django.conf import settings
 import django.contrib.auth.password_validation
 from django.shortcuts import redirect, render, get_object_or_404
-
+import stripe
 # Class-based views
 from django.views import View
 
@@ -746,10 +746,15 @@ def list_users(request):
 
 @login_required(login_url='account_sign_in')
 def accompte(request):
-
+    ## add to 11/07/2023
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['key'] = settings.STRIPE_PUBLISHABLE_KEY
+        return context
+    ## end
     # Submit form
     if request.method == 'POST':
-
+        
         salle_id = int(request.POST["salle_id"])
         salle = Salle.objects.get(id= salle_id)
 
@@ -789,13 +794,13 @@ def accompte(request):
 
         else:
             return render(request, 'payment.html', {"salle": salle, "user": user, "start_date": start_date,
-            "end_date": end_date, "duration": duration_hours,"price":price, "form": form})
+            "end_date": end_date,"key": settings.STRIPE_PUBLISHABLE_KEY, "duration": duration_hours,"price":price, "form": form})
 
     else:
         return redirect('booking')
 
 @login_required(login_url='account_sign_in')
-def payment(request):
+def payment_without_stripe(request):
 
     print(request.POST)
 
@@ -850,7 +855,7 @@ def all_booking(request):
     return JsonResponse(datas, safe=False)
 
 def all_booking_event(request):
-    reservations = Reservation.objects.all()
+    reservations = Reservation.objects.filter(is_active=True)
     
     datas = []
     for current in reservations:
@@ -985,3 +990,22 @@ def stripe_webhook(request):
 		studios.payment_bool = True
 		studios.save()
 	return HttpResponse(status=200)
+
+def charge(request):
+    if request.method == 'POST':
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        charge = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price': 'price_1NSV6WDSzBAtu4IYzTfvnI0A',
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url='https://example.com/success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='https://example.com/cancel',
+        )
+        print('############## API Stripe ')
+        print(charge)
+        if charge.status == 'open':
+            return redirect(charge.url)
+    return render(request, 'payment_successful.html')

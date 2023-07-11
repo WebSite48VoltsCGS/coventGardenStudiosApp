@@ -1,15 +1,54 @@
-{% extends 'general/base.html' %}
+{% extends 'base/base.html' %}
 
 {% load static %}
 
-{% block body %}
+{% block title %}
 
-<body>
+<title>Réservation</title>
 
-  <div class="container home_msg">
-    <h1>Thanks for your order {{ customer.name }}!</h1>
+{% endblock %}
+
+
+{% block header %}
+
+<header id="head" class="secondary"></header>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+
+  <ol class="breadcrumb">
+      <li><a href="{% url 'home' %}">Accueil</a></li>
+      <li><a href="{% url 'booking' %}">Réservation</a></li>
+      <li class="active">Confirmation de Réservation</li>
+  </ol>
+  <div class="row">
+
+  {% if messages %}
+          <div class="alert alert-success" role="alert">
+              {% for message in messages %}
+                  {{ message }}
+              {% endfor %}
+          </div>
+      {% endif %}
+
+  <div class="col-xs-12 maincontent">
+    <header class="page-header">
+      <h1 class="page-title">Confirmation de Réservation</h1>
+    </header>
+    
+    <div class="col-xs-12">
+      <div class="home_msg">
+        <h1>Thanks for your order </h1>
+      </div>
+    </div>
+ 
   </div>
-
-</body>
+      
+</div>
+</div>
 
 {% endblock %} 

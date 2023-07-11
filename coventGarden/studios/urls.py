@@ -73,4 +73,5 @@ urlpatterns = [
 
     # Deleted
     path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
+    path('charge/', views.charge, name='charge'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
