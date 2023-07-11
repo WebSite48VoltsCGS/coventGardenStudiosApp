@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendar = new FullCalendar.Calendar(calendarEl, {
       timeZone: 'UTC',
       aspectRatio: 1.5,
-      editable: true,
+      editable: false,
       selectable: true,
       locale: 'fr',
       slotDuration: '01:00',
