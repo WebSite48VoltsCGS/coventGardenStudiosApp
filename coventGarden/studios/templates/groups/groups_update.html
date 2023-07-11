@@ -24,7 +24,7 @@
 <!-- Main content -->
 {% block content %}
 
-<!-- Content 1: Form -->
+<!-- Content 1: Form (Upload files: enctype="multipart/form-data") -->
 <form method="post" enctype="multipart/form-data">
 	{% csrf_token %}
 	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
@@ -32,7 +32,7 @@
 			<div class="panel-body">
 				<!-- Title / Text -->
 				<h3 class="thin text-center">Changer les informations</h3>
-				<p class="text-center text-muted">Vous voulez retourner à la liste des groupes? <a href="{% url 'placeholder' %}">Cliquez ici</a></p>
+				<p class="text-center text-muted">Vous voulez retourner à la liste des groupes? <a href="{% url 'groups_detail' %}">Cliquez ici</a></p>
 
 				<hr>
 

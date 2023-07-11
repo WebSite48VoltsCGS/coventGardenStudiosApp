@@ -46,9 +46,13 @@
 			<header class="page-header">
 				<h1 class="page-title">Paiement accompte</h1>
 			</header>
-
+			
             <!-- Content 1: Form -->
 			<form  action="{% url 'payment' %}" method="POST">
+				<div class="justifie">
+					<p>ATTENTION : Une session réservée ne pourra être annulée 48h à l'avance</p>
+					<p>Le paiment en ligne ne représente que la moitié du tarif total. Le reste sera payé le jour J, sur place.</p>
+				</div>
 				{% csrf_token %}
 				<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 					<div class="panel panel-default">
@@ -82,11 +86,21 @@
 			</form>
 	
 		</article> <!-- /Article -->
-	
+
 	</div> <!-- /Main content -->
 
 </div> <!-- /Container -->
-
+<div class="justifie">
+	<h1>Conditions générales de vente</h1>
+	<p>Objet du Site: Le Site propose un service de location de studios, permettant aux Utilisateurs de consulter des annonces, de réserver un studio et de procéder au paiement en ligne.</p>
+	<p>Réservation et paiement : Disponibilité des studios : Les studios proposés sur le Site sont soumis à disponibilité. Les Utilisateurs peuvent consulter les dates de disponibilité et effectuer une réservation en ligne. Tarifs et paiement : Les tarifs de location des studios sont indiqués sur le Site et sont susceptibles de varier en fonction de la période et de la durée de la réservation. Les Utilisateurs sont tenus de régler le montant total de la réservation au moment de la confirmation, selon les modes de paiement proposés sur le Site.</p>
+	<p>Annulation et remboursement : Annulation par l'Utilisateur : En cas d'annulation de la réservation par l'Utilisateur, les conditions d'annulation spécifiées sur le Site s'appliquent et peuvent entraîner des frais d'annulation. Annulation par le Site : Le Site se réserve le droit d'annuler une réservation en cas de force majeure ou si les conditions de location ne sont pas respectées. En cas d'annulation par le Site, un remboursement intégral sera effectué.</p>
+	<p>Responsabilités : Responsabilité du Site : Le Site s'engage à fournir des informations claires et précises sur les studios proposés. Toutefois, le Site ne peut être tenu responsable des erreurs ou omissions dans les annonces, ni de toute conséquence résultant de l'utilisation du Site.</p>
+	<p>Protection des données personnelles : Le Site collecte et traite les données personnelles des Utilisateurs conformément à sa Politique de Confidentialité. Les Utilisateurs peuvent consulter cette politique pour plus d'informations sur la collecte, l'utilisation et la protection de leurs données personnelles.</p>
+	<p>Propriété intellectuelle : Tous les contenus présents sur le Site, y compris les textes, images, logos, sont la propriété intellectuelle du Site et sont protégés par les lois en vigueur. Toute reproduction, modification ou utilisation des contenus sans autorisation préalable est strictement interdite.</p>
+	<p>Modifications des CGV : Le Site se réserve le droit de modifier les présentes CGV à tout moment, sans préavis. Les Utilisateurs seront informés des modifications par le biais du Site. Il est recommandé aux Utilisateurs de consulter régulièrement les CGV pour être tenus informés des éventuelles modifications.</p>
+	<p>Loi applicable et juridiction compétente : Les présentes CGV sont soumises à la loi applicable du pays où est enregistré le Site. En cas de litige, les tribunaux compétents du lieu où est enregistré le Site seront seuls compétents.</p>
+</div>
 {% endblock %}
 
 

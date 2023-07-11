@@ -118,6 +118,49 @@ body {
 	height: auto;
 }
 
+/* Cookies consent */
+
+#cookieConsentBanner {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	background-color:#5555;
+	padding: 10px;
+	text-align: center;
+	z-index: 9999;
+  }
+  
+  #cookieConsentBanner.hidden {
+	display: none;
+  }
+  
+  #cookieConsentContent {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	text-align: left;
+	margin-right: 10px;
+  }
+  
+  #acceptCookiesButton {
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 3px;
+	cursor: pointer;
+  }
+  
+  #learnMoreButton {
+	background-color:#aaa;
+	color: #333;
+	border: none;
+	padding: 5px 10px;
+	border-radius: 3px;
+	text-decoration: none;
+	cursor: pointer;
+  }
 .description {
 	font-size: 18px;
 	line-height: 1.5;

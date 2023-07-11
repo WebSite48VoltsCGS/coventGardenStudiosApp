@@ -49,13 +49,14 @@ document.addEventListener('DOMContentLoaded', function() {
     var calendar = new FullCalendar.Calendar(calendarEl, {
       timeZone: 'UTC',
       aspectRatio: 1.5,
-      editable: true,
+      editable: false,
       selectable: true,
       locale: 'fr',
       slotDuration: '01:00',
       slotMinTime:"10:00",
       slotMaxTime:"23:59",
       initialView: 'timeGridWeek',
+      firstDay: 1,  // Définit le lundi comme premier jour de la semaine
       allDaySlot: false,
       headerToolbar: {
         left: 'prev,next',
@@ -73,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#startDate').val(start);
         $('#endDate').val(end);
         $('#confirmation-modal').modal('show');
-        
+
       },
       select: function(info) {
         start = new Date(info.startStr).toISOString().replace('T', ' ').replace('Z', '').replace('.000', '');

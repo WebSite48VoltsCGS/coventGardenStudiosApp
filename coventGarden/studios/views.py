@@ -1,27 +1,27 @@
-from datetime import datetime, time
+# Django
+from django.shortcuts import render, redirect
+from django.conf import settings
+from django.http import HttpResponse
 
-import django.contrib.auth.password_validation
-from django.shortcuts import redirect, render, get_object_or_404
+# Functions-based views
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 # Class-based views
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Account
-from django.contrib.auth import authenticate, login, logout, get_user_model
-from django.db import IntegrityError
+from django.contrib.auth import logout, get_user_model
 
 # Email confirmation
-from django.contrib.sites.shortcuts import get_current_site
-from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
 from .tokens import account_activation_token
-from django.core.mail import EmailMessage
 
-# Password Reset
+# Password reset
 from django.contrib.auth.views import (
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView)
+    PasswordResetView, PasswordResetDoneView,PasswordResetConfirmView, PasswordResetCompleteView)
 from django.urls import reverse_lazy
 
 # Booking
@@ -32,16 +32,24 @@ from datetime import timedelta, datetime, time
 # Pro Area
 from django.contrib import messages
 
+# Payment
+from django.conf import settings
+import stripe
+import time
+
 # Import
-from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle 
+from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle, UserPayment 
 from .forms import (
-    SignInForm, SignUpForm,
-    UserUpdateForm, ConfirmPasswordForm,
+    UserSignInForm, UserSignUpForm,
+    UserUpdateForm, UserPasswordConfirmForm,
     UserPasswordResetForm, UserPasswordSetForm,
-    CustomGroupForm, ConcertForm,
+    CustomGroupForm,
+    ConcertForm,
     EventForm, ReservationForm)
 
 User = get_user_model()
+
+
 
 # Create your views here.
 """
@@ -58,7 +66,7 @@ Navigation
     - StudiosView
     - ConcertView
     - BarView
-    - booking
+    - BookingView
     - ContactView
 """
 class HomeView(View):
@@ -124,9 +132,18 @@ class BarView(View):
         return render(request, self.template_name, self.context)
 
 
-def booking(request):
-    salles = Salle.objects.all()
-    return render(request, 'booking.html', context={"salles": salles})
+class BookingView(View):
+    template_name = "booking.html"
+    context = {
+        "title": "Réservation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Réservation"}]
+    }
+
+    def get(self, request):
+        self.context["salles"] = Salle.objects.all()
+        return render(request, self.template_name, self.context)
 
 
 class ContactView(View):
@@ -141,6 +158,19 @@ class ContactView(View):
     def get(self, request):
         return render(request, self.template_name, self.context)
 
+
+
+class EulaView(View):
+    template_name = "cgu.html"
+    context = {
+        "title": "Conditions générales d'utilisation",
+        "breadcrumb": [
+            {"view": "home", "name": "Accueil"},
+            {"view": None, "name": "Conditions générales d'utilisation"}]
+    }
+
+    def get(self, request):
+        return render(request, self.template_name, self.context)
 
 
 
@@ -166,8 +196,9 @@ WIP
         - Find out how to modify the "Password reset unsuccessful" view
         - Find the source code for PasswordResetConfirmView
 """
+
 class AccountSignInFormView(View):
-    form_class = SignInForm
+    form_class = UserSignInForm
     template_name = "account/account_sign_in_form.html"
     context = {
         "title": "Se connecter à son compte",
@@ -188,36 +219,19 @@ class AccountSignInFormView(View):
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
         form = self.form_class(request.POST)
 
-        # Success
         if form.is_valid():
-            # Form processing
-            username = request.POST["username"]
-            password = request.POST["password"]
+            form.login(request)
+            return redirect('profile_detail')
 
-            # Log in the user
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-
-                # Redirect on success
-                return redirect('profile_detail')
-
-            # User not found
-            else:
-                self.context["form"] = form
-                return render(request, self.template_name, self.context)
-
-        # Invalid form
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        # Failure
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
 
 class AccountSignUpFormView(View):
-    form_class = SignUpForm
+    form_class = UserSignUpForm
     template_name = "account/account_sign_up_form.html"
     context = {
         "title": "Créer un compte",
@@ -239,50 +253,14 @@ class AccountSignUpFormView(View):
 
     def post(self, request):
         form = self.form_class(request.POST)
+
         if form.is_valid():
-            # Form processing
-            username = request.POST["username"]
-            first_name = request.POST["first_name"]
-            last_name = request.POST["last_name"]
-            email = request.POST["email"]
-            password = request.POST["password"]
-            password_confirm = request.POST["password_confirm"]
+            form.save_user(request)
+            return redirect("account_sign_up_done")
 
-            # Password verification successful
-            if password == password_confirm:
-                # Deactivate the new user account by default
-                user = User.objects.create_user(
-                    username=username, email=email, password=password,
-                    last_name=last_name, first_name=first_name)
-                user.is_active = False
-
-                # Create a new user
-                user.save()
-
-                # Send email
-                current_site = get_current_site(request)
-                mail_subject = 'Activate your blog account.'
-                message = render_to_string('account/account_sign_up_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                })
-                to_email = form.cleaned_data.get('email')
-                email = EmailMessage(mail_subject, message, to=[to_email])
-                email.send()
-
-                return redirect("account_sign_up_done")
-
-            # Password verification failed
-            else:
-                self.context["form"] = form
-                return render(request, self.template_name, self.context)
-
-        # Invalid form
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        # Failure
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
 
 class AccountSignUpDoneView(View):
@@ -334,15 +312,14 @@ class AccountSignUpConfirmView(View):
 
         # Check for user and token
         if user is not None and account_activation_token.check_token(user, token):
-            # Activate user and save modification
+            # Activate the new user
             user.is_active = True
             user.save()
 
             return render(request, self.template_name, self.context)
 
-        # User creation failed
-        else:
-            return redirect("account_sign_up_failed")
+        # Failure
+        return redirect("account_sign_up_failed")
 
 
 class AccountSignUpFailedView(View):
@@ -475,7 +452,7 @@ class ProfileDetailView(LoginRequiredMixin, View):
 class ProfileUpdateView(LoginRequiredMixin, View):
     redirect_field_name = ''
     form_class = UserUpdateForm
-    form_confirm_class = ConfirmPasswordForm
+    form_confirm_class = UserPasswordConfirmForm
     template_name = "profile/profile_update.html"
     context = {
         "title": "Modifier mon profil",
@@ -485,54 +462,24 @@ class ProfileUpdateView(LoginRequiredMixin, View):
             {"view": None, "name": "Modifier"}],
     }
 
-    def form_class_initial(self):
-        initial = {
-            "username": self.request.user.username,
-            "email": self.request.user.email,
-            "last_name": self.request.user.last_name,
-            "first_name": self.request.user.first_name
-        }
-        return initial
-
     def get(self, request):
-        self.context["form"] = self.form_class(initial=self.form_class_initial())
+        self.context["form"] = self.form_class(instance=request.user)
         self.context["form_confirm"] = self.form_confirm_class()
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        # Form input
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, instance=request.user)
         form_confirm = self.form_confirm_class(request.POST)
 
-        # Success
         if form.is_valid() and form_confirm.is_valid():
-            # Password verification successful
-            if request.POST["password"] == request.POST["password_confirm"]:
-                # Form processing
-                user = request.user
-                user.username = request.POST["username"]
-                user.email = request.POST["email"]
-                user.last_name = request.POST["last_name"]
-                user.first_name = request.POST["first_name"]
-                user.phone = request.POST["phone"]
-
-                # Update the user
-                user.save()
-
-                # Redirect on success
+            if form_confirm.password_check(request):
+                form.update(request)
                 return redirect('profile_detail')
 
-            # Password verification failed
-            else:
-                self.context["form"] = form
-                self.context["form_confirm"] = form_confirm
-                return render(request, self.template_name, self.context)
-
         # Failure
-        else:
-            self.context["form"] = form
-            self.context["form_confirm"] = form_confirm
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        self.context["form_confirm"] = form_confirm
+        return render(request, self.template_name, self.context)
 
 
 
@@ -577,41 +524,31 @@ class GroupCreateView(LoginRequiredMixin, View):
             {"view": None, "name": "Créer"}]
     }
 
-    def form_class_initial(self):
+    def get(self, request):
         initial = {
             "name": self.request.user.username,
             "email": self.request.user.email,
             "phone": self.request.user.phone
         }
-        return initial
-
-    def get(self, request):
-        self.context["form"] = self.form_class(initial=self.form_class_initial())
+        self.context["form"] = self.form_class(initial=initial)
         return render(request, self.template_name, self.context)
 
     def post(self, request):
         form = self.form_class(request.POST, request.FILES)
+
         if form.is_valid():
-            # Associate the current user to the group
-            group = form.save(commit=False)
-            group.user = request.user
-
-            # Create a new group
-            group.save()
-
-            # Redirect on success
+            form.save_group(request)
             return redirect('groups_detail')
 
         # Failure
-        else:
-            self.context["form"] = form
-            return render(request, self.template_name, self.context)
+        self.context["form"] = form
+        return render(request, self.template_name, self.context)
 
 
 class GroupUpdateView(LoginRequiredMixin, View):
     redirect_field_name = ''
     form_class = CustomGroupForm
-    template_name = "groups/groups_create.html"
+    template_name = "groups/groups_update.html"
     context = {
         "title": "Modifier un groupe",
         "breadcrumb": [
@@ -626,22 +563,11 @@ class GroupUpdateView(LoginRequiredMixin, View):
         return render(request, self.template_name, self.context)
 
     def post(self, request, group_id):
-        # Get group object with its id
         group = CustomGroup.objects.get(id=group_id)
-
-        # Form input
         form = self.form_class(request.POST, request.FILES, instance=group)
 
-        # Success
         if form.is_valid():
-            # Associate the current user to the group
-            group = form.save(commit=False)
-            group.user = request.user
-
-            # Create a new group
-            group.save()
-
-            # Redirect on success
+            form.save_group(request)
             return redirect('groups_detail')
 
         # Failure
@@ -675,12 +601,18 @@ class GroupDeleteView(LoginRequiredMixin, View):
         if not request.user.is_authenticated:
             return redirect("account_sign_in_form")
 
-        # Delete the group
-        group = CustomGroup.objects.get(id=group_id)
-        group.delete()
-
-        # Redirect on success
+        CustomGroup.objects.get(id=group_id).delete()
         return redirect('groups_detail')
+
+
+
+
+
+
+
+
+
+
 
 
 """
@@ -727,7 +659,6 @@ class BookingsCreateView(LoginRequiredMixin, View):
 """
 Pro area
     - ProAreaView
-    - Delete technical sheet
 """
 class ProAreaView(LoginRequiredMixin, View):
     redirect_field_name = ''
@@ -865,7 +796,6 @@ def list_users(request):
 
 @login_required(login_url='account_sign_in_form')
 def accompte(request):
-
     # Submit form
     if request.method == 'POST':
 
@@ -884,7 +814,22 @@ def accompte(request):
         duration_seconds = duration.total_seconds()
         duration_hours = duration_seconds / 3600
 
-        price = 0.5*duration_hours*20
+        if duration_hours == 1. : 
+            price = 10.0
+        elif duration_hours == 2. : 
+            price = 19.0
+        elif duration_hours == 3. : 
+            price = 27.0
+        elif duration_hours == 4. : 
+            price = 34.0
+        elif duration_hours == 5. : 
+            price = 42.0 
+        elif duration_hours == 6. : 
+            price = 51.0
+        elif duration_hours == 7. : 
+            price = 59.0
+        else: 
+            price = 68.0        
         start_date = datetime.fromisoformat(start_date.rstrip('Z'))
         end_date = datetime.fromisoformat(end_date.rstrip('Z'))
         #duration = 1
@@ -912,6 +857,7 @@ def accompte(request):
 
     else:
         return redirect('booking')
+    
 
 @login_required(login_url='account_sign_in_form')
 def payment(request):
@@ -970,43 +916,78 @@ def all_booking(request):
 
 def all_booking_event(request):
     reservations = Reservation.objects.all()
-
     datas = []
+    datas.append({'firstDay': 1})
+
     for current in reservations:
-        data = {
-            'id': current.id,
-            'resourceId': current.salle.id,
-            'title': 'Indisponible',
-            'start': current.date_start,
-            'end': current.date_end,
-        }
-        data['color'] = 'gainsboro'
-        data['textColor'] = 'black'
-        datas.append(data)
+        # Vérifier si le jour de la réservation est du lundi au vendredi
+        if current.date_start.weekday() < 5:
+            data = {
+                'id': current.id,
+                'resourceId': current.salle.id,
+                'title': 'Indisponible',
+                'start': current.date_start,
+                'end': current.date_end,
+                'color': '#b22222',
+                'textColor': 'black'
+            }
+            datas.append(data)
 
     dataD = []
     dateInit = datetime(2023, 1, 2)
-    currentD = {
-        'id': 1,
-        'resourceId': 1,
-        'title': 'Indisponible',
-        'start': dateInit.replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
-        'end': dateInit.replace(hour=10, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S")
-    }
 
-    resources = Salle.objects.all()
-    for resource in resources:
+    for resource in Salle.objects.all():
         for i in range(365):
-            for j in range(10, 16):
-                new_data = currentD.copy()
-                new_data['id'] += 1
-                new_data['resourceId'] = resource.id
-                new_data['start'] = (dateInit + timedelta(days=i)).replace(hour=j, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['end'] = (dateInit + timedelta(days=i)).replace(hour=j+1, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S")
-                new_data['color'] = 'gainsboro'
-                new_data['textColor'] = 'black'
+            # Vérifier si le jour est du lundi au vendredi
+            if (dateInit + timedelta(days=i)).weekday() < 5:
+                
+                new_data = {
+                    'id': 1,  # Modifier ici
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=16, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
                 datas.append(new_data)
-
+                new_data['id'] += 1  # Modifier ici
+            if (dateInit + timedelta(days=i)).weekday() == 5:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=18, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 0,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=10, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=13, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
+            if (dateInit + timedelta(days=i)).weekday() == 6:
+                new_data = {
+                    'id': 1,
+                    'resourceId': resource.id,
+                    'title': 'Indisponible',
+                    'start': (dateInit + timedelta(days=i)).replace(hour=21, minute=0, second=0).strftime("%Y-%m-%d %H:%M:%S"),
+                    'end': (dateInit + timedelta(days=i)).replace(hour=23, minute=59, second=59).strftime("%Y-%m-%d %H:%M:%S"),
+                    'color': 'gainsboro',
+                    'textColor': 'black'
+                }
+                datas.append(new_data)
+                new_data['id'] += 1
     return JsonResponse(datas, safe=False)
 
 @login_required(login_url='account_sign_in')
@@ -1030,38 +1011,75 @@ def set_reservation(request, id_reservation):
     messages.success(request, message)  
     return redirect('bookings_detail')
 
-from django.shortcuts import render, redirect
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from .models import UserPayment
-import stripe
-import time
-
 
 @login_required(login_url='login')
 def payment(request):
-	stripe.api_key = settings.STRIPE_SECRET_KEY
-	if request.method == 'POST':
-		checkout_session = stripe.checkout.Session.create(
-			payment_method_types = ['card'],
-			line_items = [
-				{
-					'price': settings.PRODUCT_PRICE,
-					'quantity': 1,
-				},
-			],
-			mode = 'payment',
-			customer_creation = 'always',
-            success_url = 'http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url = 'http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    if request.method == 'POST':
+        salle_id = int(request.POST["salle_id"])
+        user_id = int(request.POST["user_id"])
+
+        form = ReservationForm(request.POST)
+
+        if form.is_valid():
+            salle = Salle.objects.get(id=salle_id)
+            user = CustomUser.objects.get(id=user_id)
+
+            description = "Reservation for user " + user.username
+            duration = form.cleaned_data["duration"]
+            date_start = form.cleaned_data["date_start"]
+            date_end = form.cleaned_data["date_end"]
+            price = form.cleaned_data["price"]
+            status = "En cours"
+
+            reservation = Reservation.objects.create(
+                description=description,
+                duration=duration,
+                date_start=date_start,
+                date_end=date_end,
+                price=price,
+                status=status,
+                salle=salle,
+                user=user,
+                is_active=True
+            )
+        if price == 10.0 :
+                settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_1H
+        elif price == 19.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_2H
+        elif price == 27.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_3H
+        elif price == 34.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_4H
+        elif price == 42.0:        
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_5H
+        elif price == 51.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_6H
+        elif price == 59.0:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_7H
+        else:
+            settings.PRODUCT_PRICE = settings.PRODUCT_PRICE_8H
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': settings.PRODUCT_PRICE,
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            customer_creation='always',
+            success_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url='http://127.0.0.1:8000?session_id={CHECKOUT_SESSION_ID}',
         )
-		return redirect(checkout_session.url, code=303)
-	return render(request, 'studios/payment.html')
+
+        return redirect(checkout_session.url)
+    
+    return render(request, 'studios/payment.html')
 
 
-## use Stripe dummy card: 4242 4242 4242 4242
 def payment_successful(request):
 	stripe.api_key = settings.STRIPE_SECRET_KEY
 	checkout_session_id = request.GET.get('session_id', None)

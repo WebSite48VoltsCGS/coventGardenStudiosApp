@@ -13,7 +13,7 @@
 	<title>{{title}}</title>
 
 	<!-- Styles -->
-	<link rel="shortcut icon" href="{% static 'studios/images/gt_favicon.png' %}">
+	<link rel="shortcut icon" href="{% static 'studios/images/cgs-icon.jpg' %}">
 	
     <link rel="stylesheet" href="{% static 'studios/css/familyOpenSans.css' %}" media="screen"/>
     <link rel="stylesheet" href="{% static 'studios/css/bootstrap.min.css' %}"/>
@@ -58,6 +58,7 @@
 					<li><a href="{% url 'bar' %}">Bar</a></li>
 					<li><a href="{% url 'booking' %}">Réservation</a></li>
 					<li><a href="{% url 'contact' %}">Contact</a></li>
+					<li><a href="{% url 'eula' %}">CGU</a></li>
 
 					<!-- Button(s) -->
 					{% if user.is_authenticated %}
@@ -110,6 +111,17 @@
 
 	<!-- Footer -->
 	<footer id="footer" class="top-space">
+
+		<!-- Cookies -->
+		<div id="cookieConsentBanner" class="hidden">
+			<div id="cookieConsentContent text-center">
+			  <p>Ce site utilise des cookies pour améliorer votre expérience. En continuant à naviguer sur ce site, vous acceptez notre utilisation des cookies.</p>
+			</div>
+			<div id="cookieConsentButtons">
+			  <button id="acceptCookiesButton">Accepter</button>
+			  <a href="#" id="learnMoreButton">En savoir plus</a>
+			</div>
+		</div>
 
 		<!-- Footer 1 -->
 		<div class="footer1">
@@ -184,6 +196,7 @@
 								<a href="{% url 'bar' %}">Bar</a> /
 								<a href="{% url 'booking' %}">Réservation</a> /
 								<a href="{% url 'contact' %}">Contact</a> /
+								<a href="{% url 'eula' %}">CGU</a>
 							</p>
 						</div>
 					</div>
@@ -208,6 +221,41 @@
 	<script src="{% static 'studios/js/headroom.min.js' %}"></script>
 	<script src="{% static 'studios/js/jQuery.headroom.min.js' %}"></script>
 	<script src="{% static 'studios/js/template.js' %}"></script>
+
+	<!-- Cookies -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+		  var cookieConsentBanner = document.getElementById("cookieConsentBanner");
+		  var acceptCookiesButton = document.getElementById("acceptCookiesButton");
+		  var learnMoreButton = document.getElementById("learnMoreButton");
+	   
+		  // Vérifie si le cookie d'acceptation est déjà présent
+		  var isCookieAccepted = document.cookie.indexOf("cookieAccepted=true") !== -1;
+	   
+		  if (!isCookieAccepted) {
+			cookieConsentBanner.classList.remove("hidden");
+		  }
+	   
+		  // Fonction pour accepter les cookies et masquer la bannière
+		  function acceptCookies() {
+			cookieConsentBanner.classList.add("hidden");
+			// Définir un cookie d'acceptation pour une durée de validité (par exemple, 30 jours)
+			var expirationDate = new Date();
+			expirationDate.setDate(expirationDate.getDate() + 30);
+			document.cookie = "cookieAccepted=true; expires=" + expirationDate.toUTCString() + "; path=/";
+		  }
+	   
+		  acceptCookiesButton.addEventListener("click", acceptCookies);
+	   
+		  // Fonction pour gérer l'action "En savoir plus" (à personnaliser selon vos besoins)
+		  function learnMore() {
+			// Ajoutez ici votre logique pour rediriger l'utilisateur vers une page d'informations supplémentaires sur les cookies
+			console.log("Redirection vers la page d'informations sur les cookies");
+		  }
+	   
+		  learnMoreButton.addEventListener("click", learnMore);
+		});
+	</script>
 
 	<!-- Custom JavaSript for our template -->
 	{% block scripts %}{% endblock %}

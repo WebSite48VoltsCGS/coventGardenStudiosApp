@@ -1,5 +1,4 @@
 from datetime import timedelta
-import time
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.utils import timezone
@@ -19,11 +18,13 @@ User
 class CustomUser(AbstractUser):
     username = MODEL_USERNAME
     email = MODEL_EMAIL
-    first_name = MODEL_FIRST_NAME
     last_name = MODEL_LAST_NAME
-    phone = MODEL_USER_PHONE
+    first_name = MODEL_FIRST_NAME
+    phone = MODEL_PHONE
     password = MODEL_PASSWORD
+    password_confirm = MODEL_PASSWORD_CONFIRM
     # is_active = False by default when creating an account using the SignUpForm
+    # my_groups (See CustomGroup)
 
     def __str__(self):
         return self.username

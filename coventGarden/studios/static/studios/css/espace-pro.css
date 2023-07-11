@@ -136,27 +136,6 @@
   background-color: gold;
 }
 
-/* boutton réservation*/
-
-
-.row-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  max-width: 80px;
-  margin-bottom: 10px;
-  margin-left: 535px;
-  padding: 40px;
-}
-  
-
-
-
-
-/* explications*/ 
-
-
 /*lien*/ 
 
 .lien a{
