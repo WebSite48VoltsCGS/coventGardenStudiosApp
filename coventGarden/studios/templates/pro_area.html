@@ -136,10 +136,9 @@
 	<div class="row">
 		<h2 class="ft"> Demande de programmation pour un concert FreeFriday</h2>
 		<form method="post" action='.'class="custom-form">
-			<p>Formulaire de demande de Concert </p>
 			{% csrf_token %}
 			{{ form.as_p }}
-			<button type="submit" class="custom-button">
+			<button type="submit" class="btn btn-action">
 				Envoyer
 			</button>
 		</form>
