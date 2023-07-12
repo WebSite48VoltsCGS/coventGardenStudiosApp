@@ -1,0 +1,28 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: NewUser@cgs.com
+Date: Wed, 12 Jul 2023 07:30:43 -0000
+Message-ID: 
+ <168914704388.24558.18283070402129618716@ambroise-VivoBook-S14-X430UA>
+
+
+
+
+
+Réinitialisation de mot de passe
+
+
+Bonjour NewUser,
+Une demande de modification de mot de passe a récemment été faites sur votre compte du site 127.0.0.1:8000.
+Cliquez sur le lien suivant pour réinitialiser votre mot de passe :
+
+http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/br7x37-0be75bf2bdc54cd4493404a660c3455e/
+
+Cordialement,
+
+Le Covent Garden Studio 
+
+-------------------------------------------------------------------------------

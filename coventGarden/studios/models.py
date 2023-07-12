@@ -125,7 +125,7 @@ def create_user_payment(sender, instance, created, **kwargs):
         UserPayment.objects.create(app_user=instance)
 
 
-#création freefriday
+#création freefriday dans le planning après validation de l'administrateur
 
 @receiver(post_save, sender=Concert)
 def create_event(sender, instance, created, **kwargs):
@@ -143,4 +143,24 @@ def create_event(sender, instance, created, **kwargs):
                     'description': description
     }
 )
-        
+
+# Validation par mail du Freefriday (pas opérationnel)
+"""""
+from django.core.mail import send_mail
+
+def send_concert_notification(CustomUser):
+    subject = 'Validation de votre demande de programmation FreeFriday'
+    message = f"Cher {CustomUser.username}, votre demande de programmation pour un concert Freefriday a été validée. Félicitations!"
+    from_email = 'noreply@example.com'
+    recipient_list = [CustomUser.email]
+    
+    send_mail(subject, message, from_email, recipient_list)
+
+
+@receiver(post_save, sender=Concert)
+def send_concert_notification_on_save(sender, instance, created, **kwargs):
+    if instance.validated :
+        instance.send_concert_notification()
+
+
+"""
