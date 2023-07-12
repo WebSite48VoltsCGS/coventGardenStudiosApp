@@ -1,13 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
 
-{% block title %}
-
-<title>Réservation</title>
-
-{% endblock %}
-
-
+<!-- Header -->
 {% block header %}
 
 <header id="head" class="secondary"></header>
@@ -15,41 +9,71 @@
 {% endblock %}
 
 
+
+<!-- Page header -->
+{% block page_header %}
+
+<header class="page-header">
+	<h1 class="page-title">{{title}}</h1>
+</header>
+
+{% endblock %}
+
+
+
+<!-- Main content -->
 {% block content %}
 
-<div class="container">
+{% if messages %}
+<div class="alert alert-success" role="alert">
+	{% for message in messages %}
+		{{ message }}
+	{% endfor %}
+</div>
+{% endif %}
 
-    <ol class="breadcrumb">
-        <li><a href="{% url 'home' %}">Accueil</a></li>
-        <li class="active">Réservation</li>
-    </ol>
-    <div class="row">
-
-		{% if messages %}
-            <div class="alert alert-success" role="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endif %}
-
-		<div class="col-xs-12 maincontent">
-			<header class="page-header">
-				<h1 class="page-title">Réservation</h1>
-			</header>
+<!-- Content 1 -->
+<div class="stud">
+	<div class="row">
+		<!-- Left -->
+		<div class="col-sm-6">
+			<h2>Horaires :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>Lundi - Vendredi</td><td>16h00 -  </td><td>00h00</td></tr>
+					<tr><td>Samedi *</td><td>10h00 - </td><td>18h00</td></tr>
+					<tr><td>Dimanche</td><td>13h00 - </td><td>21h00</td></tr>
+				</tbody>
+			</table>
 			
-            {% for salle in salles %}
-                <div class="col-xs-12">
-                    <h3 class="text-center mt-4">{{ salle.name }}</h3>
-                    <br>
-                    <div id='calendar{{ salle.id }}'></div>
-                </div>
-            {% endfor %}
-			
+			<!-- Add link concert-->
+			<br><p>*Ouverture jusqu'à minuit les soirs de concerts. <a href="{% url 'placeholder' %}">Placeholder!</a></p>
 		</div>
-        
+
+		<!-- Right -->
+		<div class="col-sm-6">
+			<h2>Tarifs :</h2><br>
+			<table class="table-center">
+				<tbody>
+					<tr><td>1 heure</td><td>20€</td></tr>
+					<tr><td>2 heures</td><td>38€</td></tr>
+					<tr><td>3 heures</td><td>54€</td></tr>
+					<tr><td>4 heures</td><td>68€</td></tr>
+					<tr><td>Heure supplémentaire</td><td>17€</td></tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-</div> <!-- /container -->
+</div>
+
+<!-- Content 1 -->
+{% for salle in salles %}
+<div class="col-xs-12">
+    <h3 class="text-center mt-4">{{ salle.name }}</h3>
+    <br>
+    <div id='calendar{{ salle.id }}'></div>
+</div>
+{% endfor %}
 
 
 <div class="modal" id="confirmation-modal">
@@ -90,14 +114,19 @@
 {% endblock %}
 
 
+
+<!-- Custom CSS styles file(s) -->
 {% block style %}
 
-    <link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
+<link rel="stylesheet" href="{% static 'studios/css/booking.css' %}">
 
 {% endblock %}
 
 
+
+<!-- Custom JavaScript file(s) -->
 {% block scripts %}
+
 <!--script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.8/index.global.min.js'></script-->
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
 <script src="{% static 'studios/js/booking.js' %}"></script>

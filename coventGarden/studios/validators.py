@@ -36,3 +36,13 @@ def special_validator(password, user=None):
             code='password_no_symbol')
 
 CustomPasswordValidator = [length_validator, number_validator, upper_validator, special_validator]
+
+"""
+Phone validator
+"""
+def phone_validator(value):
+    phone_regex = r'^\d{10}$'  # Regex pour vérifier les 10 chiffres
+    if not re.match(phone_regex, value):
+        raise ValidationError(
+            "Le numéro de téléphone est incorrecte",
+            code='phone')

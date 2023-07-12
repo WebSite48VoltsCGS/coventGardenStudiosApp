@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'studios',
     'django_select2',
+    'tempus_dominus',
+    'bootstrap_datepicker_plus',
 ]
 
 
@@ -146,31 +148,49 @@ New
 # Custom user
 AUTH_USER_MODEL = "studios.CustomUser"
 
-# Authentication
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+# Redirection if user is not authenticated
+# https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-loginrequired-mixin
+LOGIN_URL = "account_sign_in_form"
 
-# Forgot password
+# Email
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 
 # Store file
-MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# TOUT ÇA SERA À CHANGER POUR LE COMPTE DE CGS
 
 # Stripe
-#STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
-#STRIPE_SECRET_KEY = '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'
+# STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
+# STRIPE_SECRET_KEY = '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'
+#STRIPE_SECRET_KEY = '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'
 
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51NQItyDSzBAtu4IYN48unJrRuxo4GrWvMznSyubCODHEWxzKjHiclGYKugjss127b0wK7UsyYNbOnyYxCtEBKit800SEvM0Mks'
+# TEST 
+STRIPE_PUBLIC_KEY = 'pk_test_51NQItyDSzBAtu4IYN48unJrRuxo4GrWvMznSyubCODHEWxzKjHiclGYKugjss127b0wK7UsyYNbOnyYxCtEBKit800SEvM0Mks'
 STRIPE_SECRET_KEY = 'sk_test_51NQItyDSzBAtu4IYprr1y9hU8CqLinNb4779aYxd4qS3pYVikVwQmzmAYtjVeD5TSiQ0ngZAkHubTaDdPP8ceRcM00OUdfopPp'
 
-PRODUCT_PRICE = 'price_1NQRh0LFsoxR8h1YJfhWjrxJ'
-# PRODUCT_PRICE = 'price_1NQlqPLFsoxR8h1Y6DL1xPOL'
+# PRIX EN FONCTION DES HEURES
+PRODUCT_PRICE_1H = 'price_1NRAjZLFsoxR8h1YXpfFhOiQ'
+PRODUCT_PRICE_2H = 'price_1NRAkiLFsoxR8h1YmXGe9DPt'
+PRODUCT_PRICE_3H = 'price_1NRAlJLFsoxR8h1YR9p2GA2A'
+PRODUCT_PRICE_4H = 'price_1NRAmlLFsoxR8h1YcXvNvm5X'
+PRODUCT_PRICE_5H = 'price_1NRAnfLFsoxR8h1Y13rzlKrK'
+PRODUCT_PRICE_6H = 'price_1NRAobLFsoxR8h1YoycYn4Xd'
+PRODUCT_PRICE_7H = 'price_1NRApzLFsoxR8h1YwXiDcj9d'
+PRODUCT_PRICE_8H = 'price_1NRAqZLFsoxR8h1YxdxZ1AEg'
+
+
+PRODUCT_PRICE_TEST = 'price_1NSV6WDSzBAtu4IYzTfvnI0A'
+PRODUCT_PRICE = 'price_1NQlqPLFsoxR8h1Y6DL1xPOL'
 REDIRECT_DOMAIN = "home"
 
 # ---------- Required ----------
 # pip3 install django-select2
 # pip3 install stripe
-# pip3 install 
+# pip3 install six
+# pip3 install django-tempus-dominus
+# pip3 install django-bootstrap-datepicker-plus
 # ------------------------------
