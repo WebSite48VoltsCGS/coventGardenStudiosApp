@@ -131,7 +131,6 @@ class UserSignUpForm(forms.ModelForm):
         })
         recipient_list = [self.cleaned_data.get('email')]
 
-        recipient_list = ["ambroiselaroye12@gmail.com", "jack.du@ensea.fr"]
         # Send mail to a local directory
         if settings.DEBUG_EMAIL:
             email = EmailMessage(subject, message, to=recipient_list)
