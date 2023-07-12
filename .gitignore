@@ -1,1 +1,3 @@
 coventGarden/.env
+/env/
+/coventGarden/coventGarden/__pycache__/

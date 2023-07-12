@@ -158,7 +158,7 @@ AUTH_USER_MODEL = "studios.CustomUser"
 LOGIN_URL = "account_sign_in_form"
 
 # Email
-DEBUG_EMAIL = True
+DEBUG_EMAIL = False
 if DEBUG_EMAIL:
     """
     Send mail to a local directory
@@ -176,6 +176,7 @@ else:
     EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
     EMAIL_USE_SSL = False
     EMAIL_USE_TLS = True
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 """
 Private

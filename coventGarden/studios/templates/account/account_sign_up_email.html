@@ -1,5 +1,8 @@
-{% autoescape off %}
 Bonjour {{ user.username }},
-Cliquez sur le lien suivant pour confirmer votre addresse mail :
+
+Veuillez cliquer sur le lien suivant pour confirmer votre inscription,
 http://{{ domain }}{% url 'account_sign_up_confirm' uidb64=uid token=token %}
-{% endautoescape %}
+
+Cordialement,
+
+L'équipe de Covent Garden Studios
