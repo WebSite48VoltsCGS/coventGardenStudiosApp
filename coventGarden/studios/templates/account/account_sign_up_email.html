@@ -1,5 +1,5 @@
 {% autoescape off %}
-Hi {{ user.username }},
-Please click on the link to confirm your registration,
+Bonjour {{ user.username }},
+Cliquez sur le lien suivant pour confirmer votre addresse mail :
 http://{{ domain }}{% url 'account_sign_up_confirm' uidb64=uid token=token %}
 {% endautoescape %}
