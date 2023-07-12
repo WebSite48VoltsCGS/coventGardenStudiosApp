@@ -26,7 +26,6 @@ from django.urls import reverse_lazy
 
 # Booking
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
 from datetime import timedelta, datetime, time
 
 # Pro Area
@@ -41,8 +40,8 @@ import time
 from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle, UserPayment 
 from .forms import (
     UserSignInForm, UserSignUpForm,
-    UserProfileUpdateForm, UserPasswordConfirmForm,
-    UserPasswordResetForm, UserPasswordSetForm,
+    ProfileUpdateForm, ProfileUpdateConfirmForm,
+    PasswordForgotResetForm, PasswordForgotSetForm,
     CustomGroupForm,
     ConcertForm,
     EventForm, ReservationForm)
@@ -344,7 +343,7 @@ class AccountSignUpFailedView(View):
 
 
 class AccountPasswordForgotForm(PasswordResetView):
-    form_class = UserPasswordResetForm
+    form_class = PasswordForgotResetForm
     template_name = 'account/account_password_forgot_form.html'
     email_template_name = 'account/account_password_forgot_email.html'
     success_url = reverse_lazy('account_password_forgot_done')
@@ -382,7 +381,7 @@ class AccountPasswordForgotDone(PasswordResetDoneView):
 
 
 class AccountPasswordForgotConfirm(PasswordResetConfirmView):
-    form_class = UserPasswordSetForm
+    form_class = PasswordForgotSetForm
     template_name = 'account/account_password_forgot_confirm.html'
     success_url = reverse_lazy('account_password_forgot_complete')
     extra_context = {
@@ -451,8 +450,8 @@ class ProfileDetailView(LoginRequiredMixin, View):
 
 class ProfileUpdateView(LoginRequiredMixin, View):
     redirect_field_name = ''
-    form_class = UserProfileUpdateForm
-    form_confirm_class = UserPasswordConfirmForm
+    form_class = ProfileUpdateForm
+    form_confirm_class = ProfileUpdateConfirmForm
     template_name = "profile/profile_update.html"
     context = {
         "title": "Modifier mon profil",

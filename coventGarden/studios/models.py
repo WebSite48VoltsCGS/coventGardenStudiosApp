@@ -1,17 +1,14 @@
 from datetime import timedelta
-from django.contrib.auth.base_user import BaseUserManager
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.db import models
-
 
 from .fields import *
 
 # Create your models here.
 """
-User
+Account
     - CustomUser
     - CustomGroup
 """
@@ -23,7 +20,7 @@ class CustomUser(AbstractUser):
     phone = MODEL_PHONE
     password = MODEL_PASSWORD
     password_confirm = MODEL_PASSWORD_CONFIRM
-    # is_active = False by default when creating an account using the SignUpForm
+    # is_active = False by default when creating an account using the UserSignUpForm
     # my_groups (See CustomGroup)
 
     def __str__(self):
@@ -49,6 +46,9 @@ class CustomGroup(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+
 
 
 """
@@ -91,6 +91,8 @@ class Reservation(models.Model):
 
 
 
+
+
 """
 Pro Area
     - Concert
@@ -103,8 +105,11 @@ class Concert(models.Model):
     date = models.DateField()
     validated = models.BooleanField(default=False)
     planning = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True)
-  
-        
+
+
+
+
+
 """
 Payment
 """
