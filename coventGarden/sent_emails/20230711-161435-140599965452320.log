@@ -1,0 +1,25 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: NewUser@cgs.com
+Date: Tue, 11 Jul 2023 14:14:35 -0000
+Message-ID: 
+ <168908487526.14509.5329380811929114984@ambroise-VivoBook-S14-X430UA>
+
+
+2	You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
+3	
+4	Please go to the following page and choose a new password:
+5	
+6	http://127.0.0.1:8000/compte/mot-de-passe-oublie/modification/Mg/br6l4b-62591429070483492279e09f070c0b4b/
+7	
+8	Your username, in case you’ve forgotten: NewUser
+9	
+10	Thanks for using our site!
+11	
+12	The 127.0.0.1:8000 team
+13	
+14	
+-------------------------------------------------------------------------------
