@@ -237,10 +237,10 @@ class PasswordForgotSetForm(forms.Form):
         """
         This function is called implicitly according to the corresponding field
         """
-        password = self.cleaned_data.get('password')
+        password_new = self.cleaned_data.get('password_new')
         password_confirm = self.cleaned_data.get('password_confirm')
-        if password and password_confirm:
-            if password != password_confirm:
+        if password_new and password_confirm:
+            if password_new != password_confirm:
                 raise ValidationError(self.error_messages['password_mismatch'], code='password_mismatch')
         return password_confirm
 
