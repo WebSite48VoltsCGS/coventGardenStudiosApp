@@ -26,7 +26,6 @@ from django.urls import reverse_lazy
 
 # Booking
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
 from datetime import timedelta, datetime, time
 
 # Pro Area
@@ -38,11 +37,11 @@ import stripe
 import time
 
 # Import
-from .models import CustomGroup, Event, CustomUser, Reservation, Salle, UserPayment
+from .models import CustomGroup, Event, Concert, CustomUser, Reservation, Salle, UserPayment 
 from .forms import (
     UserSignInForm, UserSignUpForm,
-    UserUpdateForm, UserPasswordConfirmForm,
-    UserPasswordResetForm, UserPasswordSetForm,
+    ProfileUpdateForm, ProfileUpdateConfirmForm,
+    PasswordForgotResetForm, PasswordForgotSetForm,
     CustomGroupForm,
     ConcertForm,
     EventForm, ReservationForm)
@@ -116,6 +115,7 @@ class ConcertView(View):
 
     def get(self, request):
         return render(request, self.template_name, self.context)
+    
 
 
 class BarView(View):
@@ -343,7 +343,7 @@ class AccountSignUpFailedView(View):
 
 
 class AccountPasswordForgotForm(PasswordResetView):
-    form_class = UserPasswordResetForm
+    form_class = PasswordForgotResetForm
     template_name = 'account/account_password_forgot_form.html'
     email_template_name = 'account/account_password_forgot_email.html'
     success_url = reverse_lazy('account_password_forgot_done')
@@ -381,7 +381,7 @@ class AccountPasswordForgotDone(PasswordResetDoneView):
 
 
 class AccountPasswordForgotConfirm(PasswordResetConfirmView):
-    form_class = UserPasswordSetForm
+    form_class = PasswordForgotSetForm
     template_name = 'account/account_password_forgot_confirm.html'
     success_url = reverse_lazy('account_password_forgot_complete')
     extra_context = {
@@ -450,8 +450,8 @@ class ProfileDetailView(LoginRequiredMixin, View):
 
 class ProfileUpdateView(LoginRequiredMixin, View):
     redirect_field_name = ''
-    form_class = UserUpdateForm
-    form_confirm_class = UserPasswordConfirmForm
+    form_class = ProfileUpdateForm
+    form_confirm_class = ProfileUpdateConfirmForm
     template_name = "profile/profile_update.html"
     context = {
         "title": "Modifier mon profil",
@@ -462,18 +462,17 @@ class ProfileUpdateView(LoginRequiredMixin, View):
     }
 
     def get(self, request):
-        self.context["form"] = self.form_class(instance=request.user)
-        self.context["form_confirm"] = self.form_confirm_class()
+        self.context["form"] = self.form_class(user=request.user, instance=request.user)
+        self.context["form_confirm"] = self.form_confirm_class(user=request.user)
         return render(request, self.template_name, self.context)
 
     def post(self, request):
-        form = self.form_class(request.POST, instance=request.user)
-        form_confirm = self.form_confirm_class(request.POST)
+        form = self.form_class(user=request.user, data=request.POST, instance=request.user)
+        form_confirm = self.form_confirm_class(user=request.user, data=request.POST)
 
         if form.is_valid() and form_confirm.is_valid():
-            if form_confirm.password_check(request):
-                form.update(request)
-                return redirect('profile_detail')
+            form.save()
+            return redirect('profile_detail')
 
         # Failure
         self.context["form"] = form
@@ -570,8 +569,9 @@ class GroupUpdateView(LoginRequiredMixin, View):
             return redirect('groups_detail')
 
         # Failure
-        self.context["form"] = form
-        return render(request, self.template_name, self.context)
+        else:
+            self.context["form"] = form
+            return render(request, self.template_name, self.context)
 
 class GroupDeleteView(LoginRequiredMixin, View):
     redirect_field_name = ''
@@ -618,7 +618,7 @@ class BookingsDetailView(LoginRequiredMixin, View):
         "title": "Historique des réservations",
         "breadcrumb": [
             {"view": "home", "name": "Accueil"},
-            {"view": None, "name": "Mes réservations"}]
+            {"view": None, "name": "Réservations"}]
     }
 
     def get(self, request):
@@ -672,11 +672,16 @@ class ProAreaView(LoginRequiredMixin, View):
             messages.success(request,
                              'Merci pour votre proposition de concert! Un administrateur examinera votre proposition prochainement.',
                              extra_tags='concert_for')
-            return redirect('pro_area')
+        
+        return render(request, self.template_name, self.context)
+
+    def get(self, request):
+        concerts = Concert.objects.all()
+        self.context["concerts"] = concerts
 
         return render(request, self.template_name, self.context)
 
-
+       
 """
 Planning
 """
@@ -690,6 +695,7 @@ def generate_occurrences(event):
             occurrences.append(current_time)
 
     return occurrences
+
 
 
 def add_event(request):
@@ -772,7 +778,7 @@ Reservation
     - Listing reservation
 """
 def is_in_group(CustomUser):
-    return CustomUser.groups.filter(name='Client_Regulier').exists()
+    return CustomUser.groups.filter(name='CLIENT_REGULIER').exists()
 
 
 def list_salles(request):
@@ -1002,7 +1008,7 @@ def set_reservation(request):
                 message = "Votre réservation a bien été prise en compte !"
             reservation.save()
         else:
-            message = "Votre réservation ne peut plus être modifiée !"
+            message = "Cette réservation ne peut plus être modifiée !"
             messages.error(request, message)  
             return redirect('bookings_detail')
 
@@ -1055,7 +1061,7 @@ def payment(request):
             payment_method_types=['card'],
             line_items=[
                 {
-                    'price': settings.PRODUCT_PRICE_TEST,
+                    'price': settings.PRODUCT_PRICE,
                     'quantity': 1,
                 },
             ],

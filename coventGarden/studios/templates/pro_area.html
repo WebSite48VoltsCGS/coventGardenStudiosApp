@@ -136,16 +136,46 @@
 	<div class="row">
 		<h2 class="ft"> Demande de programmation pour un concert FreeFriday</h2>
 		<form method="post" action='.'class="custom-form">
-			<p>Formulaire de demande de Concert </p>
 			{% csrf_token %}
 			{{ form.as_p }}
-			<button type="submit" class="custom-button">
+			<button type="submit" class="btn btn-action">
 				Envoyer
 			</button>
 		</form>
 	</div>
 </div>
 
+
+<!-- Content 5 : My requests -->
+<div class="row">
+    <h2>Mes Demandes</h2>
+    <ul class="mesfiches">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 30%;">Groupes </th>
+                    <th style="width: 30%;">Date de demande de programmation</th>
+                    <th style="width: 30%;">Status de la demande</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for concert in concerts %}
+                <tr>
+                    <td>{{ concert.groupe1 }}, {{ concert.groupe2 }}, {{ concert.groupe3 }}</td>
+                    <td>{{ concert.date }}</td>
+                    <td>
+                        {% if concert.validated %}
+                            Valide
+                        {% else %}
+                            En attente...
+                        {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </ul>
+</div>
 {% endblock %}
 
 

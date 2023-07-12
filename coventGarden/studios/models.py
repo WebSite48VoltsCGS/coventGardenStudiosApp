@@ -1,4 +1,5 @@
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from datetime import timedelta
+from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -7,7 +8,7 @@ from .fields import *
 
 # Create your models here.
 """
-User
+Account
     - CustomUser
     - CustomGroup
 """
@@ -19,7 +20,7 @@ class CustomUser(AbstractUser):
     phone = MODEL_PHONE
     password = MODEL_PASSWORD
     password_confirm = MODEL_PASSWORD_CONFIRM
-    # is_active = False by default when creating an account using the SignUpForm
+    # is_active = False by default when creating an account using the UserSignUpForm
     # my_groups (See CustomGroup)
 
     def __str__(self):
@@ -47,6 +48,9 @@ class CustomGroup(models.Model):
         return f"{self.name}"
 
 
+
+
+
 """
 Booking
     - Event
@@ -60,6 +64,7 @@ class Event(models.Model):
     end_time = models.DateTimeField(default=timezone.now)
     description = models.TextField(blank=True)
     recurrence = models.CharField(max_length=200, blank=True)
+    date = models.DateField(default=timezone.now)
 
 class Salle(models.Model):
     name = models.fields.CharField(max_length=100)
@@ -87,6 +92,8 @@ class Reservation(models.Model):
 
 
 
+
+
 """
 Pro Area
     - Concert
@@ -99,6 +106,10 @@ class Concert(models.Model):
     date = models.DateField()
     validated = models.BooleanField(default=False)
     planning = models.OneToOneField(Event, on_delete=models.SET_NULL, blank=True, null=True)
+
+
+
+
 
 """
 Payment
@@ -113,3 +124,44 @@ class UserPayment(models.Model):
 def create_user_payment(sender, instance, created, **kwargs):
     if created:
         UserPayment.objects.create(app_user=instance)
+
+
+#création freefriday dans le planning après validation de l'administrateur
+
+@receiver(post_save, sender=Concert)
+def create_event(sender, instance, created, **kwargs):
+    if instance.validated:
+        description = f"FreeFriday en présence du groupe {instance.groupe1}, du groupe {instance.groupe2} et du groupe {instance.groupe3}"
+        date = instance.date  # Supposons que `date` est la date du concert
+
+        Event.objects.update_or_create(
+             user=instance.user,
+            title='FreeFriday',
+            defaults={
+                    'date': date,
+                    'start_time': date + timedelta(hours=20, minutes=30),
+                    'end_time': date + timedelta(hours=23, minutes=30),
+                    'description': description
+    }
+)
+
+# Validation par mail du Freefriday (pas opérationnel)
+"""""
+from django.core.mail import send_mail
+
+def send_concert_notification(CustomUser):
+    subject = 'Validation de votre demande de programmation FreeFriday'
+    message = f"Cher {CustomUser.username}, votre demande de programmation pour un concert Freefriday a été validée. Félicitations!"
+    from_email = 'noreply@example.com'
+    recipient_list = [CustomUser.email]
+    
+    send_mail(subject, message, from_email, recipient_list)
+
+
+@receiver(post_save, sender=Concert)
+def send_concert_notification_on_save(sender, instance, created, **kwargs):
+    if instance.validated :
+        instance.send_concert_notification()
+
+
+"""

@@ -136,30 +136,6 @@
   background-color: gold;
 }
 
-<<<<<<< HEAD
-=======
-/* boutton réservation*/
-
-
-.row-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  max-width: 80px;
-  margin-bottom: 10px;
-  margin-left: 535px;
-  padding: 40px;
-}
-  
-
-
-
->>>>>>> d13d34f3ad70c605cdb0a3f929e8f801c98ef13a
-
-/* explications*/ 
-
-
 /*lien*/ 
 
 .lien a{
@@ -181,7 +157,7 @@ margin: 0 auto;
 padding: 20px;
 border: 1px solid #ccc;
 border-radius: 5px;
-background-color:white;
+background-color:black;
 }
 
 /* Style des champs du formulaire */
@@ -190,20 +166,7 @@ background-color:white;
 }
 
 /* Style du bouton "Enregistrer" */
-.custom-button {
-  background-color:  #FF8C00;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 10px 0;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
+
 
 /* Style du bouton "Enregistrer" au survol */
 .custom-button:hover {

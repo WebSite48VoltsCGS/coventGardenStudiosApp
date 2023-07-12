@@ -1,19 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-
+from django.contrib.auth.models import Group
 from .models import CustomUser, CustomGroup, Event, Salle, Reservation, Concert
 
 # Register your models here.
 class CustomUserAdmin(UserAdmin):
-    list_display = ["email", "username",
-                    "last_name", "first_name",
-                    "phone"]
+    list_display = ["email", "username", "last_name", "first_name", "phone", "get_user_group"]
 
+    def get_user_group(self, obj):
+        groups = obj.groups.all()
+        return ', '.join([group.name for group in groups])
+
+    get_user_group.short_description = 'Group'
+    
 class CustomGroupAdmin(admin.ModelAdmin):
-    list_display = ["user", "name", "email",
-                    "phone", "members",
-                    "technical_sheet", "logo",
-                    "validated"]
+    list_display = ["user", "name", "email", "phone", "members", "technical_sheet", "logo", "validated"]
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ["user", "title", "start_time", "end_time", "description"]
