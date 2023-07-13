@@ -663,6 +663,9 @@ class ProAreaView(LoginRequiredMixin, View):
 
     def get(self, request):
         self.context["form"] = ConcertForm()
+        concerts = Concert.objects.all()
+        self.context["concerts"] = concerts
+        
         return render(request, self.template_name, self.context)
 
     def post(self, request):
@@ -675,11 +678,6 @@ class ProAreaView(LoginRequiredMixin, View):
         
         return render(request, self.template_name, self.context)
 
-    def get(self, request):
-        concerts = Concert.objects.all()
-        self.context["concerts"] = concerts
-
-        return render(request, self.template_name, self.context)
 
        
 """
@@ -1006,7 +1004,7 @@ def set_reservation(request):
             else:
                 reservation.is_active=True
                 message = "Votre réservation a bien été prise en compte !"
-            reservation.save()
+                reservation.save()
         else:
             message = "Cette réservation ne peut plus être modifiée !"
             messages.error(request, message)  

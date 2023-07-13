@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 
+# Email
+import environ
+from dotenv import load_dotenv
+env = environ.Env()
+load_dotenv()
 
 FIRST_DAY_OF_WEEK = 1
 
@@ -153,8 +158,28 @@ AUTH_USER_MODEL = "studios.CustomUser"
 LOGIN_URL = "account_sign_in_form"
 
 # Email
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
-EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+DEBUG_EMAIL = True
+if DEBUG_EMAIL:
+    """
+    Send mail to a local directory
+    """
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
+else:
+    """
+    Send mail using an email account
+    """
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = env('EMAIL_HOST')
+    EMAIL_PORT = env('EMAIL_PORT')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_SSL = False
+    EMAIL_USE_TLS = True
+
+"""
+Private
+"""
 
 # Store file
 MEDIA_URL = '/media/'
@@ -173,7 +198,7 @@ STRIPE_SECRET_KEY = 'sk_live_51NQQVfLFsoxR8h1YrkYz9ZO8lwiDwpS9lylETgEdfSTn0qPoIa
 #STRIPE_SECRET_KEY = 'sk_test_51NQItyDSzBAtu4IYprr1y9hU8CqLinNb4779aYxd4qS3pYVikVwQmzmAYtjVeD5TSiQ0ngZAkHubTaDdPP8ceRcM00OUdfopPp'
 
 # PRIX EN FONCTION DES HEURES
-PRODUCT_PRICE_1H = 'price_1NRAjZLFsoxR8h1YXpfFhOiQ'
+PRODUCT_PRICE_1H = 'price_1NT32TJMIWd81FifWshEnzeO'
 PRODUCT_PRICE_2H = 'price_1NRAkiLFsoxR8h1YmXGe9DPt'
 PRODUCT_PRICE_3H = 'price_1NRAlJLFsoxR8h1YR9p2GA2A'
 PRODUCT_PRICE_4H = 'price_1NRAmlLFsoxR8h1YcXvNvm5X'
@@ -193,4 +218,6 @@ REDIRECT_DOMAIN = "home"
 # pip3 install six
 # pip3 install django-tempus-dominus
 # pip3 install django-bootstrap-datepicker-plus
+# pip3 install django-environ
+# pip3 install python-dotenv
 # ------------------------------

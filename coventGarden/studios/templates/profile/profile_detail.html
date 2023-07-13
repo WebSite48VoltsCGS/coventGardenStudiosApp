@@ -39,21 +39,38 @@
 		</form>
 	</div>
 </div>
-
-<!-- Content 2: Text -->
+<br>
+<!-- Content 2: Table -->
 <div class="row">
 	<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<h4 class="text-center"> Informations Personnelles</h4>
-				<p>Nom: {{ user.last_name }}</p><br>
-				<p>Prénom: {{ user.first_name }}</p><br>
-				<p>E-mail: {{ user.email }}</p><br>
-				<p>Téléphone: {{ user.phone }}</p>
+				<h4 class="text-center">Informations Personnelles</h4>
+				<table class="table">
+					<tbody>
+						<tr>
+							<td>Nom:</td>
+							<td>{{ user.last_name }}</td>
+						</tr>
+						<tr>
+							<td>Prénom:</td>
+							<td>{{ user.first_name }}</td>
+						</tr>
+						<tr>
+							<td>E-mail:</td>
+							<td>{{ user.email }}</td>
+						</tr>
+						<tr>
+							<td>Téléphone:</td>
+							<td>{{ user.phone }}</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
 </div>
+
 
 {% endblock %}
 

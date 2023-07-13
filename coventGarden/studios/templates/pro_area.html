@@ -58,6 +58,7 @@
 <!-- Content 2 -->
 <div class="stud">
     <div class="row">
+        <div class="col-sm-12">
         <h2 class="centerwhite">Organiser son Free Friday au Covent Garden Studios</h2>
         <img src="{% static 'studios/images/freefriday_White.png' %}" alt="logofreefriday"> 
 
@@ -65,6 +66,7 @@
             Depuis plusieurs années, les Free Friday organisés par le Covent Garden Studios permettent aux groupes locaux de se produire sur scène.
             Grâce à une mise à disposition gratuite de la scène et d’un encadrement technique, les groupes peuvent se produire sur scène.
             Un plateau complet de 3 groupes doit être proposé par un groupe.
+        </div>
         </div>
     </div>
 </div>
@@ -134,6 +136,7 @@
 <!-- Content 4: Concert scheduling request -->
 <div class="stud">
 	<div class="row">
+        <div class="col-sm-12">
 		<h2 class="ft"> Demande de programmation pour un concert FreeFriday</h2>
 		<form method="post" action='.'class="custom-form">
 			{% csrf_token %}
@@ -142,40 +145,44 @@
 				Envoyer
 			</button>
 		</form>
+        </div>
 	</div>
 </div>
 
 
 <!-- Content 5 : My requests -->
 <div class="row">
-    <h2>Mes Demandes</h2>
-    <ul class="mesfiches">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: 30%;">Groupes </th>
-                    <th style="width: 30%;">Date de demande de programmation</th>
-                    <th style="width: 30%;">Status de la demande</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                {% for concert in concerts %}
-                <tr>
-                    <td>{{ concert.groupe1 }}, {{ concert.groupe2 }}, {{ concert.groupe3 }}</td>
-                    <td>{{ concert.date }}</td>
-                    <td>
-                        {% if concert.validated %}
-                            Valide
-                        {% else %}
-                            En attente...
-                        {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </ul>
+	<div class="col-sm-12">
+		<h2>Mes Demandes</h2>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width: 30%;">Groupes</th>
+						<th style="width: 30%;">Date de demande de programmation</th>
+						<th style="width: 30%;">Statut de la demande</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for concert in concerts %}
+					<tr>
+						<td>{{ concert.groupe1 }}, {{ concert.groupe2 }}, {{ concert.groupe3 }}</td>
+						<td>{{ concert.date }}</td>
+						<td>
+							{% if concert.validated %}
+								Valide
+							{% else %}
+								En attente...
+							{% endif %}
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
+
 {% endblock %}
 
 

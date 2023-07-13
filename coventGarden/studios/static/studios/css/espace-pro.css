@@ -165,14 +165,6 @@ background-color:black;
   margin: 10px 0;
 }
 
-/* Style du bouton "Enregistrer" */
-
-
-/* Style du bouton "Enregistrer" au survol */
-.custom-button:hover {
-  background-color: #FF9B22;
-}
-
 /* Style du champ de fichier */
 .custom-file-input {
   border: 1px solid #ccc;

@@ -11,7 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from .tokens import account_activation_token
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, get_connection
+from django.conf import settings
 
 # Password reset
 from django.contrib.auth.forms import PasswordResetForm
@@ -116,20 +117,38 @@ class UserSignUpForm(forms.ModelForm):
         )
         user.save()
 
-        # Send a confirmation email
+        # Send confirmation email
+        self.send_email(request, user)
+
+    def send_email(self, request, user):
         current_site = get_current_site(request)
-        mail_subject = 'Activate your blog account.'
+        subject = "Activez votre nouveau compte Covent Garden Studios"
         message = render_to_string('account/account_sign_up_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
         })
-        to_email = self.cleaned_data.get('email')
-        email = EmailMessage(mail_subject, message, to=[to_email])
-        email.send()
+        recipient_list = [self.cleaned_data.get('email')]
 
+        # Send mail to a local directory
+        if settings.DEBUG_EMAIL:
+            email = EmailMessage(subject, message, to=recipient_list)
+            email.send()
 
+        # Send mail using an email account
+        elif not settings.DEBUG_EMAIL:
+            with get_connection(
+                    host=settings.EMAIL_HOST,
+                    port=settings.EMAIL_PORT,
+                    username=settings.EMAIL_HOST_USER,
+                    password=settings.EMAIL_HOST_PASSWORD,
+                    use_ssl=settings.EMAIL_USE_SSL,
+                    use_tls=settings.EMAIL_USE_TLS,
+            ) as connection:
+                email_from = settings.EMAIL_HOST_USER
+                email = EmailMessage(subject, message, email_from, recipient_list, connection=connection)
+                email.send()
 
 
 
