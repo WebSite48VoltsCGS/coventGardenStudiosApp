@@ -17,7 +17,7 @@ import os
 import environ
 from dotenv import load_dotenv
 env = environ.Env()
-load_dotenv()
+load_dotenv('.env')
 
 FIRST_DAY_OF_WEEK = 1
 
