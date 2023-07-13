@@ -1,6 +1,7 @@
 Bonjour {{ user.username }},
 
-Veuillez cliquer sur le lien suivant pour confirmer votre inscription,
+Veuillez cliquer sur le lien suivant pour confirmer votre inscription:
+
 http://{{ domain }}{% url 'account_sign_up_confirm' uidb64=uid token=token %}
 
 Cordialement,

@@ -17,7 +17,7 @@ import os
 import environ
 from dotenv import load_dotenv
 env = environ.Env()
-load_dotenv('.env')
+load_dotenv()
 
 FIRST_DAY_OF_WEEK = 1
 
@@ -88,32 +88,22 @@ WSGI_APPLICATION = 'coventGarden.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
-
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.postgresql_psycopg2",
-#        "NAME": "coventgarden",
-#        "HOST": "localhost",
-#        "PORT": "5432",
-#    }
-#}
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'coventgarden',
-        'USER': 'admin',
-        'PASSWORD': 'admin123',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'coventgarden',
+#        'USER': 'admin',
+#        'PASSWORD': 'admin123',
+#        'HOST': 'localhost',
+#        'PORT': '5432',
+#    }
+#}
 
 
 # Password validation
@@ -168,6 +158,7 @@ AUTH_USER_MODEL = "studios.CustomUser"
 LOGIN_URL = "account_sign_in_form"
 
 # Email
+# Set DEBUG_EMAIL to True to test sending e-mails locally
 DEBUG_EMAIL = False
 if DEBUG_EMAIL:
     """
@@ -200,13 +191,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # TOUT ÇA SERA À CHANGER POUR LE COMPTE DE CGS
 
 # Stripe
-STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
-#STRIPE_SECRET_KEY = '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'
-STRIPE_SECRET_KEY = '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'
+# STRIPE_PUBLIC_KEY = 'pk_live_51NQQVfLFsoxR8h1Y29pGzKczYrkurCqRbfCAASoFOko9Xq7hEtp9hSQQukZ0a1tSwiqsQ6x3at0xSTggVzBsDKT700xng7y7qK'
+# STRIPE_SECRET_KEY = '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'
 
 # TEST 
-#STRIPE_PUBLIC_KEY = 'pk_test_51NQItyDSzBAtu4IYN48unJrRuxo4GrWvMznSyubCODHEWxzKjHiclGYKugjss127b0wK7UsyYNbOnyYxCtEBKit800SEvM0Mks'
-#STRIPE_SECRET_KEY = 'sk_test_51NQItyDSzBAtu4IYprr1y9hU8CqLinNb4779aYxd4qS3pYVikVwQmzmAYtjVeD5TSiQ0ngZAkHubTaDdPP8ceRcM00OUdfopPp'
+STRIPE_PUBLIC_KEY = 'pk_live_51NT2jXJMIWd81Fify7aaJf0ba7uODVzJOR0tQssjdpTN1FegIXUvj208ubhsgPjvdSVEUMH08mCL894dapwsgK3z007DkftuZx'
+STRIPE_SECRET_KEY = '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'
 
 # PRIX EN FONCTION DES HEURES
 PRODUCT_PRICE_1H = 'price_1NT32TJMIWd81FifWshEnzeO'
@@ -219,7 +209,7 @@ PRODUCT_PRICE_7H = 'price_1NRApzLFsoxR8h1YwXiDcj9d'
 PRODUCT_PRICE_8H = 'price_1NRAqZLFsoxR8h1YxdxZ1AEg'
 
 
-PRODUCT_PRICE_TEST = 'price_1NSV6WDSzBAtu4IYzTfvnI0A'
+# PRODUCT_PRICE = 'price_1NQRh0LFsoxR8h1YJfhWjrxJ'
 PRODUCT_PRICE = 'price_1NQlqPLFsoxR8h1Y6DL1xPOL'
 REDIRECT_DOMAIN = "home"
 

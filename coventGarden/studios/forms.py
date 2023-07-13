@@ -35,6 +35,7 @@ User = get_user_model()
 CustomUser
     - UserSignInForm
     - UserSignUpForm
+    - UserSignUpAgainForm
 """
 class UserSignInForm(forms.Form):
     """
@@ -106,19 +107,19 @@ class UserSignUpForm(forms.ModelForm):
 
     def save_user(self, request):
         # Create a deactivated user
-        user = CustomUser.objects.create_user(
+        user = CustomUser(
             username=self.cleaned_data.get('username'),
             first_name=self.cleaned_data.get('first_name'),
             last_name=self.cleaned_data.get('last_name'),
             email=self.cleaned_data.get('email'),
             phone=self.cleaned_data.get('phone'),
-            password=self.cleaned_data.get('password'),
             is_active=False
         )
-        user.save()
+        user.set_password(self.cleaned_data.get('password'))
 
         # Send confirmation email
-        self.send_email(request, user)
+        if self.send_email(request, user):
+            user.save()
 
     def send_email(self, request, user):
         current_site = get_current_site(request)
@@ -149,6 +150,63 @@ class UserSignUpForm(forms.ModelForm):
                 email_from = settings.EMAIL_HOST_USER
                 email = EmailMessage(subject, message, email_from, recipient_list, connection=connection)
                 email.send()
+
+        return True
+
+
+class UserSignUpAgainForm(forms.Form):
+    """
+    A form allowing users to send a verification email again
+    """
+    error_messages = {
+        'email_not_found': "Aucun compte n'est associé à cette adresse e-mail.",
+    }
+    email = FORM_EMAIL
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email:
+            try:
+                User.objects.get(email=email)
+            except User.DoesNotExist:
+                raise ValidationError(self.error_messages['email_not_found'], code='email_not_found')
+        return email
+
+    def send_email(self, request):
+        email = self.cleaned_data['email']
+        user = User.objects.get(email=email)
+        current_site = get_current_site(request)
+        subject = "Activez votre nouveau compte Covent Garden Studios"
+        message = render_to_string('account/account_sign_up_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
+        })
+        recipient_list = [self.cleaned_data.get('email')]
+
+        # Send mail to a local directory
+        if settings.DEBUG_EMAIL:
+            email = EmailMessage(subject, message, to=recipient_list)
+            email.send()
+
+        # Send mail using an email account
+        elif not settings.DEBUG_EMAIL:
+            with get_connection(
+                    host=settings.EMAIL_HOST,
+                    port=settings.EMAIL_PORT,
+                    username=settings.EMAIL_HOST_USER,
+                    password=settings.EMAIL_HOST_PASSWORD,
+                    use_ssl=settings.EMAIL_USE_SSL,
+                    use_tls=settings.EMAIL_USE_TLS,
+            ) as connection:
+                email_from = settings.EMAIL_HOST_USER
+                email = EmailMessage(subject, message, email_from, recipient_list, connection=connection)
+                email.send()
+
+        return True
+
+
 
 
 

@@ -16,7 +16,7 @@ Constants
 # Lengths
 LENGTH_NAME = 150       # Name field maximum length is 150 (See django.contrib.auth)
 LENGTH_PASSWORD = 255   # Password maximum length value is 4096
-LENGTH_EMAIL = 320      # Email maximum length value
+LENGTH_EMAIL = 254      # Email default length value found on GitHub
 LENGTH_PHONE = 10       # Phone number default length value
 LENGTH_URL = 200        # URL default length value
 LENGTH_TEXT = 5000

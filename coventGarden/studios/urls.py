@@ -29,8 +29,10 @@ urlpatterns = [
          name="account_sign_up_done"),
     path('compte/inscription/confirmation/<uidb64>/<token>/', views.AccountSignUpConfirmView.as_view(),
          name='account_sign_up_confirm'),
-    path('compte/inscription/failed/', views.AccountSignUpFailedView.as_view(),
+    path('compte/inscription/echec/', views.AccountSignUpFailedView.as_view(),
          name='account_sign_up_failed'),
+    path('compte/inscription/verification/', views.AccountSignUpAgainView.as_view(),
+         name='account_sign_up_again'),
 
     # Account: Password Forgot
     path('compte/mot-de-passe-oublie/', views.AccountPasswordForgotForm.as_view(),
@@ -69,22 +71,16 @@ urlpatterns = [
     # Booking
     path('api/all_booking/', views.all_booking, name='all_booking'),
     path('api/all_booking_event/', views.all_booking_event, name='all_booking_event'),
-    path('set-reservation', views.set_reservation, name='set_reservation'),
+    path('set-reservation/<int:id_reservation>/', views.set_reservation, name='set_reservation'),
     path('users/', views.list_users, name='list_users'),
     path('salles/', views.list_salles, name='list_salles'),
     path('paiement-accompte/', views.accompte, name='accompte'),
-    path('payment_successful/<str:session_id>/', views.payment_successful),
-    path('payment_cancelled/<str:session_id>/', views.payment_cancelled),
+    # path('payment_successful', views.payment_successful, name='payment_successful'),
+    # path('payment_cancelled', views.payment_cancelled, name='payment_cancelled'),
     path('stripe_webhook', views.stripe_webhook, name='stripe_web'),
-    path('payment_cancelled/', views.PaiementCancelled.as_view(), name='payment_cancelled'),
-    path('payment_successful/', views.PaiementSuccessful.as_view(), name='payment_successful'),
 
     # WIP
     path('create-checkout-session/', views.payment, name='payment'),
-
-
-    # Deleted
-    #path('delete_technical_sheet/<int:pk>/', views.delete_technical_sheet, name='delete_technical_sheet'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
