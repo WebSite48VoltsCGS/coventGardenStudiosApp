@@ -1,0 +1,4 @@
+env/
+coventGarden/__pycache__/
+migrations/__pycache__/
+studios/migrations/__pycache__/

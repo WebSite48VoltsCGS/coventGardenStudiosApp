@@ -1,5 +1,9 @@
 /*******************************/
+<<<<<<< HEAD
 /*         Navigation          */
+=======
+/*         Navigatioin         */
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 /*******************************/
 .navbar-inverse { border-radius: 0; background:rgba(0, 0, 0, .8); border-bottom:1px solid rgba(255, 255, 255, 0.15); min-height:100px; padding-top:25px; margin-bottom:0;}
 .navbar-inverse *:focus { outline: 0; }
@@ -13,7 +17,11 @@
 .navbar-inverse .navbar-nav > .active > a,
 .navbar-inverse .navbar-nav > .active > a:hover, 
 .navbar-inverse .navbar-nav > .active > a:focus { color: #fff; background:none ; }
+<<<<<<< HEAD
 .navbar-inverse .navbar-nav > .open > a { background:none; color:white; }
+=======
+.navbar-inverse .navbar-nav > .open > a{ background:none; color:white; }
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 
 .navbar-inverse .navbar-nav>li>a:hover, 
 .navbar-inverse .navbar-nav>li>a:focus,
@@ -80,10 +88,17 @@
 	.btn-default.active { color:#333; -webkit-box-shadow:inset 0px 0px 0px 3px #333; -moz-box-shadow:inset 0px 0px 0px 3px #333; box-shadow:inset 0px 0px 0px 3px #333; background: transparent; }
 	
 .btn-action,
+<<<<<<< HEAD
 .btn-primary { color:#000; background-image: -webkit-linear-gradient(top, #FF9B22 0%, #FF8C00 100%); background-image: linear-gradient(to bottom, #c3b988 0%, #c3b988 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22', endColorstr='#ffFF8C00', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); background-repeat: repeat-x; border:0 none; }
 	.btn-action:hover,
 	.btn-action:focus { color:#fff; background: #c3b988; }
 	.btn-action:active {	background: #c3b988; }
+=======
+.btn-primary { color:#FFEFD7; background-image: -webkit-linear-gradient(top, #FF9B22 0%, #FF8C00 100%); background-image: linear-gradient(to bottom, #FF9B22 0%, #FF8C00 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22', endColorstr='#ffFF8C00', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); background-repeat: repeat-x; border:0 none; }
+	.btn-action:hover,
+	.btn-action:focus { color:#fff; background: #FF9B22; }
+	.btn-action:active {	background: #FF8C00; }
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 
 
 /*******************************/
