@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from .models import CustomUser, CustomGroup, Event, Salle, Reservation, Concert
@@ -35,3 +36,7 @@ admin.site.register(Event, EventAdmin)
 admin.site.register(Salle, SalleAdmin)
 admin.site.register(Reservation, ReservationAdmin)
 admin.site.register(Concert, ConcertAdmin)
+
+
+# Register your models here.
+

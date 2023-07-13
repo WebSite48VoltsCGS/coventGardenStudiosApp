@@ -1,6 +1,10 @@
 /*******************************/
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*         Navigation          */
+=======
+/*         Navigatioin         */
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 =======
 /*         Navigatioin         */
 >>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
@@ -18,7 +22,11 @@
 .navbar-inverse .navbar-nav > .active > a:hover, 
 .navbar-inverse .navbar-nav > .active > a:focus { color: #fff; background:none ; }
 <<<<<<< HEAD
+<<<<<<< HEAD
 .navbar-inverse .navbar-nav > .open > a { background:none; color:white; }
+=======
+.navbar-inverse .navbar-nav > .open > a{ background:none; color:white; }
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 =======
 .navbar-inverse .navbar-nav > .open > a{ background:none; color:white; }
 >>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
@@ -89,15 +97,21 @@
 	
 .btn-action,
 <<<<<<< HEAD
+<<<<<<< HEAD
 .btn-primary { color:#000; background-image: -webkit-linear-gradient(top, #FF9B22 0%, #FF8C00 100%); background-image: linear-gradient(to bottom, #c3b988 0%, #c3b988 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22', endColorstr='#ffFF8C00', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); background-repeat: repeat-x; border:0 none; }
 	.btn-action:hover,
 	.btn-action:focus { color:#fff; background: #c3b988; }
 	.btn-action:active {	background: #c3b988; }
 =======
+=======
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 .btn-primary { color:#FFEFD7; background-image: -webkit-linear-gradient(top, #FF9B22 0%, #FF8C00 100%); background-image: linear-gradient(to bottom, #FF9B22 0%, #FF8C00 100%); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffFF9B22', endColorstr='#ffFF8C00', GradientType=0); filter: progid:DXImageTransform.Microsoft.gradient(enabled = false); background-repeat: repeat-x; border:0 none; }
 	.btn-action:hover,
 	.btn-action:focus { color:#fff; background: #FF9B22; }
 	.btn-action:active {	background: #FF8C00; }
+<<<<<<< HEAD
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
+=======
 >>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a
 
 

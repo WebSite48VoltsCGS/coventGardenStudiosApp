@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 env/
 coventGarden/__pycache__/
 migrations/__pycache__/
 studios/migrations/__pycache__/
+=======
+env/
+>>>>>>> 52f8c78af420c12d762aac510dbc4755b9199d2a

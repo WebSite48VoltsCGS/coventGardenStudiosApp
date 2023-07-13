@@ -165,3 +165,7 @@ def send_concert_notification_on_save(sender, instance, created, **kwargs):
 
 
 """
+
+from django.db import models
+
+# Create your models here.
